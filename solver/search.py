@@ -186,8 +186,10 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     # --- Phase 0: Zero-arm overlap ---
     if verbose:
         print(f'  Phase 0: Trying zero-arm overlap...')
+    # Cap zero-arm time: simple puzzles get 5s, complex ones get 2s
+    za_time = 2.0 if n_inputs >= 3 or (analysis.needs_bonding and n_inputs >= 2) else 5.0
     za = _try_zero_arm(puzzle, analysis, puzzle_bytes, simulator,
-                       glyphs_needed, verbose=verbose)
+                       glyphs_needed, verbose=verbose, time_limit=za_time)
     if za:
         best = za
         if verbose:
@@ -771,7 +773,14 @@ def _try_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
     """
     # All inputs must be monoatomic for zero-arm overlap
     if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
-        return None
+        # Still try if any input molecule matches output atom count
+        # (in-place transformation like P022's IRON→COPPER projection)
+        has_matching_size = any(
+            len(pio.molecule.atoms) == len(puzzle.outputs[0].molecule.atoms)
+            for pio in puzzle.inputs
+        ) if puzzle.outputs else False
+        if not has_matching_size:
+            return None
     # Must have at least one output
     if len(puzzle.outputs) < 1:
         return None

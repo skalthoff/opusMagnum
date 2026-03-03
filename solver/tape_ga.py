@@ -813,10 +813,14 @@ def generate_geometric_tapes(
         for perm in itertools.permutations(range(n_inputs)):
             tape: List[int] = []
             for pi, inp_idx in enumerate(perm):
+                if inp_idx >= len(directions):
+                    continue  # skip if direction not available for this input
                 cw_i = cw_total - inp_idx  # steps from this input to output
 
                 if pi > 0:
                     # Navigate from reset position (dir of input perm[0]) to this input
+                    if perm[0] >= len(directions):
+                        continue  # skip if direction not available for this input
                     from_dir = directions[perm[0]]
                     to_dir = directions[inp_idx]
                     ccw = (to_dir - from_dir) % 6
@@ -834,9 +838,13 @@ def generate_geometric_tapes(
         for perm in itertools.permutations(range(n_inputs)):
             tape_ccw: List[int] = []
             for pi, inp_idx in enumerate(perm):
+                if inp_idx >= len(directions):
+                    continue  # skip if direction not available for this input
                 ccw_i = 6 - (cw_total - inp_idx) if (cw_total - inp_idx) > 0 else 0
 
                 if pi > 0:
+                    if perm[0] >= len(directions):
+                        continue  # skip if direction not available for this input
                     from_dir = directions[perm[0]]
                     to_dir = directions[inp_idx]
                     cw_nav = (from_dir - to_dir) % 6
