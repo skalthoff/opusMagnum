@@ -68,6 +68,8 @@ class Recipe:
         for reaction, count in self.reactions.items():
             if count > 0:
                 glyphs.extend(REACTION_GLYPHS[reaction])
+        if self.waste:
+            glyphs.append('glyph-disposal')
         return glyphs
 
 

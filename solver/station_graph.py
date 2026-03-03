@@ -31,7 +31,7 @@ from .glyph_model import (GlyphSpec, GLYPH_SPECS, get_glyph_spec,
 @dataclass(frozen=True)
 class StationID:
     """Unique identifier for a station in the graph."""
-    kind: str      # 'input', 'glyph', 'bonder', 'output'
+    kind: str      # 'input', 'glyph', 'bonder', 'unbonder', 'output'
     index: int     # disambiguator within kind
 
     def __repr__(self) -> str:
@@ -291,7 +291,11 @@ def _find_input_sid(atom_type: AtomType,
 
 
 def _compute_assembly_order(molecule) -> List[int]:
-    """BFS from a leaf atom to determine bond-compatible delivery order."""
+    """BFS from each leaf atom; return the ordering with minimal total index spread.
+
+    For each leaf as BFS root, score = sum of |order[i+1] - order[i]| over
+    consecutive pairs. Lower score means more spatially compact delivery order.
+    """
     atoms = molecule.atoms
     bonds = molecule.bonds
     n = len(atoms)
@@ -313,25 +317,37 @@ def _compute_assembly_order(molecule) -> List[int]:
     if not leaves:
         leaves = [0]
 
-    start = leaves[0]
-    visited = set()
-    order = []
-    queue = [start]
-    visited.add(start)
+    def _bfs_from(start: int) -> List[int]:
+        visited: Set[int] = set()
+        order: List[int] = []
+        queue = [start]
+        visited.add(start)
+        while queue:
+            node = queue.pop(0)
+            order.append(node)
+            for neighbor in adj[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+        # Append any disconnected nodes
+        for i in range(n):
+            if i not in visited:
+                order.append(i)
+        return order
 
-    while queue:
-        node = queue.pop(0)
-        order.append(node)
-        for neighbor in adj[node]:
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append(neighbor)
+    def _score(order: List[int]) -> int:
+        return sum(abs(order[i + 1] - order[i]) for i in range(len(order) - 1))
 
-    for i in range(n):
-        if i not in visited:
-            order.append(i)
+    best_order = None
+    best_score = None
+    for leaf in leaves:
+        candidate = _bfs_from(leaf)
+        s = _score(candidate)
+        if best_score is None or s < best_score:
+            best_score = s
+            best_order = candidate
 
-    return order
+    return best_order
 
 
 # ---------------------------------------------------------------------------
@@ -502,6 +518,14 @@ def build_station_graph(puzzle: Puzzle,
         if analysis.needs_bonding:
             bonder_sid, bonder_station = _create_bonder_station(bonder_type)
             stations[bonder_sid] = bonder_station
+
+        # Unbonder station
+        if analysis.needs_unbonding:
+            unbonder_sid = StationID('unbonder', 0)
+            stations[unbonder_sid] = Station(
+                id=unbonder_sid,
+                part_name='unbonder',
+            )
 
         # Output station
         output_sid, output_station = _create_output_station()
