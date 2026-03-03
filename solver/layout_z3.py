@@ -60,7 +60,7 @@ class Layout:
                 sol.parts.append(Part(name=sdata, position=pos, rotation=grot))
             elif stype == 'bonder':
                 brot = self.glyph_rotations.get(i, 0)
-                sol.parts.append(Part(name='bonder', position=pos, rotation=brot))
+                sol.parts.append(Part(name=sdata, position=pos, rotation=brot))
             elif stype == 'output':
                 orot = self.output_rotations.get(i, 0)
                 sol.parts.append(Part(name='out-std', position=pos,
@@ -233,7 +233,7 @@ def _compute_layout_cost(arm_type: str, stations: List[Tuple[str, object]],
         if stype == 'glyph':
             cost += PART_COSTS.get(sdata, 0)
         elif stype == 'bonder':
-            cost += PART_COSTS.get('bonder', 10)
+            cost += PART_COSTS.get(sdata, 10)
     return cost
 
 
@@ -258,7 +258,7 @@ def _check_no_footprint_collisions(
                 return False
             occupied.add(key)
         elif stype == 'glyph' or stype == 'bonder':
-            glyph_name = sdata if stype == 'glyph' else 'bonder'
+            glyph_name = sdata
             try:
                 spec = get_glyph_spec(glyph_name)
                 fp = footprint_world(pos, rot, spec)
@@ -286,7 +286,8 @@ def _check_no_footprint_collisions(
 
 def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
                      glyphs_needed: List[str], need_bonder: bool,
-                     config: LayoutConfig = None) -> List[Layout]:
+                     config: LayoutConfig = None,
+                     bonder_name: str = 'bonder') -> List[Layout]:
     """Generate valid layouts using Z3 constraints.
 
     Uses a hybrid approach:
@@ -314,7 +315,7 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
             continue
         station_types.append(('glyph', g))
     if need_bonder:
-        station_types.append(('bonder', 'bonder'))
+        station_types.append(('bonder', bonder_name))
     station_types.append(('output', 0))
 
     n_stations = len(station_types)
@@ -330,7 +331,7 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
         for gs in glyph_stations[:max(0, max_glyphs)]:
             trimmed.append(gs)
         if need_bonder:
-            trimmed.append(('bonder', 'bonder'))
+            trimmed.append(('bonder', bonder_name))
         trimmed.append(('output', 0))
         station_types = trimmed
         n_stations = len(station_types)
@@ -482,7 +483,8 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
 
 def generate_stacked_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
                               glyphs_needed: List[str], need_bonder: bool,
-                              config: LayoutConfig = None) -> List[Layout]:
+                              config: LayoutConfig = None,
+                              bonder_name: str = 'bonder') -> List[Layout]:
     """Generate layouts where non-input parts stack at one hex.
 
     In stacked layouts, all glyphs, bonder, and output share a single
@@ -505,7 +507,7 @@ def generate_stacked_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
 
     bonder_station: List[Tuple[str, object]] = []
     if need_bonder:
-        bonder_station = [('bonder', 'bonder')]
+        bonder_station = [('bonder', bonder_name)]
 
     output_station: List[Tuple[str, object]] = [('output', 0)]
 
@@ -775,3 +777,356 @@ def compute_lower_bound(layout: Layout, analysis: PuzzleAnalysis) -> int:
     instructions_lower = 3
 
     return cost + cycles_lower + area_lower + instructions_lower
+
+
+# ---------------------------------------------------------------------------
+# Bonder-output alignment check
+# ---------------------------------------------------------------------------
+
+def _check_bonder_output_alignment(
+    station_types: List[Tuple[str, object]],
+    positions: List[HexCoord],
+    glyph_rotations: Dict[int, int],
+    output_rotations: Dict[int, int],
+    puzzle: Puzzle,
+) -> bool:
+    """Check that bonder slot positions align with output molecule bond endpoints.
+
+    For each bond in the output molecule, both atoms at the bond endpoints
+    (in world coordinates) must land on bonder active slot positions.
+    Returns True if alignment is satisfied or if no bonder/output/bonds exist.
+    """
+    if not puzzle.outputs:
+        return True
+
+    output_mol = puzzle.outputs[0].molecule
+    if not output_mol.bonds:
+        return True  # No bonds to check
+
+    # Find bonder and output station indices
+    bonder_idx = None
+    output_idx = None
+    bonder_name = 'bonder'
+    for i, (stype, sdata) in enumerate(station_types):
+        if stype == 'bonder':
+            bonder_idx = i
+            bonder_name = sdata
+        elif stype == 'output':
+            output_idx = i
+
+    if bonder_idx is None or output_idx is None:
+        return True  # No bonder-output pair
+
+    bonder_pos = positions[bonder_idx]
+    bonder_rot = glyph_rotations.get(bonder_idx, 0)
+    output_pos = positions[output_idx]
+    output_rot = output_rotations.get(output_idx, 0)
+
+    try:
+        bonder_spec = get_glyph_spec(bonder_name)
+    except KeyError:
+        return True
+
+    # Compute bonder slot world positions
+    bonder_slot_positions: Set[Tuple[int, int]] = set()
+    for slot in bonder_spec.active_slots:
+        sp = local_to_world(bonder_pos, bonder_rot, slot.du, slot.dv)
+        bonder_slot_positions.add((sp.q, sp.r))
+
+    # For each bond, check both endpoints land on bonder slots
+    for bond in output_mol.bonds:
+        from_world = local_to_world(output_pos, output_rot,
+                                     bond.from_pos.q, bond.from_pos.r)
+        to_world = local_to_world(output_pos, output_rot,
+                                   bond.to_pos.q, bond.to_pos.r)
+        from_key = (from_world.q, from_world.r)
+        to_key = (to_world.q, to_world.r)
+
+        if not (from_key in bonder_slot_positions and
+                to_key in bonder_slot_positions):
+            return False
+
+    return True
+
+
+# ---------------------------------------------------------------------------
+# Graph-constrained layout generation
+# ---------------------------------------------------------------------------
+
+def generate_layouts_from_graph(graph, puzzle: Puzzle,
+                                 analysis: PuzzleAnalysis,
+                                 config: LayoutConfig = None) -> List[Layout]:
+    """Generate layouts constrained by a StationGraph.
+
+    Uses the graph's glyph list, bonder type, and slot constraints to
+    generate only layouts where bonder-output alignment is satisfied.
+    Combines CW-sweep, stacked, and multi-atom spread layouts.
+    """
+    if config is None:
+        config = LayoutConfig()
+
+    all_layouts: List[Layout] = []
+
+    has_bonds = (puzzle.outputs and puzzle.outputs[0].molecule.bonds)
+
+    # Generate CW-sweep layouts
+    cw_layouts = generate_layouts(
+        puzzle, analysis, graph.glyph_names, graph.need_bonder,
+        config, bonder_name=graph.bonder_type)
+
+    # Generate stacked layouts
+    stacked_layouts = generate_stacked_layouts(
+        puzzle, analysis, graph.glyph_names, graph.need_bonder,
+        config, bonder_name=graph.bonder_type)
+
+    combined = cw_layouts + stacked_layouts
+
+    # Filter by bonder-output alignment if output has bonds
+    if has_bonds and graph.need_bonder:
+        for layout in combined:
+            if _check_bonder_output_alignment(
+                    layout.stations, layout.positions,
+                    layout.glyph_rotations, layout.output_rotations,
+                    puzzle):
+                all_layouts.append(layout)
+    else:
+        all_layouts = combined
+
+    # For multi-atom bonded outputs, generate spread layouts
+    if has_bonds and graph.need_bonder:
+        spread = _generate_spread_layouts(
+            puzzle, analysis, graph.glyph_names,
+            graph.bonder_type, config)
+        all_layouts.extend(spread)
+
+    all_layouts.sort(key=lambda l: l.cost)
+    return all_layouts[:config.max_layouts]
+
+
+def _generate_spread_layouts(
+    puzzle: Puzzle, analysis: PuzzleAnalysis,
+    glyph_names: List[str], bonder_name: str,
+    config: LayoutConfig,
+) -> List[Layout]:
+    """Generate layouts for multi-atom bonded outputs.
+
+    Each output atom gets its own arm direction, so the arm can drop
+    atoms at different bonder slot positions. The bonder and output
+    share a position, and their rotations ensure slot alignment.
+    """
+    if not puzzle.outputs:
+        return []
+
+    mol = puzzle.outputs[0].molecule
+    if not mol.bonds or mol.is_monoatomic:
+        return []
+
+    # Compute assembly order (BFS from leaf) - same as station_graph
+    from .station_graph import _compute_assembly_order
+    assembly_order = _compute_assembly_order(mol)
+
+    n_output_atoms = len(mol.atoms)
+    n_inputs = len(puzzle.inputs)
+    n_glyphs = len([g for g in glyph_names if g != 'baron'])
+
+    # Need: n_output_atoms dirs for atom delivery + n_inputs + n_glyphs <= 6
+    total_needed = n_output_atoms + n_inputs + n_glyphs
+    if total_needed > 6:
+        return []
+
+    layouts: List[Layout] = []
+    arm_positions = list(hex_spiral(ORIGIN, 2))
+
+    for arm_pos in arm_positions:
+        for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
+            arm_type = 'arm1' if arm_len == 1 else 'arm2'
+
+            # Compute tip positions for all 6 directions
+            tips: Dict[int, HexCoord] = {}
+            for d in range(6):
+                tip = arm_pos
+                for _ in range(arm_len):
+                    tip = tip + DIRECTIONS[d]
+                tips[d] = tip
+
+            # For each output placement, check atom reachability
+            for out_anchor_dir in range(6):
+                out_tip = tips[out_anchor_dir]
+                out_placements = _find_output_placements(out_tip, puzzle)
+
+                for out_pos, out_rot in out_placements:
+                    # Compute world positions of all output atoms
+                    atom_worlds = []
+                    for atom in mol.atoms:
+                        wp = local_to_world(out_pos, out_rot,
+                                            atom.position.q,
+                                            atom.position.r)
+                        atom_worlds.append(wp)
+
+                    # Map each atom to an arm direction
+                    atom_dirs: List[Optional[int]] = []
+                    all_reach = True
+                    used_dirs: Set[int] = set()
+                    for aw in atom_worlds:
+                        found_d = None
+                        for d, tp in tips.items():
+                            if tp == aw and d not in used_dirs:
+                                found_d = d
+                                break
+                        if found_d is None:
+                            all_reach = False
+                            break
+                        atom_dirs.append(found_d)
+                        used_dirs.add(found_d)
+
+                    if not all_reach:
+                        continue
+
+                    # Find bonder placements that align
+                    bonder_placements_valid = []
+                    for bd in used_dirs:
+                        for bp, br in _find_bonder_placements(
+                                tips[bd], bonder_name):
+                            try:
+                                spec = get_glyph_spec(bonder_name)
+                            except KeyError:
+                                continue
+                            bslots = set()
+                            for slot in spec.active_slots:
+                                sp = local_to_world(bp, br,
+                                                     slot.du, slot.dv)
+                                bslots.add((sp.q, sp.r))
+
+                            # Check all bonds covered
+                            ok = True
+                            for bond in mol.bonds:
+                                f = local_to_world(
+                                    out_pos, out_rot,
+                                    bond.from_pos.q, bond.from_pos.r)
+                                t = local_to_world(
+                                    out_pos, out_rot,
+                                    bond.to_pos.q, bond.to_pos.r)
+                                if ((f.q, f.r) not in bslots or
+                                        (t.q, t.r) not in bslots):
+                                    ok = False
+                                    break
+                            if ok:
+                                bonder_placements_valid.append((bp, br))
+
+                    if not bonder_placements_valid:
+                        continue
+
+                    # Free directions for input and glyph stations
+                    free_dirs = [d for d in range(6)
+                                 if d not in used_dirs]
+                    if len(free_dirs) < n_inputs + n_glyphs:
+                        continue
+
+                    # Try assigning inputs and glyphs to free dirs
+                    needed = n_inputs + n_glyphs
+                    for dir_combo in itertools.permutations(
+                            free_dirs, needed):
+                        input_dirs = list(dir_combo[:n_inputs])
+                        glyph_dirs = list(dir_combo[n_inputs:])
+
+                        # Build the station list and find placements
+                        for bonder_pos, bonder_rot in \
+                                bonder_placements_valid[:3]:
+                            # Build stations: inputs, glyphs,
+                            # bonder (at first atom dir), output
+                            stations: List[Tuple[str, object]] = []
+                            directions: List[int] = []
+                            positions: List[HexCoord] = []
+                            glyph_rots: Dict[int, int] = {}
+                            output_rots: Dict[int, int] = {}
+
+                            # Inputs
+                            for ii in range(n_inputs):
+                                stations.append(('input', ii))
+                                directions.append(input_dirs[ii])
+                                positions.append(tips[input_dirs[ii]])
+
+                            # Glyphs
+                            gi_offset = len(stations)
+                            glyph_valid = True
+                            for gi_idx, gname in enumerate(
+                                    glyph_names):
+                                if gname == 'baron':
+                                    continue
+                                if gi_idx >= len(glyph_dirs):
+                                    glyph_valid = False
+                                    break
+                                gd = glyph_dirs[gi_idx]
+                                gtip = tips[gd]
+                                gplacements = _find_glyph_placements(
+                                    gtip, gname)
+                                if not gplacements:
+                                    glyph_valid = False
+                                    break
+                                gpos, grot = gplacements[0]
+                                si = len(stations)
+                                stations.append(('glyph', gname))
+                                directions.append(gd)
+                                positions.append(gpos)
+                                glyph_rots[si] = grot
+
+                            if not glyph_valid:
+                                continue
+
+                            # Bonder
+                            bsi = len(stations)
+                            stations.append(('bonder', bonder_name))
+                            directions.append(atom_dirs[0])
+                            positions.append(bonder_pos)
+                            glyph_rots[bsi] = bonder_rot
+
+                            # Output
+                            osi = len(stations)
+                            stations.append(('output', 0))
+                            directions.append(atom_dirs[0])
+                            positions.append(out_pos)
+                            output_rots[osi] = out_rot
+
+                            # Compute cost
+                            cost = PART_COSTS.get(arm_type, 20)
+                            for st, sd in stations:
+                                if st == 'glyph':
+                                    cost += PART_COSTS.get(sd, 0)
+                                elif st == 'bonder':
+                                    cost += PART_COSTS.get(sd, 10)
+
+                            if (config.cost_bound is not None and
+                                    cost >= config.cost_bound):
+                                continue
+
+                            start_dir = directions[0]
+
+                            layout = Layout(
+                                arm_pos=arm_pos,
+                                arm_rot=start_dir,
+                                arm_len=arm_len,
+                                arm_type=arm_type,
+                                stations=stations,
+                                directions=directions,
+                                positions=positions,
+                                glyph_rotations=glyph_rots,
+                                output_rotations=output_rots,
+                                cost=cost,
+                            )
+                            # Store atom delivery dirs in flow order
+                            # (assembly_order maps flow index to
+                            # atom index)
+                            flow_dirs = [atom_dirs[assembly_order[i]]
+                                         for i in range(
+                                             len(assembly_order))
+                                         if i < len(atom_dirs)
+                                         and assembly_order[i]
+                                         < len(atom_dirs)]
+                            layout._atom_dirs = flow_dirs
+                            layouts.append(layout)
+
+                            if len(layouts) >= config.max_layouts:
+                                return layouts
+
+    layouts.sort(key=lambda l: l.cost)
+    return layouts[:config.max_layouts]

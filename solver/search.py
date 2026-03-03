@@ -12,7 +12,7 @@ import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import itertools
 
@@ -20,11 +20,14 @@ from .hex import HexCoord, DIRECTIONS, ORIGIN, hex_spiral
 from .puzzle import Puzzle, PuzzleIO, parse_puzzle
 from .solution import Solution, Part, Inst, solution_to_bytes, write_solution, PART_COSTS
 from .recipe import PuzzleAnalysis, analyze_puzzle, REACTION_GLYPHS
+from .production_planner import generate_plans, ProductionPlan
 from .simulator import Simulator, VerifyResult
-from .layout_z3 import generate_layouts, compute_lower_bound, Layout, LayoutConfig
+from .layout_z3 import (generate_layouts, compute_lower_bound, Layout,
+                        LayoutConfig, generate_layouts_from_graph)
 from .tape_ga import TapeGA, GAConfig, generate_geometric_tapes, Individual
 from .pattern_db import PatternDB
 from .glyph_model import get_glyph_spec, local_to_world
+from .station_graph import build_station_graph, StationGraph, graph_to_plan
 
 
 @dataclass
@@ -75,13 +78,10 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     # --- 1. Analyze puzzle ---
     analysis = analyze_puzzle(puzzle)
 
-    glyphs_needed = []
-    if analysis.recipe:
-        for reaction, count in analysis.recipe.reactions.items():
-            if count > 0:
-                for glyph_name in REACTION_GLYPHS[reaction]:
-                    glyphs_needed.append(glyph_name)
+    plans = generate_plans(puzzle, analysis)
 
+    # Use first plan's glyphs for zero-arm and initial display
+    glyphs_needed = plans[0].glyph_names if plans else []
     need_bonder = analysis.needs_bonding
     n_inputs = len(puzzle.inputs)
     n_outputs = len(puzzle.outputs)
@@ -121,7 +121,10 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         print(f'  Inputs: {n_inputs}, Outputs: {n_outputs}')
         if deduped_puzzle:
             print(f'  Deduplicated inputs: {deduped_n_inputs} (from {n_inputs})')
-        print(f'  Glyphs needed: {glyphs_needed}')
+        print(f'  Plans: {len(plans)}')
+        for pi, plan in enumerate(plans):
+            print(f'    Plan {pi}: glyphs={plan.glyph_names}, '
+                  f'grabs={plan.total_grabs}, cost~{plan.estimated_cost}')
         print(f'  Needs bonder: {need_bonder}')
 
     # --- 2. Load puzzle bytes ---
@@ -170,8 +173,9 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         return best
 
     # --- Phase 1: Generate layouts ---
-    # Only handle monoatomic inputs for now
-    if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
+    # Skip non-monoatomic inputs unless the planner has unbonder support
+    has_mono_inputs = all(pio.molecule.is_monoatomic for pio in puzzle.inputs)
+    if not has_mono_inputs:
         if verbose:
             print(f'  Skipping layout search: non-monoatomic inputs')
         return best
@@ -179,41 +183,17 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     if verbose:
         print(f'  Phase 1: Generating layouts via Z3...')
 
-    # Generate layouts for each arm length separately to ensure diversity
-    layouts = []
-    for arm_len in [1, 2]:
-        config = LayoutConfig(
-            min_arm_len=arm_len,
-            max_arm_len=arm_len,
-            max_layouts=200,
-        )
-        if best is not None:
-            config.cost_bound = best.metrics.get('cost', None)
-        batch = generate_layouts(puzzle, analysis, glyphs_needed, need_bonder, config)
-        layouts.extend(batch)
-        if verbose:
-            print(f'  Arm length {arm_len}: {len(batch)} CW-sweep layouts')
-
-    # Generate stacked layouts separately (parts share same hex)
+    # Generate layouts for each plan variant
     from .layout_z3 import generate_stacked_layouts
-    for arm_len in [1, 2]:
-        config = LayoutConfig(
-            min_arm_len=arm_len,
-            max_arm_len=arm_len,
-            max_layouts=200,
-        )
-        if best is not None:
-            config.cost_bound = best.metrics.get('cost', None)
-        stacked = generate_stacked_layouts(
-            puzzle, analysis, glyphs_needed, need_bonder, config)
-        layouts.extend(stacked)
-        if verbose:
-            print(f'  Arm length {arm_len}: {len(stacked)} stacked layouts')
+    # Each entry: (layout, plan, optional_graph)
+    layouts_with_plans: List[Tuple[Layout, ProductionPlan, Optional[StationGraph]]] = []
 
-    # Generate deduplicated layouts when inputs share element types
-    # (e.g., P008 has 3 Fire inputs — one input station suffices)
-    if deduped_puzzle is not None:
-        deduped_analysis = analyze_puzzle(deduped_puzzle)
+    for plan in plans:
+        plan_glyphs = plan.glyph_names
+        plan_bonder = plan.need_bonder
+        plan_bonder_name = plan.bonder_type
+
+        # Generate layouts for each arm length separately to ensure diversity
         for arm_len in [1, 2]:
             config = LayoutConfig(
                 min_arm_len=arm_len,
@@ -222,30 +202,128 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
             )
             if best is not None:
                 config.cost_bound = best.metrics.get('cost', None)
-            batch = generate_layouts(
-                deduped_puzzle, deduped_analysis, glyphs_needed, need_bonder, config)
-            layouts.extend(batch)
+            batch = generate_layouts(puzzle, analysis, plan_glyphs,
+                                     plan_bonder, config,
+                                     bonder_name=plan_bonder_name)
+            for lay in batch:
+                layouts_with_plans.append((lay, plan, None))
             if verbose:
-                print(f'  Arm length {arm_len}: {len(batch)} deduped CW-sweep layouts')
+                print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
+                      f'arm{arm_len}: {len(batch)} CW-sweep layouts')
+
+        # Generate stacked layouts separately (parts share same hex)
+        for arm_len in [1, 2]:
+            config = LayoutConfig(
+                min_arm_len=arm_len,
+                max_arm_len=arm_len,
+                max_layouts=200,
+            )
+            if best is not None:
+                config.cost_bound = best.metrics.get('cost', None)
             stacked = generate_stacked_layouts(
-                deduped_puzzle, deduped_analysis, glyphs_needed, need_bonder, config)
-            layouts.extend(stacked)
+                puzzle, analysis, plan_glyphs, plan_bonder, config,
+                bonder_name=plan_bonder_name)
+            for lay in stacked:
+                layouts_with_plans.append((lay, plan, None))
             if verbose:
-                print(f'  Arm length {arm_len}: {len(stacked)} deduped stacked layouts')
+                print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
+                      f'arm{arm_len}: {len(stacked)} stacked layouts')
+
+        # Generate deduplicated layouts when inputs share element types
+        if deduped_puzzle is not None:
+            deduped_analysis = analyze_puzzle(deduped_puzzle)
+            for arm_len in [1, 2]:
+                config = LayoutConfig(
+                    min_arm_len=arm_len,
+                    max_arm_len=arm_len,
+                    max_layouts=200,
+                )
+                if best is not None:
+                    config.cost_bound = best.metrics.get('cost', None)
+                batch = generate_layouts(
+                    deduped_puzzle, deduped_analysis, plan_glyphs,
+                    plan_bonder, config, bonder_name=plan_bonder_name)
+                for lay in batch:
+                    layouts_with_plans.append((lay, plan, None))
+                if verbose:
+                    print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
+                          f'arm{arm_len}: {len(batch)} deduped CW-sweep layouts')
+                stacked = generate_stacked_layouts(
+                    deduped_puzzle, deduped_analysis, plan_glyphs,
+                    plan_bonder, config, bonder_name=plan_bonder_name)
+                for lay in stacked:
+                    layouts_with_plans.append((lay, plan, None))
+                if verbose:
+                    print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
+                          f'arm{arm_len}: {len(stacked)} deduped stacked layouts')
+
+    # --- Phase 1b: Station graph constrained layouts ---
+    # Build station graphs and generate alignment-constrained layouts
+    graphs = build_station_graph(puzzle, analysis)
+    graph_plans: Dict[int, ProductionPlan] = {}  # graph_idx -> plan
+
+    if verbose and graphs:
+        print(f'  Station graphs: {len(graphs)} variants')
+
+    for gi, graph in enumerate(graphs):
+        # Convert graph to plan for tape compilation compatibility
+        plan = graph_to_plan(graph, puzzle, analysis)
+        graph_plans[gi] = plan
+
+        for arm_len in [1, 2]:
+            config = LayoutConfig(
+                min_arm_len=arm_len,
+                max_arm_len=arm_len,
+                max_layouts=200,
+            )
+            if best is not None:
+                config.cost_bound = best.metrics.get('cost', None)
+
+            graph_layouts = generate_layouts_from_graph(
+                graph, puzzle, analysis, config)
+
+            for lay in graph_layouts:
+                layouts_with_plans.append((lay, plan, graph))
+
+            if verbose and graph_layouts:
+                print(f'  Graph {gi} arm{arm_len}: {len(graph_layouts)} '
+                      f'constrained layouts (bonder={graph.bonder_type})')
+
+        # Also try with deduped puzzle
+        if deduped_puzzle is not None:
+            deduped_analysis_g = analyze_puzzle(deduped_puzzle)
+            deduped_graphs = build_station_graph(deduped_puzzle, deduped_analysis_g)
+            for dg in deduped_graphs:
+                dplan = graph_to_plan(dg, deduped_puzzle, deduped_analysis_g)
+                for arm_len in [1, 2]:
+                    config = LayoutConfig(
+                        min_arm_len=arm_len,
+                        max_arm_len=arm_len,
+                        max_layouts=200,
+                    )
+                    if best is not None:
+                        config.cost_bound = best.metrics.get('cost', None)
+                    dg_layouts = generate_layouts_from_graph(
+                        dg, deduped_puzzle, deduped_analysis_g, config)
+                    for lay in dg_layouts:
+                        layouts_with_plans.append((lay, dplan, dg))
+                    if verbose and dg_layouts:
+                        print(f'  Deduped graph arm{arm_len}: '
+                              f'{len(dg_layouts)} constrained layouts')
 
     if verbose:
-        print(f'  Total: {len(layouts)} candidate layouts')
+        print(f'  Total: {len(layouts_with_plans)} candidate layouts')
 
-    if not layouts:
+    if not layouts_with_plans:
         if verbose:
             print(f'  No valid layouts found')
         return best
 
     # --- Phase 2: Compute lower bounds and create priority queue ---
     layout_bounds = []
-    for i, layout in enumerate(layouts):
+    for i, (layout, plan, graph_opt) in enumerate(layouts_with_plans):
         lb = compute_lower_bound(layout, analysis)
-        layout_bounds.append((lb, i, layout))
+        layout_bounds.append((lb, i, layout, plan, graph_opt))
 
     # Sort by lower bound (ascending)
     layout_bounds.sort(key=lambda x: x[0])
@@ -260,7 +338,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     # Get instruction weights from pattern DB
     inst_weights = pattern_db.instruction_weights() if pattern_db.patterns else None
 
-    for rank, (lb, layout_idx, layout) in enumerate(layout_bounds):
+    for rank, (lb, layout_idx, layout, plan, graph_opt) in enumerate(layout_bounds):
         # 3a. Branch-and-bound: skip if lower bound >= current best
         if best is not None and lb >= best.score:
             if verbose and rank < 5:
@@ -278,12 +356,15 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         base_sol = layout.to_solution(puzzle, n_outputs)
 
         # 3c. Generate seed tapes from multiple sources
-        seed_tapes = _build_seed_tapes(layout, n_inputs, pattern_db, glyphs_needed,
-                                       analysis=analysis, puzzle=puzzle)
+        seed_tapes = _build_seed_tapes(layout, n_inputs, pattern_db,
+                                       plan.glyph_names,
+                                       analysis=analysis, puzzle=puzzle,
+                                       plan=plan, graph=graph_opt)
 
         if verbose and rank < 10:
             print(f'  Layout {rank}: cost={layout.cost}g, lb={lb}, '
-                  f'{len(seed_tapes)} seed tapes')
+                  f'{len(seed_tapes)} seed tapes, '
+                  f'glyphs={plan.glyph_names}')
 
         # 3d. Quick screening: try seed tapes directly before full GA
         layout_info = {
@@ -385,11 +466,15 @@ def _build_seed_tapes(layout: Layout, n_inputs: int,
                       pattern_db: PatternDB,
                       glyphs_needed: List[str],
                       analysis: Optional[PuzzleAnalysis] = None,
-                      puzzle: Optional[Puzzle] = None) -> List[List[int]]:
+                      puzzle: Optional[Puzzle] = None,
+                      plan: Optional[ProductionPlan] = None,
+                      graph: Optional[StationGraph] = None) -> List[List[int]]:
     """Build seed tapes for GA from multiple sources.
 
     Sources (priority order):
-      1. Compiled tapes from dataflow analysis (highest priority)
+      0. Graph-compiled tapes (from station graph, highest priority)
+      0b. Plan-compiled tapes (from production plan)
+      1. Compiled tapes from dataflow analysis
       2. Geometric templates based on layout geometry
       3. Similar tapes from archive pattern DB
       4. Common tape templates from archive
@@ -397,7 +482,19 @@ def _build_seed_tapes(layout: Layout, n_inputs: int,
     seed_tapes: List[List[int]] = []
     n_stations = len(layout.stations)
 
-    # Source 1: Compiled tapes (dataflow-derived, highest priority)
+    # Source 0: Graph-compiled tapes (station graph, highest priority)
+    if graph is not None:
+        from .tape_compiler import compile_tapes_from_graph
+        graph_tapes = compile_tapes_from_graph(layout, graph)
+        seed_tapes.extend(graph_tapes)
+
+    # Source 0b: Plan-compiled tapes (production planner)
+    if plan is not None and plan.atom_routes:
+        from .tape_compiler import compile_tapes_from_plan
+        plan_tapes = compile_tapes_from_plan(layout, plan)
+        seed_tapes.extend(plan_tapes)
+
+    # Source 1: Compiled tapes (dataflow-derived)
     if analysis is not None and puzzle is not None:
         from .tape_compiler import compile_tapes
         compiled = compile_tapes(layout, analysis, puzzle)

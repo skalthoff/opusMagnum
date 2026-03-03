@@ -691,6 +691,12 @@ def compile_tapes(layout: Layout, analysis: PuzzleAnalysis,
                 tapes.append([Inst.GRAB] + [rot_inst] * n_rot
                              + [Inst.DROP, terminal])
 
+    # --- Strategy 8: Per-atom spread delivery for multi-atom outputs ---
+    atom_dirs = getattr(layout, '_atom_dirs', None)
+    if atom_dirs and graph.tasks:
+        _compile_spread_delivery_from_tasks(
+            tapes, graph.tasks, atom_dirs, layout)
+
     # --- Deduplicate ---
     seen: Set[Tuple[int, ...]] = set()
     unique: List[List[int]] = []
@@ -701,3 +707,875 @@ def compile_tapes(layout: Layout, analysis: PuzzleAnalysis,
             unique.append(tape)
 
     return unique
+
+
+def _compile_spread_delivery_from_tasks(
+    tapes: List[List[int]],
+    tasks: List[DeliveryTask],
+    atom_dirs: List[int],
+    layout: Layout,
+) -> None:
+    """Generate tapes for spread layouts using DeliveryTasks.
+
+    Each atom_dirs[i] gives the target arm direction for task i.
+    """
+    arm_start = layout.arm_rot
+    if len(atom_dirs) != len(tasks):
+        return
+
+    # Full delivery sequence
+    for terminal in [Inst.RESET, Inst.REPEAT]:
+        tape: List[int] = []
+        cur_dir = arm_start
+
+        for ti, task in enumerate(tasks):
+            src_dir = layout.directions[task.source_idx]
+            dest_dir = atom_dirs[ti]
+
+            tape.extend(_rotation_instructions(cur_dir, src_dir))
+            tape.append(Inst.GRAB)
+            tape.extend(_rotation_instructions(src_dir, dest_dir))
+            tape.append(Inst.DROP)
+            cur_dir = dest_dir
+
+        if terminal == Inst.REPEAT:
+            tape.extend(_rotation_instructions(cur_dir, arm_start))
+        tape.append(terminal)
+        tapes.append(tape)
+
+
+# ---------------------------------------------------------------------------
+# Plan-aware tape compilation
+# ---------------------------------------------------------------------------
+
+def compile_tapes_from_plan(layout: Layout,
+                            plan: 'ProductionPlan') -> List[List[int]]:
+    """Compile tapes using a ProductionPlan's atom routes and assembly order.
+
+    Generates tapes that handle multi-grab sequences (same input grabbed
+    N times per output cycle) and assembly-ordered delivery for bonded outputs.
+    """
+    from .production_planner import ProductionPlan, AtomRoute
+
+    tapes: List[List[int]] = []
+    arm_start = layout.arm_rot
+
+    input_stations = _find_input_stations(layout)
+    output_idx = _find_output_station(layout)
+    bonder_idx = _find_bonder_station(layout)
+
+    if output_idx is None:
+        return tapes
+
+    # Build io_index -> station index mapping
+    io_to_station: Dict[int, int] = {}
+    for si in input_stations:
+        _stype, sdata = layout.stations[si]
+        if isinstance(sdata, int):
+            io_to_station[sdata] = si
+
+    # Find glyph stations
+    glyph_stations: Dict[str, List[int]] = {}
+    for i, (st, sd) in enumerate(layout.stations):
+        if st == 'glyph':
+            glyph_stations.setdefault(sd, []).append(i)
+
+    routes = plan.atom_routes
+    if not routes:
+        return tapes
+
+    # --- Strategy P1: Multi-grab sequential delivery ---
+    # Deliver atoms in assembly order, each as a separate grab-rotate-drop-reset
+    _compile_multi_grab_sequential(
+        tapes, routes, plan.assembly_order, layout, arm_start,
+        io_to_station, glyph_stations, bonder_idx, output_idx)
+
+    # --- Strategy P2: Per-route single delivery loops ---
+    # Each route gets its own single-delivery tape (useful when GA combines)
+    _compile_per_route_singles(
+        tapes, routes, layout, arm_start,
+        io_to_station, glyph_stations, bonder_idx, output_idx)
+
+    # --- Strategy P3: Multi-grab with jiggle for glyph pass-through ---
+    _compile_multi_grab_jiggle(
+        tapes, routes, plan.assembly_order, layout, arm_start,
+        io_to_station, glyph_stations, bonder_idx, output_idx)
+
+    # --- Deduplicate ---
+    seen: Set[Tuple[int, ...]] = set()
+    unique: List[List[int]] = []
+    for tape in tapes:
+        key = tuple(tape)
+        if key not in seen and len(tape) >= 2:
+            seen.add(key)
+            unique.append(tape)
+
+    return unique
+
+
+def _route_source_station(route: 'AtomRoute',
+                          io_to_station: Dict[int, int],
+                          input_stations: List[int]) -> Optional[int]:
+    """Find layout station index for a route's source input."""
+    if route.source_input_idx in io_to_station:
+        return io_to_station[route.source_input_idx]
+    # Fallback: use first input station (for deduplicated puzzles)
+    return input_stations[0] if input_stations else None
+
+
+def _glyph_dirs_for_route(route: 'AtomRoute',
+                           glyph_stations: Dict[str, List[int]],
+                           layout: Layout) -> List[int]:
+    """Get direction indices of glyphs this route should pass through."""
+    dirs = []
+    for glyph_name in route.glyph_visits:
+        if glyph_name in glyph_stations:
+            for si in glyph_stations[glyph_name]:
+                dirs.append(layout.directions[si])
+    return dirs
+
+
+def _route_through_glyph(src_dir: int, dest_dir: int,
+                           glyph_dir: int) -> List[int]:
+    """Route from src to dest via glyph_dir using CW or CCW.
+
+    Determines which rotation direction (CW or CCW) from src passes
+    through glyph_dir on the way to dest, and returns that rotation sequence.
+    """
+    # Check if CW rotation from src hits glyph before dest
+    cw_path = []
+    d = src_dir
+    cw_hits_glyph = False
+    cw_hits_glyph_before_dest = False
+    for _ in range(6):
+        d = (d - 1) % 6  # CW step
+        cw_path.append(d)
+        if d == glyph_dir:
+            cw_hits_glyph = True
+            cw_hits_glyph_before_dest = True
+        if d == dest_dir:
+            break
+
+    # Check CCW path
+    ccw_path = []
+    d = src_dir
+    ccw_hits_glyph = False
+    ccw_hits_glyph_before_dest = False
+    for _ in range(6):
+        d = (d + 1) % 6  # CCW step
+        ccw_path.append(d)
+        if d == glyph_dir:
+            ccw_hits_glyph = True
+            ccw_hits_glyph_before_dest = True
+        if d == dest_dir:
+            break
+
+    # Prefer the path that passes through glyph
+    if cw_hits_glyph_before_dest and not ccw_hits_glyph_before_dest:
+        return [Inst.ROTATE_CW] * len(cw_path)
+    elif ccw_hits_glyph_before_dest and not cw_hits_glyph_before_dest:
+        return [Inst.ROTATE_CCW] * len(ccw_path)
+    elif cw_hits_glyph_before_dest:
+        # Both hit glyph, use shorter
+        if len(cw_path) <= len(ccw_path):
+            return [Inst.ROTATE_CW] * len(cw_path)
+        return [Inst.ROTATE_CCW] * len(ccw_path)
+
+    # Neither path naturally hits glyph — use shortest path
+    return _rotation_instructions(src_dir, dest_dir)
+
+
+def _route_avoiding_dirs(src_dir: int, dest_dir: int,
+                          avoid_dirs: List[int]) -> List[int]:
+    """Route from src to dest avoiding certain directions.
+
+    Tries CW and CCW and picks the one that avoids the given directions.
+    """
+    avoid_set = set(avoid_dirs)
+
+    # CW path
+    cw_path = []
+    d = src_dir
+    cw_avoids = True
+    for _ in range(6):
+        d = (d - 1) % 6
+        cw_path.append(d)
+        if d in avoid_set and d != dest_dir:
+            cw_avoids = False
+        if d == dest_dir:
+            break
+
+    # CCW path
+    ccw_path = []
+    d = src_dir
+    ccw_avoids = True
+    for _ in range(6):
+        d = (d + 1) % 6
+        ccw_path.append(d)
+        if d in avoid_set and d != dest_dir:
+            ccw_avoids = False
+        if d == dest_dir:
+            break
+
+    # Prefer avoiding path, then shorter
+    if ccw_avoids and not cw_avoids:
+        return [Inst.ROTATE_CCW] * len(ccw_path)
+    elif cw_avoids and not ccw_avoids:
+        return [Inst.ROTATE_CW] * len(cw_path)
+    elif len(cw_path) <= len(ccw_path):
+        return [Inst.ROTATE_CW] * len(cw_path)
+    return [Inst.ROTATE_CCW] * len(ccw_path)
+
+
+def _compile_multi_grab_sequential(
+        tapes: List[List[int]],
+        routes: List['AtomRoute'],
+        assembly_order: List[int],
+        layout: Layout,
+        arm_start: int,
+        io_to_station: Dict[int, int],
+        glyph_stations: Dict[str, List[int]],
+        bonder_idx: Optional[int],
+        output_idx: int):
+    """Generate multi-grab sequential tapes with route-aware rotation.
+
+    For each atom in assembly_order:
+    - Glyph routes: grab input, rotate THROUGH glyph direction to bonder/output
+    - Direct routes: grab input, rotate AROUND glyph directions to bonder/output
+    Each sub-delivery ends with drop + reset.
+    """
+    input_stations = _find_input_stations(layout)
+    need_bonder = bonder_idx is not None
+    route_by_id = {r.atom_id: r for r in routes}
+
+    order = assembly_order if assembly_order else [r.atom_id for r in routes]
+    order = [aid for aid in order if aid in route_by_id]
+    if not order:
+        return
+
+    # Collect all glyph directions for avoidance
+    all_glyph_dirs = set()
+    for gname, stations in glyph_stations.items():
+        for si in stations:
+            all_glyph_dirs.add(layout.directions[si])
+
+    # Determine final target for each route
+    for final_target_idx in ([bonder_idx, output_idx] if need_bonder else [output_idx]):
+        if final_target_idx is None:
+            continue
+        final_dir = layout.directions[final_target_idx]
+
+        tape: List[int] = []
+        cur_dir = arm_start
+        valid = True
+
+        for atom_id in order:
+            route = route_by_id[atom_id]
+            src_station = _route_source_station(route, io_to_station,
+                                                 input_stations)
+            if src_station is None:
+                valid = False
+                break
+
+            src_dir = layout.directions[src_station]
+
+            # Navigate to source
+            tape.extend(_rotation_instructions(cur_dir, src_dir))
+            tape.append(Inst.GRAB)
+
+            if route.glyph_visits and not route.needs_ungrabbed:
+                # Route THROUGH glyph on the way to final target
+                glyph_dir_list = _glyph_dirs_for_route(
+                    route, glyph_stations, layout)
+                if glyph_dir_list:
+                    nav = _route_through_glyph(
+                        src_dir, final_dir, glyph_dir_list[0])
+                else:
+                    nav = _rotation_instructions(src_dir, final_dir)
+            elif all_glyph_dirs:
+                # Direct route: AVOID glyph directions
+                nav = _route_avoiding_dirs(
+                    src_dir, final_dir, list(all_glyph_dirs))
+            else:
+                nav = _rotation_instructions(src_dir, final_dir)
+
+            tape.extend(nav)
+            tape.append(Inst.DROP)
+            cur_dir = final_dir
+
+        if not valid or not tape:
+            continue
+
+        # Terminal: Reset
+        tape.append(Inst.RESET)
+        tapes.append(tape)
+
+        # Also try with Repeat terminal
+        tape_repeat = tape[:-1]  # remove Reset
+        tape_repeat.extend(_rotation_instructions(cur_dir, arm_start))
+        tape_repeat.append(Inst.REPEAT)
+        tapes.append(tape_repeat)
+
+    # Also try both orderings: assembly_order and reverse
+    if len(order) > 1:
+        for rev_order in [list(reversed(order))]:
+            for final_target_idx in ([bonder_idx, output_idx] if need_bonder
+                                     else [output_idx]):
+                if final_target_idx is None:
+                    continue
+                final_dir = layout.directions[final_target_idx]
+
+                tape = []
+                cur_dir = arm_start
+                valid = True
+
+                for atom_id in rev_order:
+                    route = route_by_id[atom_id]
+                    src_station = _route_source_station(
+                        route, io_to_station, input_stations)
+                    if src_station is None:
+                        valid = False
+                        break
+                    src_dir = layout.directions[src_station]
+                    tape.extend(_rotation_instructions(cur_dir, src_dir))
+                    tape.append(Inst.GRAB)
+
+                    if route.glyph_visits and not route.needs_ungrabbed:
+                        glyph_dir_list = _glyph_dirs_for_route(
+                            route, glyph_stations, layout)
+                        if glyph_dir_list:
+                            nav = _route_through_glyph(
+                                src_dir, final_dir, glyph_dir_list[0])
+                        else:
+                            nav = _rotation_instructions(src_dir, final_dir)
+                    elif all_glyph_dirs:
+                        nav = _route_avoiding_dirs(
+                            src_dir, final_dir, list(all_glyph_dirs))
+                    else:
+                        nav = _rotation_instructions(src_dir, final_dir)
+
+                    tape.extend(nav)
+                    tape.append(Inst.DROP)
+                    cur_dir = final_dir
+
+                if valid and tape:
+                    tape.append(Inst.RESET)
+                    tapes.append(tape)
+
+
+def _compile_per_route_singles(
+        tapes: List[List[int]],
+        routes: List['AtomRoute'],
+        layout: Layout,
+        arm_start: int,
+        io_to_station: Dict[int, int],
+        glyph_stations: Dict[str, List[int]],
+        bonder_idx: Optional[int],
+        output_idx: int):
+    """Generate individual single-delivery tapes for each route.
+
+    For glyph routes: route through glyph to bonder/output.
+    For direct routes: route to bonder/output avoiding glyphs.
+    """
+    input_stations = _find_input_stations(layout)
+    need_bonder = bonder_idx is not None
+
+    # Collect glyph directions for avoidance
+    all_glyph_dirs = set()
+    for gname, stations in glyph_stations.items():
+        for si in stations:
+            all_glyph_dirs.add(layout.directions[si])
+
+    for route in routes:
+        src_station = _route_source_station(route, io_to_station,
+                                             input_stations)
+        if src_station is None:
+            continue
+        src_dir = layout.directions[src_station]
+
+        # Determine final targets to try
+        final_targets = []
+        if need_bonder and bonder_idx is not None:
+            final_targets.append(bonder_idx)
+        final_targets.append(output_idx)
+
+        for tgt_station in final_targets:
+            tgt_dir = layout.directions[tgt_station]
+
+            if route.glyph_visits and not route.needs_ungrabbed:
+                # Route through glyph to target
+                glyph_dir_list = _glyph_dirs_for_route(
+                    route, glyph_stations, layout)
+                if glyph_dir_list:
+                    nav = _route_through_glyph(
+                        src_dir, tgt_dir, glyph_dir_list[0])
+                else:
+                    nav = _rotation_instructions(src_dir, tgt_dir)
+
+                # Tape: grab, route through glyph, drop, reset
+                tape = [Inst.GRAB] + nav + [Inst.DROP, Inst.RESET]
+                tapes.append(tape)
+                tape = [Inst.GRAB] + nav + [Inst.RESET]
+                tapes.append(tape)
+            else:
+                # Direct route, avoid glyphs if any
+                if all_glyph_dirs:
+                    nav = _route_avoiding_dirs(
+                        src_dir, tgt_dir, list(all_glyph_dirs))
+                else:
+                    nav = _rotation_instructions(src_dir, tgt_dir)
+
+                tape = [Inst.GRAB] + nav + [Inst.DROP, Inst.RESET]
+                tapes.append(tape)
+                tape = [Inst.GRAB] + nav + [Inst.RESET]
+                tapes.append(tape)
+
+            # Also try all CW/CCW variants
+            single_tapes = _compile_single_delivery(
+                src_dir, tgt_dir, route.needs_ungrabbed, arm_start)
+            tapes.extend(single_tapes)
+
+            # Also try jiggle if route has glyph visits
+            if route.glyph_visits and not route.needs_ungrabbed:
+                jiggle_tapes = _compile_jiggle(src_dir, tgt_dir, arm_start)
+                tapes.extend(jiggle_tapes)
+
+
+def _compile_multi_grab_jiggle(
+        tapes: List[List[int]],
+        routes: List['AtomRoute'],
+        assembly_order: List[int],
+        layout: Layout,
+        arm_start: int,
+        io_to_station: Dict[int, int],
+        glyph_stations: Dict[str, List[int]],
+        bonder_idx: Optional[int],
+        output_idx: int):
+    """Generate multi-grab tapes with jiggle + route-through for glyph effects.
+
+    For glyph routes: grab, jiggle through glyph, deliver to bonder/output.
+    For direct routes: grab, route around glyph, deliver to bonder/output.
+    """
+    input_stations = _find_input_stations(layout)
+    need_bonder = bonder_idx is not None
+    route_by_id = {r.atom_id: r for r in routes}
+
+    order = assembly_order if assembly_order else [r.atom_id for r in routes]
+    order = [aid for aid in order if aid in route_by_id]
+    if not order:
+        return
+
+    has_glyph_routes = any(route_by_id[aid].glyph_visits
+                           for aid in order if aid in route_by_id)
+    if not has_glyph_routes:
+        return
+
+    all_glyph_dirs = set()
+    for gname, stations in glyph_stations.items():
+        for si in stations:
+            all_glyph_dirs.add(layout.directions[si])
+
+    for final_target_idx in ([bonder_idx, output_idx] if need_bonder
+                             else [output_idx]):
+        if final_target_idx is None:
+            continue
+        final_dir = layout.directions[final_target_idx]
+
+        for jiggle_cw in [True, False]:
+            for jiggle_size in [1, 2]:
+                tape: List[int] = []
+                cur_dir = arm_start
+                valid = True
+
+                for atom_id in order:
+                    route = route_by_id[atom_id]
+                    src_station = _route_source_station(
+                        route, io_to_station, input_stations)
+                    if src_station is None:
+                        valid = False
+                        break
+                    src_dir = layout.directions[src_station]
+
+                    tape.extend(_rotation_instructions(cur_dir, src_dir))
+                    tape.append(Inst.GRAB)
+
+                    if route.glyph_visits and not route.needs_ungrabbed:
+                        # Jiggle through glyph, then route to target
+                        if jiggle_cw:
+                            tape.extend([Inst.ROTATE_CW] * jiggle_size)
+                            tape.extend([Inst.ROTATE_CCW] * jiggle_size)
+                        else:
+                            tape.extend([Inst.ROTATE_CCW] * jiggle_size)
+                            tape.extend([Inst.ROTATE_CW] * jiggle_size)
+                        # After jiggle, back at src_dir
+                        tape.extend(
+                            _rotation_instructions(src_dir, final_dir))
+                    elif all_glyph_dirs:
+                        nav = _route_avoiding_dirs(
+                            src_dir, final_dir, list(all_glyph_dirs))
+                        tape.extend(nav)
+                    else:
+                        tape.extend(
+                            _rotation_instructions(src_dir, final_dir))
+
+                    tape.append(Inst.DROP)
+                    cur_dir = final_dir
+
+                if valid and tape:
+                    tape.append(Inst.RESET)
+                    tapes.append(tape)
+
+
+# ---------------------------------------------------------------------------
+# Station-graph-aware tape compilation
+# ---------------------------------------------------------------------------
+
+def compile_tapes_from_graph(layout: Layout, graph) -> List[List[int]]:
+    """Compile tapes using a positioned StationGraph.
+
+    The graph already knows:
+    - Which direction each station is at (from layout)
+    - Which flows go through which glyph directions (from flow tracing)
+    - What order to deliver atoms (from assembly order)
+
+    So tape compilation becomes mechanical:
+      for each flow in assembly_order:
+          rotate to flow.source direction -> GRAB
+          rotate through flow.via directions (through glyph)
+          rotate to flow.dest direction -> DROP
+      RESET
+    """
+    from .station_graph import StationGraph, StationID
+
+    tapes: List[List[int]] = []
+    arm_start = layout.arm_rot
+
+    # Build StationID -> layout station index mapping
+    sid_to_layout_idx: Dict = {}
+    glyph_layout_used: Set[int] = set()
+
+    for sid, station in graph.stations.items():
+        for li, (stype, sdata) in enumerate(layout.stations):
+            if stype != sid.kind:
+                continue
+            if stype == 'input' and sdata == station.io_index:
+                sid_to_layout_idx[sid] = li
+                break
+            elif stype == 'glyph' and sdata == station.part_name:
+                if li not in glyph_layout_used:
+                    sid_to_layout_idx[sid] = li
+                    glyph_layout_used.add(li)
+                    break
+            elif stype == 'bonder':
+                sid_to_layout_idx[sid] = li
+                break
+            elif stype == 'output':
+                sid_to_layout_idx[sid] = li
+                break
+
+    def _sid_dir(sid) -> Optional[int]:
+        idx = sid_to_layout_idx.get(sid)
+        if idx is not None and idx < len(layout.directions):
+            return layout.directions[idx]
+        return None
+
+    # Get flows in assembly order
+    flow_by_id = {f.flow_id: f for f in graph.flows}
+    ordered_flows = [flow_by_id[fid] for fid in graph.assembly_order
+                     if fid in flow_by_id]
+
+    if not ordered_flows:
+        return tapes
+
+    # --- Strategy G1: Full assembly sequence with route-through ---
+    for terminal in [Inst.RESET, Inst.REPEAT]:
+        tape: List[int] = []
+        cur_dir = arm_start
+        valid = True
+
+        for flow in ordered_flows:
+            src_dir = _sid_dir(flow.source)
+            dest_dir = _sid_dir(flow.dest)
+            if src_dir is None or dest_dir is None:
+                valid = False
+                break
+
+            tape.extend(_rotation_instructions(cur_dir, src_dir))
+            tape.append(Inst.GRAB)
+
+            if flow.via and not flow.needs_ungrab:
+                via_dirs = [_sid_dir(via) for via in flow.via]
+                via_dirs = [d for d in via_dirs if d is not None]
+                if via_dirs:
+                    nav = _route_through_glyph(src_dir, dest_dir, via_dirs[0])
+                else:
+                    nav = _rotation_instructions(src_dir, dest_dir)
+                tape.extend(nav)
+            else:
+                tape.extend(_rotation_instructions(src_dir, dest_dir))
+
+            tape.append(Inst.DROP)
+            cur_dir = dest_dir
+
+        if not valid or not tape:
+            continue
+
+        if terminal == Inst.REPEAT:
+            tape.extend(_rotation_instructions(cur_dir, arm_start))
+        tape.append(terminal)
+        tapes.append(tape)
+
+    # --- Strategy G2: Individual flow tapes (one atom per cycle) ---
+    for flow in ordered_flows:
+        src_dir = _sid_dir(flow.source)
+        dest_dir = _sid_dir(flow.dest)
+        if src_dir is None or dest_dir is None:
+            continue
+
+        if flow.via and not flow.needs_ungrab:
+            via_dirs = [_sid_dir(via) for via in flow.via]
+            via_dirs = [d for d in via_dirs if d is not None]
+            if via_dirs:
+                nav_to_dest = _route_through_glyph(
+                    src_dir, dest_dir, via_dirs[0])
+            else:
+                nav_to_dest = _rotation_instructions(src_dir, dest_dir)
+        else:
+            nav_to_dest = _rotation_instructions(src_dir, dest_dir)
+
+        nav_to_src = _rotation_instructions(arm_start, src_dir)
+
+        # GRX
+        tapes.append(nav_to_src + [Inst.GRAB] + nav_to_dest + [Inst.RESET])
+        # GRgX
+        tapes.append(nav_to_src + [Inst.GRAB] + nav_to_dest
+                     + [Inst.DROP, Inst.RESET])
+        # GRgC (repeat)
+        nav_return = _rotation_instructions(dest_dir, src_dir)
+        tapes.append(nav_to_src + [Inst.GRAB] + nav_to_dest
+                     + [Inst.DROP] + nav_return + [Inst.REPEAT])
+
+    # --- Strategy G3: Conversion flow (ungrab at glyph) ---
+    output_dir = None
+    for sid in graph.stations:
+        if sid.kind == 'output':
+            output_dir = _sid_dir(sid)
+            break
+
+    for flow in ordered_flows:
+        if not flow.needs_ungrab or not flow.via:
+            continue
+        src_dir = _sid_dir(flow.source)
+        glyph_dir = _sid_dir(flow.via[0])
+        if src_dir is None or glyph_dir is None or output_dir is None:
+            continue
+
+        conv_tapes = _compile_conversion_delivery(
+            src_dir, glyph_dir, output_dir, arm_start)
+        tapes.extend(conv_tapes)
+
+    # --- Strategy G4: Jiggle patterns for immediate glyphs ---
+    for flow in ordered_flows:
+        if flow.needs_ungrab or not flow.via:
+            continue
+        src_dir = _sid_dir(flow.source)
+        if src_dir is None:
+            continue
+
+        jiggle_tapes = _compile_jiggle(src_dir, src_dir, arm_start)
+        tapes.extend(jiggle_tapes)
+
+    # --- Strategy G5: All-direction brute force ---
+    for n_rot in range(1, 6):
+        for rot_inst in [Inst.ROTATE_CW, Inst.ROTATE_CCW]:
+            for terminal in [Inst.RESET, Inst.REPEAT]:
+                tapes.append([Inst.GRAB] + [rot_inst] * n_rot + [terminal])
+                tapes.append([Inst.GRAB] + [rot_inst] * n_rot
+                             + [Inst.DROP, terminal])
+
+    # --- Strategy G6: Reverse assembly order ---
+    if len(ordered_flows) > 1:
+        for terminal in [Inst.RESET]:
+            tape_r: List[int] = []
+            cur_dir_r = arm_start
+            valid_r = True
+
+            for flow in reversed(ordered_flows):
+                src_dir = _sid_dir(flow.source)
+                dest_dir = _sid_dir(flow.dest)
+                if src_dir is None or dest_dir is None:
+                    valid_r = False
+                    break
+
+                tape_r.extend(_rotation_instructions(cur_dir_r, src_dir))
+                tape_r.append(Inst.GRAB)
+
+                if flow.via and not flow.needs_ungrab:
+                    via_dirs = [_sid_dir(via) for via in flow.via]
+                    via_dirs = [d for d in via_dirs if d is not None]
+                    if via_dirs:
+                        nav = _route_through_glyph(
+                            src_dir, dest_dir, via_dirs[0])
+                    else:
+                        nav = _rotation_instructions(src_dir, dest_dir)
+                    tape_r.extend(nav)
+                else:
+                    tape_r.extend(_rotation_instructions(src_dir, dest_dir))
+
+                tape_r.append(Inst.DROP)
+                cur_dir_r = dest_dir
+
+            if valid_r and tape_r:
+                tape_r.append(terminal)
+                tapes.append(tape_r)
+
+    # --- Strategy G7: Per-atom slot delivery for spread layouts ---
+    # When the layout has _atom_dirs, each output atom has its own
+    # arm direction for delivery
+    atom_dirs = getattr(layout, '_atom_dirs', None)
+    if atom_dirs and len(atom_dirs) == len(ordered_flows):
+        _compile_spread_delivery(tapes, ordered_flows, atom_dirs,
+                                 layout, graph, _sid_dir)
+
+    # --- Deduplicate ---
+    seen_g: Set[Tuple[int, ...]] = set()
+    unique_g: List[List[int]] = []
+    for tape in tapes:
+        key = tuple(tape)
+        if key not in seen_g and len(tape) >= 2:
+            seen_g.add(key)
+            unique_g.append(tape)
+
+    return unique_g
+
+
+def _compile_spread_delivery(
+    tapes: List[List[int]],
+    flows,
+    atom_dirs: List[int],
+    layout: Layout,
+    graph,
+    sid_dir_fn,
+) -> None:
+    """Generate tapes for spread layouts where each atom goes to a specific
+    arm direction (different bonder slot position).
+
+    For each flow i, the destination direction is atom_dirs[i] instead of
+    the bonder's single direction.
+    """
+    arm_start = layout.arm_rot
+
+    # Full assembly sequence: deliver each atom to its specific slot
+    for terminal in [Inst.RESET, Inst.REPEAT]:
+        tape: List[int] = []
+        cur_dir = arm_start
+        valid = True
+
+        for fi, flow in enumerate(flows):
+            src_dir = sid_dir_fn(flow.source)
+            dest_dir = atom_dirs[fi] if fi < len(atom_dirs) else None
+            if src_dir is None or dest_dir is None:
+                valid = False
+                break
+
+            # Navigate to source
+            tape.extend(_rotation_instructions(cur_dir, src_dir))
+            tape.append(Inst.GRAB)
+
+            # Route through glyph if needed
+            if flow.via and not flow.needs_ungrab:
+                via_dirs = [sid_dir_fn(via) for via in flow.via]
+                via_dirs = [d for d in via_dirs if d is not None]
+                if via_dirs:
+                    nav = _route_through_glyph(src_dir, dest_dir,
+                                               via_dirs[0])
+                else:
+                    nav = _rotation_instructions(src_dir, dest_dir)
+                tape.extend(nav)
+            else:
+                # For direct atoms (no glyph), avoid glyph directions
+                glyph_dirs_all = set()
+                for sid in graph.stations:
+                    if sid.kind == 'glyph':
+                        gd = sid_dir_fn(sid)
+                        if gd is not None:
+                            glyph_dirs_all.add(gd)
+                if glyph_dirs_all:
+                    nav = _route_avoiding_dirs(src_dir, dest_dir,
+                                               list(glyph_dirs_all))
+                else:
+                    nav = _rotation_instructions(src_dir, dest_dir)
+                tape.extend(nav)
+
+            tape.append(Inst.DROP)
+            cur_dir = dest_dir
+
+        if not valid or not tape:
+            continue
+
+        if terminal == Inst.REPEAT:
+            tape.extend(_rotation_instructions(cur_dir, arm_start))
+        tape.append(terminal)
+        tapes.append(tape)
+
+    # Also try reverse order
+    for terminal in [Inst.RESET]:
+        tape: List[int] = []
+        cur_dir = arm_start
+        valid = True
+
+        rev_flows = list(reversed(flows))
+        rev_dirs = list(reversed(atom_dirs))
+
+        for fi, flow in enumerate(rev_flows):
+            src_dir = sid_dir_fn(flow.source)
+            dest_dir = rev_dirs[fi] if fi < len(rev_dirs) else None
+            if src_dir is None or dest_dir is None:
+                valid = False
+                break
+
+            tape.extend(_rotation_instructions(cur_dir, src_dir))
+            tape.append(Inst.GRAB)
+
+            if flow.via and not flow.needs_ungrab:
+                via_dirs = [sid_dir_fn(via) for via in flow.via]
+                via_dirs = [d for d in via_dirs if d is not None]
+                if via_dirs:
+                    nav = _route_through_glyph(src_dir, dest_dir,
+                                               via_dirs[0])
+                else:
+                    nav = _rotation_instructions(src_dir, dest_dir)
+                tape.extend(nav)
+            else:
+                tape.extend(_rotation_instructions(src_dir, dest_dir))
+
+            tape.append(Inst.DROP)
+            cur_dir = dest_dir
+
+        if valid and tape:
+            tape.append(terminal)
+            tapes.append(tape)
+
+    # Per-atom single delivery tapes
+    for fi, flow in enumerate(flows):
+        src_dir = sid_dir_fn(flow.source)
+        dest_dir = atom_dirs[fi] if fi < len(atom_dirs) else None
+        if src_dir is None or dest_dir is None:
+            continue
+
+        if flow.via and not flow.needs_ungrab:
+            via_dirs = [sid_dir_fn(via) for via in flow.via]
+            via_dirs = [d for d in via_dirs if d is not None]
+            if via_dirs:
+                nav = _route_through_glyph(src_dir, dest_dir,
+                                           via_dirs[0])
+            else:
+                nav = _rotation_instructions(src_dir, dest_dir)
+        else:
+            nav = _rotation_instructions(src_dir, dest_dir)
+
+        nav_to_src = _rotation_instructions(arm_start, src_dir)
+
+        tapes.append(nav_to_src + [Inst.GRAB] + nav + [Inst.RESET])
+        tapes.append(nav_to_src + [Inst.GRAB] + nav
+                     + [Inst.DROP, Inst.RESET])
