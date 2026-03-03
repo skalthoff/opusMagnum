@@ -705,6 +705,12 @@ def _build_seed_tapes(layout: Layout, n_inputs: int,
         compiled = compile_tapes(layout, analysis, puzzle)
         seed_tapes.extend(compiled)
 
+    # Source 1b: Bonding chain tapes (complete multi-atom delivery sequences)
+    if analysis is not None and puzzle is not None and analysis.needs_bonding:
+        from .tape_compiler import compile_bonding_chain_tapes
+        chain_tapes = compile_bonding_chain_tapes(layout, analysis, puzzle)
+        seed_tapes.extend(chain_tapes)
+
     # Source 2: Geometric templates
     geo_tapes = generate_geometric_tapes(n_stations, n_inputs, layout.directions)
     seed_tapes.extend(geo_tapes)

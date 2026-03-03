@@ -2120,3 +2120,234 @@ def _compile_composed_multi_stage(
                             + [Inst.RESET])
                     tapes.append(full)
                     count += 1
+def compile_bonding_chain_tapes(layout: Layout, analysis: PuzzleAnalysis,
+                                puzzle: Puzzle) -> List[List[int]]:
+    """Generate complete bonding chain tapes for bonded-output puzzles.
+
+    For puzzles where multiple atoms must be delivered to a bonder, then
+    the bonded molecule picked up and delivered to the output, generates
+    complete tapes covering the entire cycle:
+
+        [deliver atom 1 to bonder] [deliver atom 2 to bonder] ...
+        [pickup bonded molecule] [deliver to output] RESET
+
+    This is critical because partial tapes (deliver without pickup) are
+    useless — the GA cannot discover the missing pickup phase through
+    random mutation.
+    """
+    tapes: List[List[int]] = []
+
+    if not analysis.needs_bonding:
+        return tapes
+
+    input_stations = _find_input_stations(layout)
+    output_idx = _find_output_station(layout)
+    bonder_idx = _find_bonder_station(layout)
+
+    if output_idx is None or bonder_idx is None or not input_stations:
+        return tapes
+
+    bonder_dir = layout.directions[bonder_idx]
+    out_dir = layout.directions[output_idx]
+    arm_start = layout.arm_rot
+
+    # Collect input directions
+    input_dirs: List[Tuple[int, int]] = []  # (station_idx, direction)
+    for si in input_stations:
+        input_dirs.append((si, layout.directions[si]))
+
+    # Find glyph stations for pass-through routes
+    glyph_stations: List[Tuple[int, int, str]] = []  # (station_idx, direction, name)
+    for i, (st, sd) in enumerate(layout.stations):
+        if st == 'glyph':
+            glyph_stations.append((i, layout.directions[i], sd))
+
+    # Determine how many atoms need to be delivered to the bonder.
+    # For bonded outputs, the output molecule's atom count is the delivery count.
+    n_atoms_needed = 0
+    for pio in puzzle.outputs:
+        n_atoms_needed = max(n_atoms_needed, len(pio.molecule.atoms))
+
+    if n_atoms_needed < 2:
+        return tapes
+
+    # Build delivery sequences for different input orderings
+    # Each input may need to deliver multiple atoms (if same element repeated)
+
+    # Case 1: All inputs are distinct — try all permutations of input delivery order
+    if len(input_dirs) >= 2 and len(input_dirs) <= n_atoms_needed + 1:
+        _compile_chain_permutations(
+            tapes, input_dirs, n_atoms_needed, bonder_dir, out_dir,
+            arm_start, glyph_stations, layout)
+
+    # Case 2: Single input delivering multiple atoms to bonder
+    if len(input_dirs) >= 1:
+        _compile_chain_single_input(
+            tapes, input_dirs, n_atoms_needed, bonder_dir, out_dir,
+            arm_start, glyph_stations, layout)
+
+    # Deduplicate
+    seen: Set[Tuple[int, ...]] = set()
+    unique: List[List[int]] = []
+    for tape in tapes:
+        key = tuple(tape)
+        if key not in seen and len(tape) >= 2:
+            seen.add(key)
+            unique.append(tape)
+
+    return unique
+
+
+def _compile_chain_permutations(
+    tapes: List[List[int]],
+    input_dirs: List[Tuple[int, int]],
+    n_atoms: int,
+    bonder_dir: int,
+    out_dir: int,
+    arm_start: int,
+    glyph_stations: List[Tuple[int, int, str]],
+    layout: Layout,
+) -> None:
+    """Generate bonding chain tapes for all permutations of distinct inputs."""
+    # Build delivery sequences: assign each atom to an input
+    # If more atoms than inputs, some inputs deliver multiple times
+    n_inputs = len(input_dirs)
+
+    # Generate input assignments: which input delivers which atom
+    # For 2 atoms / 2 inputs: [(0,1), (1,0)]
+    # For 3 atoms / 2 inputs: [(0,0,1), (0,1,0), (1,0,0), (0,1,1), (1,0,1), (1,1,0)]
+    if n_atoms <= 4 and n_inputs <= 3:
+        # Enumerate assignments
+        assignments = list(itertools.product(range(n_inputs), repeat=n_atoms))
+        # Filter: each input must appear at least once (if n_inputs <= n_atoms)
+        if n_inputs <= n_atoms:
+            assignments = [a for a in assignments
+                           if len(set(a)) >= min(n_inputs, n_atoms)]
+        # Limit to avoid explosion
+        assignments = assignments[:24]
+    else:
+        # For larger cases, just use simple orderings
+        assignments = [tuple(i % n_inputs for i in range(n_atoms))]
+
+    glyph_dir_set = {gd for _, gd, _ in glyph_stations}
+
+    for assignment in assignments:
+        for use_glyph_passthrough in ([True, False] if glyph_stations else [False]):
+            for terminal in [Inst.RESET, Inst.REPEAT]:
+                for use_cw in [True, False]:
+                    tape: List[int] = []
+                    cur_dir = arm_start
+
+                    # Phase 1: Deliver each atom to the bonder
+                    for atom_idx in range(n_atoms):
+                        inp_idx = assignment[atom_idx]
+                        _, inp_dir = input_dirs[inp_idx]
+
+                        # Navigate to input
+                        tape.extend(_rotation_instructions(cur_dir, inp_dir))
+                        tape.append(Inst.GRAB)
+
+                        # Navigate to bonder (optionally through glyph)
+                        if use_glyph_passthrough and glyph_stations:
+                            _, glyph_dir, _ = glyph_stations[0]
+                            nav = _route_through_glyph(inp_dir, bonder_dir,
+                                                       glyph_dir)
+                        elif use_cw:
+                            nav = _rotation_instructions_cw(inp_dir, bonder_dir)
+                        else:
+                            nav = _rotation_instructions(inp_dir, bonder_dir)
+
+                        tape.extend(nav)
+                        tape.append(Inst.DROP)
+                        cur_dir = bonder_dir
+
+                    # Phase 2: Pickup bonded molecule and deliver to output
+                    tape.append(Inst.GRAB)
+                    tape.extend(_rotation_instructions(bonder_dir, out_dir))
+                    tape.append(Inst.DROP)
+                    cur_dir = out_dir
+
+                    # Terminal
+                    if terminal == Inst.REPEAT:
+                        tape.extend(_rotation_instructions(cur_dir, arm_start))
+                    tape.append(terminal)
+                    tapes.append(tape)
+
+
+def _compile_chain_single_input(
+    tapes: List[List[int]],
+    input_dirs: List[Tuple[int, int]],
+    n_atoms: int,
+    bonder_dir: int,
+    out_dir: int,
+    arm_start: int,
+    glyph_stations: List[Tuple[int, int, str]],
+    layout: Layout,
+) -> None:
+    """Generate bonding chain tapes where a single input delivers all atoms."""
+    glyph_dir_set = {gd for _, gd, _ in glyph_stations}
+
+    for _, inp_dir in input_dirs:
+        rot_in_to_bond = _rotation_instructions(inp_dir, bonder_dir)
+        rot_in_to_bond_cw = _rotation_instructions_cw(inp_dir, bonder_dir)
+        rot_in_to_bond_ccw = _rotation_instructions_ccw(inp_dir, bonder_dir)
+        rot_bond_to_in = _rotation_instructions(bonder_dir, inp_dir)
+        rot_bond_to_out = _rotation_instructions(bonder_dir, out_dir)
+
+        for rot_to_bond in [rot_in_to_bond, rot_in_to_bond_cw, rot_in_to_bond_ccw]:
+            for terminal in [Inst.RESET, Inst.REPEAT]:
+                # Build complete chain: deliver n_atoms, pickup, deliver to output
+                tape: List[int] = []
+                cur_dir = arm_start
+
+                # Navigate to first input
+                tape.extend(_rotation_instructions(cur_dir, inp_dir))
+
+                for atom_idx in range(n_atoms):
+                    tape.append(Inst.GRAB)
+                    tape.extend(rot_to_bond)
+                    tape.append(Inst.DROP)
+
+                    if atom_idx < n_atoms - 1:
+                        # Return to input for next atom
+                        tape.extend(rot_bond_to_in)
+
+                # Pickup bonded molecule
+                tape.append(Inst.GRAB)
+                tape.extend(rot_bond_to_out)
+                tape.append(Inst.DROP)
+                cur_dir = out_dir
+
+                if terminal == Inst.REPEAT:
+                    tape.extend(_rotation_instructions(cur_dir, arm_start))
+                tape.append(terminal)
+                tapes.append(tape)
+
+        # Also try with glyph pass-through for each delivery
+        if glyph_stations:
+            _, glyph_dir, _ = glyph_stations[0]
+            rot_in_via_glyph = _route_through_glyph(
+                inp_dir, bonder_dir, glyph_dir)
+
+            for terminal in [Inst.RESET, Inst.REPEAT]:
+                tape = []
+                cur_dir = arm_start
+                tape.extend(_rotation_instructions(cur_dir, inp_dir))
+
+                for atom_idx in range(n_atoms):
+                    tape.append(Inst.GRAB)
+                    tape.extend(rot_in_via_glyph)
+                    tape.append(Inst.DROP)
+
+                    if atom_idx < n_atoms - 1:
+                        tape.extend(rot_bond_to_in)
+
+                tape.append(Inst.GRAB)
+                tape.extend(rot_bond_to_out)
+                tape.append(Inst.DROP)
+                cur_dir = out_dir
+
+                if terminal == Inst.REPEAT:
+                    tape.extend(_rotation_instructions(cur_dir, arm_start))
+                tape.append(terminal)
+                tapes.append(tape)
