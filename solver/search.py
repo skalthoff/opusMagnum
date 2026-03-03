@@ -4,12 +4,13 @@ Architecture:
   1. Z3 generates valid layouts (from layout_z3.py)
   2. Branch-and-bound prunes by sum4 lower bound
   3. For each layout, GA optimizes tapes (from tape_ga.py)
-  4. omsim via ctypes verifies every candidate (~2000/sec)
+  4. omsim via ctypes verifies every candidate
   5. Best solution survives across all layouts
 """
 from __future__ import annotations
 import os
 import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -21,10 +22,10 @@ from .puzzle import Puzzle, PuzzleIO, parse_puzzle
 from .solution import Solution, Part, Inst, solution_to_bytes, write_solution, PART_COSTS
 from .recipe import PuzzleAnalysis, analyze_puzzle, REACTION_GLYPHS
 from .production_planner import generate_plans, ProductionPlan
-from .simulator import Simulator, VerifyResult
+from .simulator import Simulator, VerifyResult, PuzzleContext
 from .layout_z3 import (generate_layouts, compute_lower_bound, Layout,
                         LayoutConfig, generate_layouts_from_graph)
-from .tape_ga import TapeGA, GAConfig, generate_geometric_tapes, Individual
+from .tape_ga import TapeGA, GAConfig, generate_geometric_tapes, Individual, _is_obviously_invalid
 from .pattern_db import PatternDB
 from .glyph_model import get_glyph_spec, local_to_world
 from .station_graph import build_station_graph, StationGraph, graph_to_plan
@@ -64,6 +65,34 @@ def verify_solution(sol: Solution, puzzle_path: str,
     except Exception:
         pass
     return None
+
+
+def _ga_worker(args):
+    """Worker process: run GA on a single layout.
+
+    Returns (rank, best_tape, metrics, score, n_evals).
+    best_tape is None if no valid solution was found.
+    """
+    (rank, base_sol, layout_info, puzzle_bytes, seed_tapes,
+     target, current_best_score, inst_weights, ga_seed) = args
+
+    sim = Simulator()
+    ga_config = GAConfig(
+        pop_size=20 if rank < 10 else 15,
+        max_generations=60 if rank < 5 else 30,
+        stagnation_limit=15,
+    )
+
+    ga = TapeGA(sim, ga_config, inst_weights, seed=ga_seed)
+    ga_result = ga.optimize(
+        base_sol, layout_info, puzzle_bytes,
+        seed_tapes, target, current_best_score
+    )
+
+    n_evals = ga.total_evaluations
+    if ga_result is not None and ga_result.valid:
+        return (rank, ga_result.tape, ga_result.metrics, ga_result.fitness, n_evals)
+    return (rank, None, None, None, n_evals)
 
 
 def search_solve(puzzle: Puzzle, puzzle_path: str,
@@ -338,35 +367,41 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     # Get instruction weights from pattern DB
     inst_weights = pattern_db.instruction_weights() if pattern_db.patterns else None
 
+    # Create reusable puzzle context for screening (parses puzzle once)
+    puzzle_ctx = simulator.create_puzzle_context(puzzle_bytes)
+
+    # Theoretical minimum for early termination
+    theory_cost = 20  # arm1
+    if analysis.recipe:
+        theory_cost += analysis.recipe.glyph_cost
+    if need_bonder:
+        theory_cost += 10
+    theory_min = theory_cost + 3  # cost + 1 cycle + 1 area + 1 instruction
+
+    # --- Phase 3a: Sequential screening (fast, provides pruning) ---
+    from .solution import CachedSolutionBase
+    ga_candidates = []  # (rank, layout, base_sol, layout_info, seed_tapes, plan)
+
     for rank, (lb, layout_idx, layout, plan, graph_opt) in enumerate(layout_bounds):
-        # 3a. Branch-and-bound: skip if lower bound >= current best
+        # Branch-and-bound: skip if lower bound >= current best
         if best is not None and lb >= best.score:
-            if verbose and rank < 5:
-                print(f'  Layout {rank}: lb={lb} >= best={best.score:.0f}, pruned')
             continue
 
         # Check time budget
-        elapsed = time.time() - t0
-        if elapsed > time_limit:
+        if time.time() - t0 > time_limit:
             if verbose:
-                print(f'  Time limit reached after {rank} layouts ({elapsed:.1f}s)')
+                print(f'  Time limit reached during screening after {rank} layouts')
             break
 
-        # 3b. Build base solution (without arm)
+        # Build base solution (without arm)
         base_sol = layout.to_solution(puzzle, n_outputs)
 
-        # 3c. Generate seed tapes from multiple sources
+        # Generate seed tapes from multiple sources
         seed_tapes = _build_seed_tapes(layout, n_inputs, pattern_db,
                                        plan.glyph_names,
                                        analysis=analysis, puzzle=puzzle,
                                        plan=plan, graph=graph_opt)
 
-        if verbose and rank < 10:
-            print(f'  Layout {rank}: cost={layout.cost}g, lb={lb}, '
-                  f'{len(seed_tapes)} seed tapes, '
-                  f'glyphs={plan.glyph_names}')
-
-        # 3d. Quick screening: try seed tapes directly before full GA
         layout_info = {
             'arm_pos': layout.arm_pos,
             'arm_len': layout.arm_len,
@@ -374,14 +409,15 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
             'arm_type': layout.arm_type,
         }
 
+        # Quick screening: try seed tapes directly
         found_via_screen = False
-        screen_cycle_limit = 1000  # valid solutions complete in <100 cycles
+        screen_cache = CachedSolutionBase(base_sol, layout_info)
         for tape in seed_tapes:
+            if _is_obviously_invalid(tape):
+                continue
             total_verified += 1
-            screen_sol = layout.add_arm_with_tape(base_sol, tape)
-            screen_bytes = solution_to_bytes(screen_sol)
-            screen_result = simulator.verify_bytes(puzzle_bytes, screen_bytes,
-                                                   cycle_limit=screen_cycle_limit)
+            screen_bytes = screen_cache.splice(tape)
+            screen_result = puzzle_ctx.verify(screen_bytes, cycle_limit=1000)
             if screen_result.valid:
                 metrics = {
                     'cost': screen_result.cost,
@@ -392,6 +428,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                 metrics['sum4'] = sum(metrics[k] for k in ('cost', 'cycles', 'area', 'instructions'))
                 score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
                 if best is None or score < best.score:
+                    screen_sol = layout.add_arm_with_tape(base_sol, tape)
                     best = SearchResult(screen_sol, metrics, score)
                     found_via_screen = True
                     if verbose:
@@ -400,54 +437,112 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                               f'{m["cost"]}g/{m["cycles"]}c/'
                               f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
 
-        if found_via_screen:
-            continue  # Skip full GA for this layout, seed tape was enough
+        # Early termination at theoretical minimum
+        if best is not None and best.score <= theory_min:
+            if verbose:
+                print(f'  Reached theoretical minimum ({theory_min}), stopping')
+            break
 
-        # 3e. Run GA
-        # Adjust GA config based on rank: more effort for promising layouts
-        ga_config = GAConfig(
-            pop_size=20 if rank < 10 else 15,
-            max_generations=60 if rank < 5 else 30,
-            stagnation_limit=15,
-        )
+        if not found_via_screen:
+            ga_candidates.append((rank, layout, base_sol, layout_info, seed_tapes, plan))
 
-        current_best_score = best.score if best is not None else None
-        ga = TapeGA(simulator, ga_config, inst_weights, seed=42 + rank)
-        ga_result = ga.optimize(
-            base_sol, layout_info, puzzle_bytes,
-            seed_tapes, target, current_best_score
-        )
-        total_verified += ga.total_evaluations
+    puzzle_ctx.destroy()
 
-        # 3e. Update best if GA found a valid improvement
-        if ga_result is not None and ga_result.valid:
-            if best is None or ga_result.fitness < best.score:
-                # Reconstruct the full solution
-                final_sol = layout.add_arm_with_tape(base_sol, ga_result.tape)
-                best = SearchResult(
-                    solution=final_sol,
-                    metrics=ga_result.metrics,
-                    score=ga_result.fitness,
-                )
-                if verbose:
-                    m = ga_result.metrics
-                    print(f'  ** New best (layout {rank}): '
-                          f'{m["cost"]}g/{m["cycles"]}c/'
-                          f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+    if verbose:
+        print(f'  Screening done: {len(ga_candidates)} layouts need GA')
 
-        # 3f. Early termination if at theoretical minimum
-        if best is not None:
-            theory_cost = 20  # arm1
-            if analysis.recipe:
-                theory_cost += analysis.recipe.glyph_cost
-            if need_bonder:
-                theory_cost += 10
-            # Sum4 minimum: cost + 1 cycle + 1 area + 1 instruction
-            theory_min = theory_cost + 3
-            if best.score <= theory_min:
-                if verbose:
-                    print(f'  Reached theoretical minimum ({theory_min}), stopping')
+    # --- Phase 3b: GA on remaining layouts (parallel if possible, else sequential) ---
+    if ga_candidates and (best is None or best.score > theory_min):
+        # Prepare worker arguments (with pruning)
+        worker_args = []
+        # Keep mapping from rank to (layout, base_sol) for solution reconstruction
+        rank_to_layout = {}
+        for rank, layout, base_sol, layout_info, seed_tapes, plan in ga_candidates:
+            if best is not None:
+                lb = compute_lower_bound(layout, analysis)
+                if lb >= best.score:
+                    continue
+            if time.time() - t0 > time_limit:
                 break
+            current_best_score = best.score if best is not None else None
+            worker_args.append((
+                rank, base_sol, layout_info, puzzle_bytes, seed_tapes,
+                target, current_best_score, inst_weights, 42 + rank
+            ))
+            rank_to_layout[rank] = (layout, base_sol)
+
+        if worker_args:
+            # Try parallel execution, fall back to sequential
+            n_workers = min(max(1, os.cpu_count() - 1), 8, len(worker_args))
+            use_parallel = n_workers > 1
+
+            if use_parallel:
+                try:
+                    pool = ProcessPoolExecutor(max_workers=n_workers)
+                    if verbose:
+                        print(f'  Starting parallel GA with {n_workers} workers '
+                              f'on {len(worker_args)} layouts...')
+                except (PermissionError, OSError):
+                    use_parallel = False
+                    if verbose:
+                        print(f'  Parallel GA unavailable, using sequential...')
+
+            if use_parallel:
+                try:
+                    futures = {pool.submit(_ga_worker, args): args[0]
+                               for args in worker_args}
+                    for future in as_completed(futures):
+                        rank_id = futures[future]
+                        try:
+                            rank_result, best_tape, metrics, score, n_evals = future.result()
+                            total_verified += n_evals
+                            if best_tape is not None and (best is None or score < best.score):
+                                layout, base_sol = rank_to_layout[rank_result]
+                                final_sol = layout.add_arm_with_tape(base_sol, best_tape)
+                                best = SearchResult(
+                                    solution=final_sol,
+                                    metrics=metrics,
+                                    score=score,
+                                )
+                                if verbose:
+                                    m = metrics
+                                    print(f'  ** New best (layout {rank_result} GA): '
+                                          f'{m["cost"]}g/{m["cycles"]}c/'
+                                          f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+                        except Exception as e:
+                            if verbose:
+                                print(f'  GA worker for layout {rank_id} failed: {e}')
+                finally:
+                    pool.shutdown(wait=False)
+            else:
+                # Sequential fallback
+                if verbose:
+                    print(f'  Running GA sequentially on {len(worker_args)} layouts...')
+                for args in worker_args:
+                    if time.time() - t0 > time_limit:
+                        if verbose:
+                            print(f'  Time limit reached during GA')
+                        break
+                    rank_result, best_tape, metrics, score, n_evals = _ga_worker(args)
+                    total_verified += n_evals
+                    if best_tape is not None and (best is None or score < best.score):
+                        layout, base_sol = rank_to_layout[rank_result]
+                        final_sol = layout.add_arm_with_tape(base_sol, best_tape)
+                        best = SearchResult(
+                            solution=final_sol,
+                            metrics=metrics,
+                            score=score,
+                        )
+                        if verbose:
+                            m = metrics
+                            print(f'  ** New best (layout {rank_result} GA): '
+                                  f'{m["cost"]}g/{m["cycles"]}c/'
+                                  f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+                    # Update pruning for subsequent layouts
+                    if best is not None and best.score <= theory_min:
+                        if verbose:
+                            print(f'  Reached theoretical minimum ({theory_min}), stopping')
+                        break
 
     elapsed = time.time() - t0
     if verbose:

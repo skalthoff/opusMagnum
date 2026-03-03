@@ -318,3 +318,101 @@ def solution_to_bytes(sol: Solution) -> bytes:
 def write_solution(sol: Solution, path: str):
     """Write a .solution binary file."""
     Path(path).write_bytes(solution_to_bytes(sol))
+
+
+def _serialize_arm_part(arm_type: str, pos: 'HexCoord', size: int,
+                        rotation: int, tape: List[int]) -> bytes:
+    """Serialize a single arm part to binary format."""
+    buf = bytearray()
+    buf += _write_string(arm_type)
+    buf += struct.pack('<B', 1)  # marker byte
+    buf += struct.pack('<ii', pos.q, pos.r)
+    buf += struct.pack('<I', size)
+    buf += struct.pack('<i', rotation)
+    buf += struct.pack('<I', 0)  # io_index
+
+    # Instructions: only non-noop entries
+    instructions = [(i, code) for i, code in enumerate(tape) if code and code != Inst.NOOP]
+    buf += struct.pack('<I', len(instructions))
+    for idx, code in instructions:
+        buf += struct.pack('<i', idx)
+        buf += struct.pack('<B', code)
+
+    # Arm number
+    buf += struct.pack('<I', 0)
+
+    return bytes(buf)
+
+
+class CachedSolutionBase:
+    """Pre-serialized solution bytes with the arm omitted.
+
+    The part count field is at a known offset so we can patch it when
+    splicing in different arm tapes without re-serializing the base.
+    """
+
+    __slots__ = ('_header', '_parts_data', '_base_part_count',
+                 '_arm_type', '_arm_pos', '_arm_size', '_arm_rot')
+
+    def __init__(self, base_sol: Solution, layout_info: dict):
+        # Serialize the header (everything before parts data)
+        header = bytearray()
+        header += struct.pack('<I', 7)  # version
+        header += _write_string(base_sol.puzzle_name)
+        header += _write_string(base_sol.solution_name)
+        header += struct.pack('<I', 1 if base_sol.solved else 0)
+        if base_sol.solved:
+            header += struct.pack('<II', 0, base_sol.cycles)
+            header += struct.pack('<II', 1, base_sol.cost)
+            header += struct.pack('<II', 2, base_sol.area)
+            header += struct.pack('<II', 3, base_sol.instruction_count)
+
+        self._base_part_count = len(base_sol.parts)
+        # Part count placeholder — will be patched in splice()
+        header += struct.pack('<I', self._base_part_count + 1)
+
+        # Serialize all base parts (non-arm)
+        parts_data = bytearray()
+        for part in base_sol.parts:
+            parts_data += _write_string(part.name)
+            parts_data += struct.pack('<B', 1)
+            parts_data += struct.pack('<ii', part.position.q, part.position.r)
+            parts_data += struct.pack('<I', part.size)
+            parts_data += struct.pack('<i', part.rotation)
+            parts_data += struct.pack('<I', part.io_index)
+
+            parts_data += struct.pack('<I', len(part.instructions))
+            for inst in part.instructions:
+                parts_data += struct.pack('<i', inst.index)
+                parts_data += struct.pack('<B', inst.instruction)
+
+            if part.name == 'track':
+                parts_data += struct.pack('<I', len(part.track_hexes))
+                for th in part.track_hexes:
+                    parts_data += struct.pack('<ii', th.offset_q, th.offset_r)
+
+            parts_data += struct.pack('<I', part.arm_number)
+
+            if part.name == 'pipe':
+                parts_data += struct.pack('<I', part.conduit_id)
+                parts_data += struct.pack('<I', len(part.conduit_hexes))
+                for ch in part.conduit_hexes:
+                    parts_data += struct.pack('<ii', ch.offset_q, ch.offset_r)
+
+        self._header = bytes(header)
+        self._parts_data = bytes(parts_data)
+        self._arm_type = layout_info.get('arm_type', 'arm1')
+        self._arm_pos = layout_info['arm_pos']
+        self._arm_size = layout_info['arm_len']
+        self._arm_rot = layout_info['arm_rot']
+
+    def splice(self, tape: List[int]) -> bytes:
+        """Build complete solution bytes with the given arm tape.
+
+        Much faster than full solution_to_bytes() since header+base parts
+        are pre-serialized and only the arm bytes change.
+        """
+        arm_bytes = _serialize_arm_part(
+            self._arm_type, self._arm_pos, self._arm_size,
+            self._arm_rot, tape)
+        return self._header + self._parts_data + arm_bytes

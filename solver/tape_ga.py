@@ -9,8 +9,8 @@ import random
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Callable
 
-from .solution import Solution, Part, Inst, solution_to_bytes, Instruction
-from .simulator import Simulator, VerifyResult
+from .solution import Solution, Part, Inst, solution_to_bytes, Instruction, CachedSolutionBase
+from .simulator import Simulator, VerifyResult, PuzzleContext
 
 
 @dataclass
@@ -53,6 +53,37 @@ class Individual:
     valid: bool = False
 
 
+def _is_obviously_invalid(tape: List[int]) -> bool:
+    """Fast-reject tapes that can never produce a valid solution.
+
+    Checks (in order of cheapness):
+    - Empty tape
+    - No GRAB instruction (can never pick up an atom)
+    - No terminal (RESET/REPEAT) (infinite non-repeating execution)
+    - All rotations with no GRAB/DROP (arm spins forever)
+    """
+    if not tape:
+        return True
+    has_grab = False
+    has_terminal = False
+    has_non_rotation = False
+    rotation_set = {Inst.ROTATE_CW, Inst.ROTATE_CCW, Inst.PIVOT_CW, Inst.PIVOT_CCW}
+    for inst in tape:
+        if inst == Inst.GRAB:
+            has_grab = True
+        if inst in (Inst.RESET, Inst.REPEAT):
+            has_terminal = True
+        if inst not in rotation_set:
+            has_non_rotation = True
+    if not has_grab:
+        return True
+    if not has_terminal:
+        return True
+    if not has_non_rotation:
+        return True
+    return False
+
+
 class TapeGA:
     """Genetic algorithm for tape optimization."""
 
@@ -65,6 +96,7 @@ class TapeGA:
         self._inst_weights = instruction_weights or self._default_weights()
         self._inst_choices, self._inst_probs = self._build_weighted_choices()
         self.total_evaluations = 0
+        self.total_prerejected = 0
         self.best_ever: Optional[Individual] = None
         self._best_cycles: Optional[int] = None  # for adaptive cycle limit scaling
 
@@ -121,12 +153,18 @@ class TapeGA:
         Returns:
             Best valid Individual found, or None if no valid tape was found.
         """
+        # Pre-serialize base solution for fast tape splicing
+        cached_base = CachedSolutionBase(base_sol, layout_info)
+
+        # Create reusable puzzle context (parses puzzle once for all evals)
+        puzzle_ctx = self.sim.create_puzzle_context(puzzle_bytes)
+
         # 1. Create initial population from seed tapes + mutations
         population = self._create_initial_population(seed_tapes)
 
         # 2. Evaluate all individuals
         for ind in population:
-            evaluated = self._evaluate(ind.tape, base_sol, layout_info, puzzle_bytes, target)
+            evaluated = self._evaluate(ind.tape, base_sol, layout_info, puzzle_bytes, target, cached_base, puzzle_ctx)
             ind.fitness = evaluated.fitness
             ind.metrics = evaluated.metrics
             ind.valid = evaluated.valid
@@ -177,7 +215,7 @@ class TapeGA:
 
             # 3e. Evaluate children
             for child in children:
-                evaluated = self._evaluate(child.tape, base_sol, layout_info, puzzle_bytes, target)
+                evaluated = self._evaluate(child.tape, base_sol, layout_info, puzzle_bytes, target, cached_base, puzzle_ctx)
                 child.fitness = evaluated.fitness
                 child.metrics = evaluated.metrics
                 child.valid = evaluated.valid
@@ -203,6 +241,9 @@ class TapeGA:
                             valid=True,
                         )
 
+        # Clean up puzzle context
+        puzzle_ctx.destroy()
+
         # Return best valid individual
         if self.best_ever is not None and self.best_ever.valid:
             return self.best_ever
@@ -219,20 +260,42 @@ class TapeGA:
         layout_info: dict,
         puzzle_bytes: bytes,
         target: str,
+        cached_base: Optional[CachedSolutionBase] = None,
+        puzzle_ctx: Optional[PuzzleContext] = None,
     ) -> Individual:
         """Build solution with tape, verify, and return scored Individual."""
         self.total_evaluations += 1
 
-        sol = self._build_solution_with_tape(base_sol, layout_info, tape)
-        sol_bytes = solution_to_bytes(sol)
+        # Fast-reject obviously invalid tapes before FFI
+        if _is_obviously_invalid(tape):
+            self.total_prerejected += 1
+            penalty = self.config.invalid_penalty_base + len(tape) * self.config.invalid_penalty_per_inst
+            return Individual(
+                tape=list(tape),
+                fitness=float(penalty),
+                metrics=None,
+                valid=False,
+            )
+
+        # Use cached base bytes if available (avoids full rebuild + serialize)
+        if cached_base is not None:
+            sol_bytes = cached_base.splice(tape)
+        else:
+            sol = self._build_solution_with_tape(base_sol, layout_info, tape)
+            sol_bytes = solution_to_bytes(sol)
 
         # Adaptive cycle limit: use 3x best known cycles, floored at config default
         if self._best_cycles is not None:
             cycle_limit = max(self.config.cycle_limit, 3 * self._best_cycles)
         else:
             cycle_limit = self.config.cycle_limit
-        result: VerifyResult = self.sim.verify_bytes(puzzle_bytes, sol_bytes,
-                                                     cycle_limit=cycle_limit)
+
+        # Use puzzle context (single FFI call) when available, else fallback
+        if puzzle_ctx is not None:
+            result: VerifyResult = puzzle_ctx.verify(sol_bytes, cycle_limit=cycle_limit)
+        else:
+            result: VerifyResult = self.sim.verify_bytes(puzzle_bytes, sol_bytes,
+                                                         cycle_limit=cycle_limit)
 
         if result.valid:
             metrics = {

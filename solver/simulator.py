@@ -84,6 +84,25 @@ class Simulator:
         lib.verifier_disable_limits.argtypes = [ctypes.c_void_p]
         lib.verifier_disable_limits.restype = None
 
+        # puzzle context API
+        lib.verifier_create_puzzle_context.argtypes = [ctypes.c_char_p, ctypes.c_int]
+        lib.verifier_create_puzzle_context.restype = ctypes.c_void_p
+
+        lib.verifier_evaluate_solution.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_char_p, ctypes.c_int,
+            ctypes.c_int,
+            ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int),
+            ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int),
+        ]
+        lib.verifier_evaluate_solution.restype = ctypes.c_int
+
+        lib.verifier_puzzle_context_error.argtypes = [ctypes.c_void_p]
+        lib.verifier_puzzle_context_error.restype = ctypes.c_char_p
+
+        lib.verifier_destroy_puzzle_context.argtypes = [ctypes.c_void_p]
+        lib.verifier_destroy_puzzle_context.restype = None
+
     def verify_files(self, puzzle_path: str, solution_path: str,
                      cycle_limit: int = 150000) -> VerifyResult:
         """Verify a solution from file paths."""
@@ -158,6 +177,10 @@ class Simulator:
 
         return result
 
+    def create_puzzle_context(self, puzzle_bytes: bytes) -> 'PuzzleContext':
+        """Create a reusable puzzle context for batch evaluation."""
+        return PuzzleContext(self._lib, puzzle_bytes)
+
     def evaluate_metric(self, puzzle_path: str, solution_path: str,
                        metric: str) -> int:
         """Evaluate a single metric."""
@@ -172,3 +195,61 @@ class Simulator:
             return val
         finally:
             self._lib.verifier_destroy(v)
+
+
+class PuzzleContext:
+    """Reusable puzzle context that parses the puzzle once.
+
+    Avoids re-parsing puzzle bytes on every verify call. Use for batch
+    evaluation of many solutions against the same puzzle.
+    """
+
+    def __init__(self, lib, puzzle_bytes: bytes):
+        self._lib = lib
+        self._ctx = lib.verifier_create_puzzle_context(
+            puzzle_bytes, len(puzzle_bytes))
+        if not self._ctx:
+            raise RuntimeError("Failed to create puzzle context")
+
+    def verify(self, solution_bytes: bytes,
+               cycle_limit: int = 150000) -> VerifyResult:
+        """Evaluate a solution against the pre-parsed puzzle.
+
+        Returns all 4 metrics in a single FFI call (cost, cycles, area,
+        instructions), avoiding 4 separate verifier_evaluate_metric calls
+        and redundant puzzle re-parsing.
+        """
+        out_cost = ctypes.c_int(-1)
+        out_cycles = ctypes.c_int(-1)
+        out_area = ctypes.c_int(-1)
+        out_instructions = ctypes.c_int(-1)
+
+        ok = self._lib.verifier_evaluate_solution(
+            self._ctx,
+            solution_bytes, len(solution_bytes),
+            cycle_limit,
+            ctypes.byref(out_cost), ctypes.byref(out_cycles),
+            ctypes.byref(out_area), ctypes.byref(out_instructions),
+        )
+
+        if ok:
+            return VerifyResult(
+                valid=True,
+                cost=out_cost.value,
+                cycles=out_cycles.value,
+                area=out_area.value,
+                instructions=out_instructions.value,
+            )
+        else:
+            err = self._lib.verifier_puzzle_context_error(self._ctx)
+            error_str = err.decode('utf-8') if err else "unknown error"
+            return VerifyResult(valid=False, error=error_str)
+
+    def destroy(self):
+        """Free the puzzle context."""
+        if self._ctx:
+            self._lib.verifier_destroy_puzzle_context(self._ctx)
+            self._ctx = None
+
+    def __del__(self):
+        self.destroy()
