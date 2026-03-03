@@ -1,0 +1,10 @@
+Henley: Dans certains cas, tu voudras que le bras fasse pivoter ce qu'il tient...
+Anataeus (Student): Tu veux dire, contrairement à la rotation du bras lui-même.
+Henley: Exactement. Dans ces cas-là, tu utiliseras les instructions de pivotement.
+
+-----------
+
+Anataeus (Student): C'est vraiment très simple.
+Henley: Je suis content de voir que c'est si facile pour toi.
+Anataeus (Student): Pourquoi, il t'a fallu combien de temps à _toi_ ?
+Henley: Continuons.

@@ -1,0 +1,27 @@
+﻿Anataeus (Shabby): Concordia, ¿puedo hacerte una pregunta extraña?
+Concordia (Shabby): Si es necesario.
+Anataeus (Shabby): ¿Todavía estás motivada por esta idea de venganza?
+Concordia (Shabby): Sin duda. Cuando recuerdo lo que ocurrió, siento tanta ira como el día en que ocurrió.
+Concordia (Shabby): La casa Colvan nos arruinó y mató a tantos... ¿con qué propósito?
+Concordia (Shabby): Se lo debo a la memoria de los que he perdido, algún tipo de compensación.
+Anataeus (Shabby): Ya veo.
+Concordia (Shabby): Pero Anataeus, ¿qué te llevó a seguir este camino conmigo?
+Anataeus (Shabby): No lo sé. No lo he pensado demasiado...
+Concordia (Shabby): Hemos recorrido un largo camino para que desconozcas tu motivación.
+Anataeus (Shabby): Supongo que es una cuestión de... una cuestión de quién soy yo.
+Anataeus (Shabby): Si no fuera por nuestro objetivo, ¿por qué razón estaría aquí?
+Anataeus (Shabby): Debo practicar la alquimia. Es mi propósito.
+
+-----------
+
+Anataeus (Shabby): Listo. ¿Esto te parece sospechoso?
+Concordia (Shabby): Ahora que has preguntado, no puedo evitar verlo y sospechar.
+Anataeus (Shabby): Pero si lo vieras solo, sin que yo te haya preguntado, ¿lo considerarías sospechoso?
+Concordia (Shabby): Tal vez no lo haría. Es difícil decir sin verlo en su lugar.
+Anataeus (Shabby): Tendremos que confiar en que Nils sabe cómo colocar un explosivo discretamente.
+Concordia (Shabby): Tengo la sensación de que ha tenido experiencia con este tipo de trabajo antes...
+Anataeus (Shabby): ¿Y estás segura de que sabe dónde colocarlos?
+Concordia (Shabby): Clara se encargó de eso. De alguna manera obtuvo un mapa de todas las propiedades de la Casa Colvan... incluyendo sus puestos de guardia y arsenales.
+Anataeus (Shabby): Ah, claro que lo hizo.
+Concordia (Shabby): Disfrutaré viendo a las Casas vecinas apresurarse a reclamar las propiedades de Colvan como propias.
+Concordia (Shabby): Es una retribución adecuada.

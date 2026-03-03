@@ -1,0 +1,17 @@
+﻿Nils: 이건 너무 과한거 같은데. 군대에 들어가기 위해 제복 치수라도 재는 느낌입니다마는.
+Concordia (Shabby): 움직이지 마세요. 안 그러면 제대로 치수를 못 재니까.
+Nils: 이런 옷을 꼭 입어야 하는 건가요?
+Anataeus (Shabby): 빛을 많이 흡수할수록, 어두운 곳에서 숨기 쉬울 겁니다.
+Nils: 숨는 건 제 전문입니다마는. 제 능력을 과소평가하지 마십시오.
+Anataeus (Shabby): 조심해서 나쁠 건 없지요, 안 그래요?
+
+-----------
+
+Concordia (Shabby): 멋진 모습이네요, 안 그래요?
+Nils (Cloak): 마음이 바뀌었습니다. 꽤 잘 어울리는 거 같은데.
+Anataeus (Shabby): 우리 의류상을 해도 되겠는데.
+Anataeus (Shabby): 어쨌든 연금술을 더 하기 힘들어졌으니까... 남은 수은을 다 썼거든.
+Concordia (Shabby): 하지만 좋은 생각이었어. 방직 물품들을 찾아볼게.
+Anataeus (Shabby): 마네킹도 부탁해.
+Concordia (Shabby): 맡겨만 달라고.
+Anataeus (Shabby): 완벽해.

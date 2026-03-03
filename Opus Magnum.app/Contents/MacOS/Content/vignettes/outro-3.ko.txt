@@ -1,0 +1,17 @@
+﻿Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): 출발할 시간이군요.
+Concordia (Shabby): 행운을 빌어요, 닐스!
+Nils (Cloak): 강을 따라서 납 광석이 실린 바지선이 내려오면 성공했다는 신호입니다.
+Nils (Cloak): 제 몫의 금을 어디로 보내야 할지는 따로 알려드리지요.
+Concordia (Shabby): 여기로 돌아오지 않을 건가요?
+Nils (Cloak): 아무래도 머무를 수 없게 된 거 같습니다.
+Anataeus (Shabby): 드디어 우리를 믿게 되었군요.
+Nils (Cloak): 거기에 대해서 말인데.
+Nils (Cloak): 맨 처음에 이 버려진 가게에서 두 분을 찾았을 때, 잘 때 둘 다 찔러버리고 도망갈 생각도 했습니다마는.
+Concordia (Shabby): 이런... 그러지 않아서 다행이네요.
+Nils (Cloak): 농담이었습니다. 그런 옷 팔아 봤자 얼마 안할 겁니다.
+Anataeus (Shabby): 참으로 친절하시기도 하지.
+Concordia (Shabby): 더 감동적인 이야기는 없을것 같네요.
+Anataeus (Shabby): 안전한 길 되길, 닐스. 만약 저희를 찾아야 한다면, 당분간은 여기 계속 있을 생각입니다. 
+Nils (Cloak): 오래지 않아 다시 만나게 될 거라 생각합니다.

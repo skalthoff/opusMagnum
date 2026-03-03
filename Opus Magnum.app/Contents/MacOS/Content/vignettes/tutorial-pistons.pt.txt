@@ -1,0 +1,12 @@
+Henley: Um braço com pistão é um tipo especial de braço que pode se estender e retrair.
+Anataeus (Student): E presumivelmente há instruções que controlam o pistão?
+Henley: Isso mesmo. Vou demonstrar.
+
+-----------
+
+Anataeus (Student): Entendo. Braços de pistão podem atingir áreas que um braço normal não pode. 
+Henley: É o que os torna tão úteis! Mas eles custam um pouco mais do que braços comuns, entretando.
+Anataeus (Student): E eu posso usar a função de reinício para fazer um braço retornar para o seu estado inicial de onde quer que ele esteja. Isso é conveniente.
+Henley: Só não se esqueça de que a instrução de reinício vai levar a mesma quantidade de tempo para ser executada do que levaria para executar essas instruções individualmente.
+Anataeus (Student): Bem, sim, é claro que vai.
+Henley: É claro.

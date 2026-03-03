@@ -1,0 +1,20 @@
+﻿Portraits: Anataeus, Concordia
+
+Concordia: ¿Y? ¿Cómo te fue?
+Anataeus: Una pesadilla.
+Anataeus: Armand me contó sus viejas historias sobre el honor y justicia.
+Anataeus: La Señora Van Tassen parecía ser una estatua.
+Anataeus: Frederick derramó comida sobre su camisa.
+Concordia: ¡Qué valiente eres, sobreviviendo a una cena formal!
+Anataeus: Fue bastante difícil, sinceramente. No puedo soportar la formalidad.
+Anataeus: Armand no recordaba mi nombre. El Capitán Gelt tuvo que recordarle varias veces.
+Concordia: Para ser justos, empezaste hace poco.
+Anataeus: Sí, supongo que es mucho pedir. Una cosa tan complicada y tediosa como recordar un solo nombre, el nombre de su nuevo Alquimista.
+Anataeus: El que se graduó como mejor de su clase en el Colegio de Ingeniería Alquímica.
+Concordia: Anataeus...
+Anataeus: ¡Lo ves! _Tu_ si recuerdas mi nombre.
+Concordia: ¿Piensas que Armand sabe mi nombre? Teniendo en cuenta que he estado aquí toda mi vida.
+Anataeus: ¡Tal vez la próxima vez puedas ir en mi lugar! Seguro ni siquiera se dé cuenta de que es una persona diferente.
+Concordia: "Hnnngh, Alquimista... Proveedor... ¿quién eras otra vez? Mm, sí, hnnnngh... "
+Anataeus: Nos meterás en problemas.
+Concordia: He estado haciendo esto durante años.	

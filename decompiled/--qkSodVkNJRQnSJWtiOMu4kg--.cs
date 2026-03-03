@@ -1,0 +1,59 @@
+using System;
+using System.Collections;
+
+public sealed class _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D
+{
+	public Index2 _0023_003DqS1FXM7vc4G9JN8xWcZ9Tsw_003D_003D;
+
+	public IntPtr _0023_003DqljBuT_00249rkfGI1wo6wALHRw_003D_003D;
+
+	public bool _0023_003Dq2CR0BSeWqYbxIs8sNlYWRA_003D_003D;
+
+	public _0023_003DqbA6Sa8L4h3TKMfLpMJe3yA_003D_003D _0023_003Dqbv1eg4VY9PniHYD0r6wuMg_003D_003D;
+
+	public Range2 _0023_003Dqj5cK_0024Dfwk4ov0kxnd64qXQ_003D_003D;
+
+	public BitArray _0023_003DqfiuhG22CucE8ZNDBW49Vew_003D_003D;
+
+	public Maybe<string> _0023_003DqXs_00243HD9usu6zCSSpp3ur9Q_003D_003D;
+
+	public DateTime _0023_003DqJFR3oOkmTqNXaPz2oKI6ZkZH_0024PUyNB61BTZeiyAmHPw_003D;
+
+	public int _0023_003DqCvFw_qmLCUyv_0024pJeA_00242fuQ_003D_003D()
+	{
+		return _0023_003DqS1FXM7vc4G9JN8xWcZ9Tsw_003D_003D.X;
+	}
+
+	public int _0023_003DqpKfEOOa42zjzqerT2f9obA_003D_003D()
+	{
+		return _0023_003DqS1FXM7vc4G9JN8xWcZ9Tsw_003D_003D.Y;
+	}
+
+	public Vector2 _0023_003Dqf1Mde9Zviemao14vZptK5Q_003D_003D()
+	{
+		return 0.5f * _0023_003DqS1FXM7vc4G9JN8xWcZ9Tsw_003D_003D.ToVector2();
+	}
+
+	public Vector2 _0023_003DqQLcMQmblzkEakW_0024dd5p66m5SRIe6ZT1ElcDcUzT8Wg8_003D()
+	{
+		return (0.5f * _0023_003DqS1FXM7vc4G9JN8xWcZ9Tsw_003D_003D.ToVector2()).Rounded();
+	}
+
+	public override bool Equals(object _0023_003DqYN19ZxvOfXoYLRekbH6mww_003D_003D)
+	{
+		if (_0023_003DqYN19ZxvOfXoYLRekbH6mww_003D_003D is _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D2 && _0023_003DqXs_00243HD9usu6zCSSpp3ur9Q_003D_003D._0023_003DqmCJ_0024iG9vMgP5KlB8KYcHOA_003D_003D() && _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D2._0023_003DqXs_00243HD9usu6zCSSpp3ur9Q_003D_003D._0023_003DqmCJ_0024iG9vMgP5KlB8KYcHOA_003D_003D())
+		{
+			return _0023_003DqXs_00243HD9usu6zCSSpp3ur9Q_003D_003D._0023_003DqYrym_Gw9kA2zlivP68OzUQ_003D_003D() == _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D2._0023_003DqXs_00243HD9usu6zCSSpp3ur9Q_003D_003D._0023_003DqYrym_Gw9kA2zlivP68OzUQ_003D_003D();
+		}
+		return false;
+	}
+
+	public override int GetHashCode()
+	{
+		if (_0023_003DqXs_00243HD9usu6zCSSpp3ur9Q_003D_003D._0023_003DqmCJ_0024iG9vMgP5KlB8KYcHOA_003D_003D())
+		{
+			return _0023_003DqXs_00243HD9usu6zCSSpp3ur9Q_003D_003D._0023_003DqYrym_Gw9kA2zlivP68OzUQ_003D_003D().GetHashCode();
+		}
+		return base.GetHashCode();
+	}
+}

@@ -1,0 +1,17 @@
+Henley: Je crois que c'est tout ce que tu as besoin de savoir pour utiliser le moteur de transmutation de façon efficace.
+Anataeus (Student): Je vais encore faire un produit pour être sûr d'avoir compris.
+
+-----------
+
+Henley: Qu'est-ce que tu comptes faire quand tu auras ton diplôme ?
+Anataeus (Student): J'aimerais devenir l'alchimiste en chef de l'une des grandes Maisons.
+Henley: C'est... ambitieux. Tout droit sorti de l'université ?
+Anataeus (Student): Pourquoi pas ?
+Henley: C’est vrai. Tu peux prétendre à de grandes ambitions...
+Anataeus (Student): Et toi ?
+Henley: Je me plais ici. Je crois que je vais rester encore un peu. J'espère devenir professeur un jour.
+Anataeus (Student): Tu sembles avoir un don pour l'enseignement.
+Henley: Tu crois ? Eh bien, que chacun de nous réalise son _grand œuvre !_
+Anataeus (Student): _Un grand œuvre..._ J'ai toujours trouvé ce terme plutôt prétentieux, même si je comprends l'intention.
+Anataeus (Student): Pourquoi est-ce que tu ris ?
+Henley: Anataeus Vaya trouvant quelque chose prétentieux ? C'est la meilleure...

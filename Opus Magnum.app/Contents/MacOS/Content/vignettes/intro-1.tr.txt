@@ -1,0 +1,20 @@
+Portraits: Anataeus, Concordia
+
+Concordia: Eee, nasıl geçti?
+Anataeus: Felaket.
+Anataeus: Armand onur ve doğruluk hakkındaki eski hikayelerini anlatmaya devam etti.
+Anataeus: Bayan Van Tassen mumyalanmış gibi görünüyor.
+Anataeus: Frederick gömleğine yemek döktü.
+Concordia: Ne cesur bir adamsın, resmi bir akşam yemeğinden sağ çıktın!
+Anataeus: Yine de gerçekten zor. Tıkanıklığa dayanamıyorum.
+Anataeus: Armand adımı hatırlamıyor. Kaptan Gelt ona birkaç kez hatırlatmak zorunda kaldı.
+Concordia: Adil olmak gerekirse, burada yenisin.
+Anataeus: Evet, sanırım bunu istemek çok fazla. Böylesine karmaşık, külfetli bir şey ki tek bir ismi hatırlamak: Yeni simyagerinizin adını.
+Anataeus: Simya Mühendisliği Fakültesi'nden sınıfının birincisi olarak mezun olmuş…
+Concordia: Anataeus -
+Anataeus: Gördün mü! _Sen_ ismimi iyi hatırlıyorsun.
+Concordia: Armand'ın _benim_ adını bildiğini mi düşünüyorsun? Tüm hayatım boyunca burada olduğumu düşünerek söyle.
+Anataeus: Belki bir dahaki sefere benim yerime gidebilirsin! Farklı biri olduğunu bile fark etmeyebilir.
+Concordia: “Eeee, Simyacı... Tedarikçi... hangisiydin sen? Mm, evet, aaaa...”
+Anataeus: Başımızı belaya sokacaksın.
+Concordia: Bunu yıllardır yapıyorum.

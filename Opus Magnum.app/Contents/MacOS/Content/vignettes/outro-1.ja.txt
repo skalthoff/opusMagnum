@@ -1,0 +1,23 @@
+﻿Portraits: Anataeus, Concordia
+
+Concordia: それで、●建物内にある、●あらゆるものを●もう一度●チェックし直すことを●決めたの。その時の●アルマンドの●顔を●見せたかったわ！
+Anataeus: ああ……
+Concordia: アンテウス、●私の●話を●聞いてる？
+Anataeus: え？
+Concordia: それが●答えね。
+Anataeus: 何？
+Concordia: あなた、●落ち込んでるわね。
+Anataeus: 落ち込んでなんか●_ないよ_。僕は……●不機嫌で●落胆している●だけだ。
+Concordia: それで、●ヴァン・タッセン家の●偉大なる●錬金術師が●不機嫌で●落胆している●理由は●なに？
+Anataeus: 何もない。その、●自分が●ここにいる●意味を●考えてるんだ。
+Concordia: あなたは●私たちの●錬金術師として●ここに●いるのよ。
+Anataeus: いや、●もっと●大きな●意味でね……
+Action: Enter, Captain Gelt
+Captain Gelt: 錬金術師は●ここに●いるか？
+Anataeus: ゲルト大尉、●どんな●ご用でしょうか？
+Captain Gelt: ただちに●メインホールに●来てくれ。ちょっとした●緊急事態でな。
+Concordia: 何が●あったんです？
+Captain Gelt: 別の●一家が●我々の●不意を●突いて●攻勢に●出てきた……●我々は●直ちに●対応する●必要がある。
+Anataeus: 錬金術を●お役に●立てましょう！
+Concordia: あなた、●なんだか●嬉しそうね。
+Anataeus: もちろんさ！とうとう●何か●重要な●事が●起こったんだから！

@@ -1,0 +1,24 @@
+﻿Portraits: Anataeus (Shabby), Concordia (Shabby)
+
+Concordia (Shabby): 다시 돌아갔으면 좋겠어...
+Anataeus (Shabby): 우리에게 선택권이 없었던 것은 확실해.
+Concordia (Shabby): 어찌되었든간에 말이야! 최소한 프레드릭이라도 살았으면, 반 타쎈 가문의 핏줄이 이어질 가능성은 있었단 말이야.
+Anataeus (Shabby): 너무 늦었어. 이제 뭘해야 할지 생각하는게 좋을거야.
+Concordia (Shabby): 다음은 없어! 이해 못하겠어? 누가 우리를 돌보려고 하겠어. 우리는 이 남은 인생을 비참하게 숨어 살아야 한다고.
+Concordia (Shabby): 차라리 돌아가서 그들하고 같이 죽겠어.
+Anataeus (Shabby): 콩코디아...
+Concordia (Shabby): 너도 화나지 않니?
+Anataeus (Shabby): 화? 나... 난 모르겠어. 우리— 내가 가문을 얼마나 바보같이 막아냈는데. 뭐라도 받을 자격이 있는지 모르겠어.
+Anataeus (Shabby): 내 연금술사로서의 경력은 망해가고 있어.
+Anataeus (Shabby): 이거 참 쓸데없는 일이 되어버렸어! 어쩌면 그냥 다 잊어버리는 편이 나을지도...
+Concordia (Shabby): 아나테우스, 들어봐. 네가 뭘 하고 싶은 건진 모르겠지만, 이제 나는 복수밖에 없어.
+Concordia (Shabby): 어떻게 해내야 할지조차 모르겠어. 하지만 그게 이제 내 인생의 목적이 되었다고.
+Anataeus (Shabby): 그게 또 다른 “가문들의 방식”이야? 명예, 배반, 보복같은거?
+Concordia (Shabby): 아니. 이건 콜반 가의 비열한 놈들의 심장에 칼을 꽂고 싶은 내 목표야.
+Concordia (Shabby): 어떻게 그런 잔인한 짓을 할 수 있지?
+Anataeus (Shabby): 콩코디아...
+Concordia (Shabby): 밖에 나갔다 올게. 위험한 건 알지만, 아주 오랫동안 걸어야겠어.
+Anataeus (Shabby): 잠깐, 콩코디아.
+Concordia (Shabby): 왜?
+Anataeus (Shabby): 그러니까... 그... 우리가 무엇을 하기로 하든지 간에, 변성 기관을 돌릴 재료들은 필요하니까.
+Anataeus (Shabby): 같이 가자.

@@ -1,0 +1,24 @@
+﻿[DO NOT PARSE]
+
+*Submission Instructions*
+
+#The _Journal of Alchemical Engineering_ is a collection of user-created puzzles curated by Zachtronics. To submit a puzzle for inclusion in the _Journal_, upload your puzzle to Steam Workshop and send the following information to *zach@zachtronics.com*:
+ 
+• a link to your puzzle on Steam Workshop,
+• an explanation of what makes your puzzle interesting,
+• an explanation of what you imagine your puzzle's product(s) to be, and
+• the name you would like attached to the puzzle, in the format ""Last, F."" (if your full name were ""First Last"").
+
+#*Submission Rules*
+
+#By submitting a puzzle for inclusion in the _Journal of Alchemical Engineering_, you are granting us full permission with no limitations to modify and distribute that puzzle as part of the game. You will receive no monetary compensation for your submission; our consideration of your puzzle and credit attribution in a manner described above shall be your sole and full compensation.
+
+You may only submit puzzles that you, yourself, have created.
+
+You agree to be bound by the terms of the Steam® Subscriber Agreement.
+
+Do not submit the same puzzle more than once.
+
+#*Puzzle Design Tips*
+
+#Aim to create something that is both uniquely interesting and consistent with the game's setting and aesthetics. For example, just because you can use every type of atom in a single product or reagent doesn't mean you should. The best puzzles are engaging in their own right _and_ evocative of the world of the game.

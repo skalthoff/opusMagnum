@@ -1,0 +1,16 @@
+﻿Captain Gelt (Armor): Tal vez el mensaje Colvan estaba equivocado.
+Anataeus: Yo no asumiría que lo estaba.
+Captain Gelt (Armor): ¡Todavía podría ser retractado! Un error por un escrito o una página errónea... una carta enviada por equivocación...
+Concordia: Siento decirle que creo que eso es muy poco probable.
+Anataeus: Quédese aquí un poco más, Capitán. Le prepararé una poción de coraje. Algo para llenar su sangre con espíritu luchador.
+Captain Gelt (Armor): Gracias, Anataeus. Eres muy amable.
+
+-----------
+
+Concordia: ¿Crees que la poción de coraje funcionará? Pareciera difícil combatir los hábitos de toda una vida.
+Anataeus: Funcionará después de un tiempo. La poción que le di es más que nada alcohol.
+Concordia: Me alegra ver que no has perdido tu voluntad de bromear con el pobre Capitán, incluso en estas condiciones extremas.
+Anataeus: No estoy bromeando. Esta vez, al menos.
+Anataeus: Si el honor le demanda que sacrifique su vida, quiero que se sienta como... o al menos, más como si mismo.
+Concordia: Eso es conmovedor, en una manera extraña.
+

@@ -1,0 +1,12 @@
+Henley: Piston kolu, uzayabilen ve geri çekilebilen özel bir koldur.
+Anataeus (Student): Ve muhtemelen pistonu kontrol eden talimatlar da vardır.
+Henley: Evet. Göstereyim.
+
+-----------
+
+Anataeus (Student): Anlıyorum. Piston kolları normal bir kolla erişemediğiniz alanlara ulaşabilir.
+Henley: Onları bu kadar kullanışlı yapan şey bu! Yine de normal kollardan biraz daha pahalıya mal oluyorlar.
+Anataeus (Student): Ve bir kolun bulunduğu yerden ilk durumuna dönmesini sağlamak için sıfırlama talimatını kullanabilirim. Bu kullanışlı.
+Henley: Sıfırlama talimatının, verilen önceki talimatları tek tek kullanmak kadar süre kullanacağını unutma.
+Anataeus (Student): Ee, herhalde yani.
+Henley: Herhalde.

@@ -1,0 +1,17 @@
+﻿Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): Parece que es hora de que me vaya.
+Concordia (Shabby): ¡Buena suerte, Nils!
+Nils (Cloak): Sabrán que lo logré cuando una barcaza de mineral de plomo fluya río abajo hacia ustedes.
+Nils (Cloak): Enviaré instrucciones que detallan a dónde enviar mi parte del oro más tarde.
+Concordia (Shabby): ¿No volverá aquí?
+Nils (Cloak): No, me temo que no puedo quedarme.
+Anataeus (Shabby): Así que confía en nosotros, finalmente.
+Nils (Cloak): Es gracioso.
+Nils (Cloak): Cuando los encontré a los dos escondidos en esta tienda abandonada, mi primer pensamiento fue matarlos mientras dormían y vender sus cosas.
+Concordia (Shabby): Oh Dios... Me alegra que no lo hayas hecho.
+Nils (Cloak): Estoy bromeando. De todos modos, habría cobrado solo una miseria por su ropa mediocre.
+Anataeus (Shabby): Que conmovedor.
+Concordia (Shabby): Creo que no se puede contar una historia más conmovedora.
+Anataeus (Shabby): Que tenga un buen viaje, Nils. Estaremos aquí por el momento, si desea encontrarnos.
+Nils (Cloak): Estoy seguro de que nos encontraremos de nuevo en poco tiempo.

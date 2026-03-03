@@ -1,0 +1,10 @@
+[DO NOT PARSE]
+
+Regeln für das Transmutationslabor:
+#Zugang nur für Lehrkräfte und Diplom-Studenten des alchemistischen Engineerings!
+#(Jegliche Ausnahmen müssen vom Universitätskanzler genehmigt werden)
+#Im Labor Siegel und Zulassung für das Alchemiestudium stets bei sich tragen.
+#Im Labor sind keine Speisen oder Getränke erlaubt.
+#Das Sitzen auf oder Anlehnen an Transmutationsmaschinen oder ihre Komponenten ist nicht gestattet.
+#Bitte das Labor für alle anderen sauberhalten.
+#Damit bist du gemeint, Anataeus!

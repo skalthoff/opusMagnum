@@ -1,0 +1,24 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): Nils ? C'est vous ?
+Action: Enter, Nils
+Nils: Désolé d'interrompre vos intrigues d'alchimiste, mais je reviens pour vous informer que la Maison Colvan renforce ses patrouilles le long des zones frontalières.
+Nils: Ils sont peut-être au courant que des gens se sont échappés...
+Concordia (Shabby): Ils en ont mis du temps.
+Anataeus (Shabby): Merci de nous avertir. Il me reste encore quelques petites choses à faire, mais nous devrions pouvoir partir dès que j'aurai terminé.
+Nils: N'hésitez pas, ils recherchent clairement quelqu'un.
+Anataeus (Shabby): Clara, je te présente Nils. On pourrait dire que c'est un personnage peu recommandable...
+Clara: Oui, je sais.
+Anataeus (Shabby): Attends... tu connais Nils ?
+Clara: Si je le connais ? Je l'emploie.
+Nils: Mais seulement à temps partiel.
+Concordia (Shabby): Ha ! Je me suis toujours demandé comment tu avais fait pour nous trouver si facilement.
+Clara: Je suis presque vexée que tu ne t'en sois pas rendu compte avant.
+Concordia (Shabby): J'ai bien peur que tes machinations soient d'un niveau bien supérieur aux nôtres.
+Anataeus (Shabby): Et moi qui croyais avoir trouvé le seul voleur de confiance de la ville...
+Nils: Lady Soria, je vous conseille de rentrer chez vous avant qu'on ne vous voie ici.
+Clara: C'est probablement mieux ainsi, je suis d'accord.
+Anataeus (Shabby): Il reste encore cette affaire du rouge à lèvres.
+Clara: Une fois terminé, Nils pourra me l'apporter la nuit même du bal.
+Anataeus (Shabby): Très bien. Encore une chose, Clara... ce sera le chaos.
+Clara: Je sais. Mais ça ne me fait pas peur.

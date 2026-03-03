@@ -1,0 +1,17 @@
+Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): Görünüşe göre gitme vakti geldi.
+Concordia (Shabby): İyi şanslar Nils!
+Nils (Cloak): Bir mavna kurşun nehirden sana doğru yüzdüğünde başardığımı anlayacaksın.
+Nils (Cloak): Ve daha sonra altından payımı nereye göndereceğime dair talimatlar göndereceğim.
+Concordia (Shabby): Buraya geri dönmeyecek misin?
+Nils (Cloak): Hayır, korkarım kalamam.
+Anataeus (Shabby): Sonunda bize güveniyorsun.
+Nils (Cloak): Bu biraz komik.
+Nils (Cloak): İkinizi bu terk edilmiş dükkanda saklanırken ilk bulduğumda, ilk aklıma gelen, siz uyuduktan sonra sizi kesmek ve kişisel eşyalarınızı satmaktı.
+Concordia (Shabby): Aman... Yapmadığına sevindim.
+Nils (Cloak): Şaka yapıyorum. Zaten vasat giysileriniz için sadece az bir miktar verirlerdi.
+Anataeus (Shabby): Ne kadar dokunaklı.
+Concordia (Shabby): Daha dokunaklı bir hikayenin yazılamayacağını düşünüyorum.
+Anataeus (Shabby): İyi seyahatler, Nils. Bizi bulmak istersen şimdilik burada olacağız.
+Nils (Cloak): Eminim bu uzun bir zaman sonra olacak.

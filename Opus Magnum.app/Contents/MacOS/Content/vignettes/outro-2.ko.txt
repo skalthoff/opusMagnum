@@ -1,0 +1,20 @@
+﻿Portraits: Verrin Ravari, Taros Colvan
+
+Taros Colvan: 하! 약골들. 베린, 네 말이 맞았다. 두려워할 만한 건 없었어.
+Verrin Ravari: 제가 예상했듯이 말입니다.
+Verrin Ravari: 반 타쎈 가문은 정도를 너무 벗어났습니다. 우리는 그것을 바로잡을 뿐이고요.
+Verrin Ravari: 이제 남은 것은 조건을 협상하는 거지만— 협상할 만한 것도 별로 없지요.
+Taros Colvan: 협상은 지루해...
+Verrin Ravari: 그래도 필요합니다.
+Taros Colvan: 우리 그냥... 모두 죽여버리면 어떤가?
+Verrin Ravari: 다소 극단적이군요.
+Taros Colvan: 우리가 이겼는데도 이 나약한 가문이 남아 있다고 생각하면 꼴보기 싫다. 이 주변에 붙어서 구걸이나 하거나, 과거의 영광 타령이나 하겠지.
+Taros Colvan: 그건 위험이 있다. 그리고 베린, 네가 직접 예전 방식은 바뀌어야 한다고 말했지.
+Verrin Ravari: 분명히 제가 그랬습니다만—
+Taros Colvan: 설마 두려워하는 건가?
+Taros Colvan: 공격하라고 시키는 것은 쉽지만, 끝을 맺을 때가 되면...
+Verrin Ravari: 전 두렵지 않습니다! 반 타쎈의 핏줄을 끝장내는 게 좋은 생각이라고 한다면 거기 따르겠습니다.
+Taros Colvan: 베린, 너 자신이 똑똑하다고 생각하겠지. 하지만 네가 우리 가문의 수석 연금술사라 해도 네 생각이 내 생각보다 중요하다고 생각하지는 마라.
+Taros Colvan: 알겠나?
+Verrin Ravari: 물론입니다, 타로스 님.
+Taros Colvan: 따라와.

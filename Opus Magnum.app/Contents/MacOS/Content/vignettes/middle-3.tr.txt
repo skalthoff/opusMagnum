@@ -1,0 +1,21 @@
+Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): Anlaştık mı?
+Nils: İlginç bir teklif.
+Nils: Ancak Colvan'ın işgal ettiği eski Van Tassen bileşiğinin içine girmek çok daha zor. Muhafızları çok daha uyanık.
+Anataeus (Shabby): İnan bana, biliyoruz. Concordia ve ben canımızı zor kurtardık.
+Nils: Beni içeri al yeter. Gerisini ben halledebilirim.
+Concordia (Shabby): Bu o kadar kolay değil.
+Concordia (Shabby): İhtiyacımız olan şey, kişide taşıyabileceğin bir şey değil. Bu bir sevkiyat.
+Anataeus (Shabby): Tam olarak, bir kurşun cevheri sevkiyatı.
+Nils: Ben... anlıyorum.
+Concordia (Shabby): Size bir nakliye siparişi vereceğim, ancak bir mühür gerekiyor. Gerçek bir sipariş bulmalı ve mührü almalısınız.
+Nils: Tamam. Ve sonra sanırım bir tedarik görevlisini taklit edeceğim ve gönderiyi nehrin aşağısına götüreceğim.
+Concordia (Shabby): Aynen öyle!
+Nils: Bu beklediğimden... biraz daha hayali.
+Anataeus (Shabby): Tam tersine, uygulanabilir.
+Anataeus (Shabby): Pratikte kendi denginde biri ile parkta yürürsün, değil mi?
+Concordia (Shabby): Unutmayın, size hiçbir yerde bulamayacağınız en iyi ekipmanı sağlayacağız.
+Anataeus (Shabby): Bu altını yapacaksam, kurşuna ihtiyacım var… sonuçta simya böyle çalışır.
+Nils: Altın, evet. Altını biraz seviyorum.
+Anataeus (Shabby): Bunu hallederseniz ve biraz daha fazlasına sahip olursunuz. Söz veriyorum.

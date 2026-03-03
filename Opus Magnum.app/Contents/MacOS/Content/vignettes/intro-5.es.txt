@@ -1,0 +1,18 @@
+﻿Portraits: Verrin Ravari, Taros Colvan
+
+Taros Colvan: Verrin, tengo entendido que los alquimistas deben aprobar un curso difícil en la Universidad Imperial y, por lo tanto, solo un número muy pequeño se graduan.
+Verrin Ravari: Correcto.
+Taros Colvan: Y, por esa razón, los alquimistas tienden a mantenerse al tanto el uno del otro, incluso cuando se dispersan por toda la ciudad...
+Verrin Ravari: Suele ser el caso.
+Taros Colvan: Entonces, ¿no crees que el alquimista de una Casa, digamos la Casa Colvan, sabría que otra Casa, por ejemplo la Casa Van Tassen, tenía un nuevo alquimista?
+Verrin Ravari: Taros, veo a dónde va esto y quiero decirle...
+Taros Colvan: Y _aun así_, me sorprende decir que mi alquimista de alguna manera ignoro esto y no hizo nada para detenerlo o incapacitarlo durante este tiempo.
+Taros Colvan: Qué extraño, ¿no te parece?
+Verrin Ravari: Le he explicado esto. Hicimos nuestro mejor intento, pero se escabulló de alguna manera.
+Verrin Ravari: Si me hubieran notificado antes que había desaparecido un cargamento de mineral-
+Taros Colvan: ¡Excusas! ¡Solo escucho excusas!
+Verrin Ravari: Por favor, joven Taros. Debo recordarle que su padre y yo...
+Taros Colvan: ¿Mi padre? ¡Mi padre debería haberse librado de ti hace mucho tiempo! No eres digno de mencionar su nombre.
+Taros Colvan: Te consideras un estratega, pero tu consejo vale menos que tu alquimia. ¡Vete!
+Verrin Ravari: ¡Está cometiendo un error, Taros!
+Taros Colvan: Dije. Vete.

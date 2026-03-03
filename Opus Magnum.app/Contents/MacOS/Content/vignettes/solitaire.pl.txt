@@ -1,0 +1,103 @@
+Concordia: Gdy widzę twoje silniki transmutacyjne w akcji, przychodzą mi na myśl przyjemne wspomnienia gry w Ogród Sigmara?
+Anataeus: Jaki ogród?
+Concordia: Nigdy nie grałeś? Myślałam, że każdy zna tą grę. Układasz kulki według pewnego schematu, a potem-
+Anataeus: Kulki?
+Concordia: A co innego?
+Anataeus: Symbole pierwiastków! Szklane sfery reprezentujące różne typy atomów.
+Concordia: Małe szklane sfery są powrzechnie znane jako kulki.
+Anataeus: Nigdy nie mówimy na nie "kulki".
+Concordia: Mówią tak wszyscy, którzy nie są wysoko wykształconymi alchemikami. A teraz, nie chcesz wypróbować?
+Anataeus: Niech ci będzie.
+
+----- After winning 1 game.
+
+Concordia: Czyż to nie jest przyjemne?
+Anataeus: Alchemia tak w ogóle nie działa! Na przykład podstawowe żywioły-
+Concordia: To tylko mała zabawa, Anateuszu. Gdy byliśmy mali, przychodziliśmy tutaj i graliśmy, gdy nie było alchemika.
+Anataeus: Co? Byliście przy silniku transmutacyjnym bez żadnego nadzoru?
+Concordia: Używaliśmy tylko kulek, Anateuszu. Bez nerwów.
+Anataeus: To nie są kulki, to są reprezentacje fundamentalnych budulców wszechświata!
+Concordia: Są to również małe szklane sfery. Rzucić w ciebie jedną?
+Anataeus: Ach, przestań! Nie można bawić się takim delikatnym sprzętem.
+Concordia: I tak są o wiele tańsze niż reszta. Zważywszy, że są to kulki.
+Anataeus: Mimo wszystko doceniłbym, gdybyś nie była w stosunku do nich tak pochopna.
+Concordia: Cóż, robiliśmy to latami. Naprawdę nie wiedziałeś o Ogrodzie Sigmara?
+Anataeus: W ogóle. Nie uczą nas na uniwersytecie rzeczy tak frywolnych!
+
+----- After winning 10 games.
+
+Concordia: Jak na "rzecz tak frywolną", całkiem nieźle się bawisz.
+Anataeus: Może troszeczkę. Można znaleźć kilka strategii...
+Concordia: Tak, można wygrać pewniej przy odrobinie ćwiczeń i uwagi.
+Anataeus: Więc kim był ten Sigmar? Czemu sprzątam jego ogród?
+Concordia: Ty mi powiedz.
+Anataeus: Ja? Skąd mam wiedzieć?
+Concordia: Bo sam dawno temu był alchemikiem, czyż nie?
+Anataeus: Nigdy nie słyszałem o żadnym Sigmarze.
+Concordia: Jesteś pewien?
+Anataeus: Możliwe, że był jedną z tych ludowych legend. Innymi słowy, fikcyjny.
+Concordia: Może fikcyjna była twoja uwaga na zajęciach historii?
+Anataeus: Proszę cię. Byłem wzorowym uczniem.
+
+----- After winning 25 games.
+
+Concordia: Wzorowy uczeń, i to jaki! Najpierw nie zna Ogrodu Sigmara, a teraz się okazuje, że o Sigmarze też nie słyszał.
+Anataeus: Nawet nie ustaliliśmy, czy istniał!
+Concordia: To poszukaj czegoś w bibliotece. Na pewno znajdziesz coś interesującego.
+Anataeus: Myślę, że mógłbym- czekaj, czy ty właśnie dałaś mi rozkaz?
+Concordia: Jak na takiego specjalistę, dziwnie opierasz się poznawaniu przeszłości swojej dziedziny.
+Anataeus: Takie tematy były na uniwersytecie niemile widziane... było kilku znawców historii i legend, ale poważniejsi uczniowie skupiali się na współczesnych praktykach.
+Anataeus: Nikt nie widzi większego sensu w zagłębianiu się w przeszłość.
+Concordia: Szkoda. Gdy laicy myślą o alchemii, zazwyczaj myślą o starych opowieściach. Dobrze by było chociażby je znać.
+Anataeus: Obawiam się, że takie opowieści nie zawsze stawiają dziedzinę w pozytywnym świetle...
+Concordia: To zależy.
+Anataeus: Na razie myślę, że po prostu pogram dalej.
+Concordia: Znakomita myśl.
+
+----- After winning 50 games.
+
+Anataeus: Więc gdy byłaś mała, alchemicy Van Tassenów nigdy nie mieli pretensji do obecności dzieciaków biegających wkoło po laboratorium?
+Concordia: Nie wiedzieli, że tam byliśmy.
+Anataeus: Z pewnością zauważyli by porozrzucane symbole pierwiastków. "Kulki", czy jak wy na to mówicie.
+Concordia: Twoi poprzednicy rzadko stawiali stopę w laboratorium.
+Anataeus: To jakiś żart.
+Concordia: Wcale nie. Myślę, że odkładali alchemię na bok, widząc siebie bardziej jako część wewnętrznego kręgu rodzinnego.
+Anataeus: Absurdalne.
+Concordia: Realizowali swoje interesy, wchodzili w sojusze czy intrygi, podkładali stopę rywalom...
+Anataeus: Moja profesorka wyraźnie doradziła mi unikania takich rzeczy.
+Concordia: Zgadzam się z nią całkowicie. Nie lubię takich podstępnych ludzi.
+Anataeus: Pewnie jest przyzwyczajona, że jej rada jest często ignorowana.
+Concordia: Prawdopodobne. Wierz mi lub nie, ale jesteś pierwszym znanym mi alchemikiem, który faktycznie skupia się na alchemii!
+
+----- After winning 75 games.
+
+Anataeus: Więc kto ciebie nauczył grać w tą grę?
+Concordia: Mój ojciec. Też był zaopatrzeniowcem w czasach lepszych niż te.
+Anataeus: I zakładam że ktoś inny też go nauczył, i tak tą grę sobie przekazywano... ale czemu? Jaki jest pożytek w zachowywaniu takiej wiedzy?
+Concordia: Można odciągnąć myśli od problemów, czyż nie?
+Anataeus: Pewnie tak...
+Concordia: Tak naprawdę, zasugerowałam ci ją właśnie dlatego, że ostatnio widzę ciebie pod dość dużym napięciem.
+Anataeus: Widzisz? Ja- Nie zdawałem sobie sprawy, że to widać aż tak.
+Concordia: To było raczej oczywiste.
+Anataeus: Rozumiem...
+Concordia: W czasach takich jak te, warto zająć sobie myśli takim prostym zajęciem.
+Concordia: Inaczej będą wędrować do innych, większych, bardziej niepokojących myśli.
+Anataeus: Wydaje mi się, że faktycznie ta gra jest dla mnie raczej relaksująca.
+Concordia: Cieszę się, że to słyszę.
+
+----- After winning 100 games.
+
+Anataeus: Konkordio, dziękuję, że poleciłaś mi tą grę. Wychodzi na to, że ją lubię.
+Concordia: Nie ma za co, Anateuszu. Cieszę się, że sprawia ci przyjemność.
+Concordia: Tym bardziej po tym, jak nazwałeś ją frywolną.
+Anataeus: Jest frywolna! Po prostu... jest w tym dobra.
+Concordia: Dobrze jest uczyć się rzeczy, które nie są alchemią, czyż nie?
+Anataeus: Nie ma sensu. Ta mała gierka po prostu jest wyjątkiem od reguły.
+Concordia: Poświęciłeś całe swoje życie chęci bycia alchemikiem.
+Concordia: Teraz, kiedy już nim jesteś, trzeba nauczyć się reszty.
+Anataeus: Reszty?
+Concordia: Reszty życia. Tego, co nie jest alchemią.
+Anataeus: Czyli tego, co bezużyteczne.
+Concordia: Po prostu musisz pozwolić mi być twoim instruktorem w tej materii.
+Anataeus: Ale czy pozwolę? Wygląda na to, że nie dajesz mi wyboru.
+Concordia: Coś w tobie lubię, Anateuszu. Wiesz, kiedy go nie masz.

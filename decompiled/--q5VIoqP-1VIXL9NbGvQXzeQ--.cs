@@ -1,0 +1,14 @@
+using System;
+
+public sealed class _0023_003Dq5VIoqP_00241VIXL9NbGvQXzeQ_003D_003D
+{
+	public IntPtr _0023_003Dqm1WAXbOKfEtdeIgVatHGwQ_003D_003D;
+
+	public string _0023_003DqQKOJF1Vk6nyPetpkXBLH7A_003D_003D;
+
+	public DateTime _0023_003DqM5At5KAt90jQyofq8PhSIAqpiVelg7ZprFLL6_0024kOLwY_003D;
+
+	public string _0023_003DqRZd9U8sxJE3j_Ki_vGU8qXAgsL84DAQh_00242KJD7OfT0Y_003D;
+
+	public string _0023_003DqkO_1f_0024eOFjHjyjhRaen9BwQ9OBBhE0V5YdgkQTDIMzU_003D;
+}

@@ -1,0 +1,17 @@
+﻿Portraits: Armand Van Tassen, Anataeus, Captain Gelt
+
+Armand Van Tassen: ¿La Casa Colvan? Es una pena.
+Armand Van Tassen: Tendré que presentar una queja formal.
+Anataeus: ¿Debo comenzar a desarrollar armas para un contraataque? Algo como una granada de fuego con...
+Captain Gelt: Dudo que sea necesario. No es raro que las Casas renegocien los territorios de esta manera.
+Anataeus: Pero... se han apoderado de varios de nuestros edificios sin ninguna resistencia.
+Captain Gelt: Pronto dejarán de avanzar e intentarán reforzar las nuevas fronteras. Eso es lo que pasa con este tipo de cosas.
+Armand Van Tassen: Deberíamos contraatacar al menos un poco.
+Armand Van Tassen: No queremos parecer débiles, después de todo.
+Captain Gelt: Ejecutaré una acción limitada de retaguardia con las fuerzas ubicadas en el área.
+Anataeus: ¿Eso es... eso es todo?
+Captain Gelt: Escucha. La casa Colvan no quiere una batalla, al igual que nosotros. Vamos a intercambiar algunas calles y ese debería ser el final.
+Armand Van Tassen: Creo que el joven Taros Colvan es el jefe de esa familia ahora... tiene sentido que esté dispuesto a evaluar nuestra respuesta.
+Armand Van Tassen: Le enviaré un mensaje y resolveremos esto como Casas honorables.
+Captain Gelt: ¿Taros? Era un niño brillante...
+Armand Van Tassen: Sí. Estoy seguro de que nos escuchará.

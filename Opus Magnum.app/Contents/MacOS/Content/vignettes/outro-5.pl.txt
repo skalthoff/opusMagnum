@@ -1,0 +1,34 @@
+Portraits: Verrin Ravari (Shabby), Anataeus (Shabby)
+
+Verrin Ravari (Shabby): Surprise! I’ve found you. Hiding out in this rotting hovel like the rat you are.
+Verrin Ravari (Shabby): You bastard of an alchemist. Don’t think I don’t know every part of your plot, and the names of all of your accomplices, too.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): I’ll have to admit— it was a decent plan. Everyone at the ball was quite shocked.
+Verrin Ravari (Shabby): And then Lady Soria’s confused look, her biggest eyes: “My lipstick? Why, it was a gift from the Colvan alchemist...”
+Verrin Ravari (Shabby): Luckily, House Colvan’s guards are no match for me. I’ll explain it all to them later, once I return with your head.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): The funny thing is, the assassination of Taros Colvan and the collapse of his House hardly even matters to me.
+Verrin Ravari (Shabby): Taros was an idiot, easily beguiled by promises of riches and wealth, and his House didn’t deserve to be in his hands.
+Verrin Ravari (Shabby): In fact, the attack on House Van Tassen was entirely my idea. I simply planted the seed in his impressionable mind.
+Verrin Ravari (Shabby): And why did I do it?
+Verrin Ravari (Shabby): Let me ask you a question in return. Imagine if the Van Tassens had worked for you, instead of the other way round.
+Verrin Ravari (Shabby): If you had been in charge, wouldn’t you have won that battle with your superior knowledge and tactics? Wouldn’t you have what you wanted?
+Verrin Ravari (Shabby): So why weren’t you?
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): The Houses are weak after centuries of decadence. They don’t deserve what they have.
+Verrin Ravari (Shabby): But we do— by the very fact that we can take it from them!
+Verrin Ravari (Shabby): I’ll rule House Colvan easily enough once I’m cleared of the assassination you tried to pin on me.
+Verrin Ravari (Shabby): The damage from the explosions will have to be repaired too, of course…
+Verrin Ravari (Shabby): I am generous. You can get what remains of House Van Tassen.
+Verrin Ravari (Shabby): Then, we can simply evenly divide the other Houses between us as we overtake them...
+Verrin Ravari (Shabby): What do you think? I’m… I’m… what’s wrong with you?
+Verrin Ravari (Shabby): Why aren’t you saying anything?
+Action: Change, Anataeus (Shabby), Mannequin
+Mannequin: ...
+Verrin Ravari (Shabby): Is... that... no!
+Verrin Ravari (Shabby): You! No!
+Verrin Ravari (Shabby): You’re not even here! You’ve gone already.
+Verrin Ravari (Shabby): I get it. Ha...
+Verrin Ravari (Shabby): Good one, Anataeus. Good one, yes.
+Verrin Ravari (Shabby): Ha, ha, ha... aaaaah.
+Verrin Ravari (Shabby): My plans... my opus magnum...

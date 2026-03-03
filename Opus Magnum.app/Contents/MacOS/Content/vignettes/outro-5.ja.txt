@@ -1,0 +1,34 @@
+﻿Portraits: Verrin Ravari (Shabby), Anataeus (Shabby)
+
+Verrin Ravari (Shabby): 驚いたか？！見つけたぞ。みすぼらしい●掘っ立て●小屋に●ネズミのように●隠れたものだな。
+Verrin Ravari (Shabby): この錬金術師の●面汚しめが。お前の●計画の●一部始終と、●共謀者の●名前は●全部●お見通しだ。
+Anataeus (Shabby): …
+Verrin Ravari (Shabby): 認めよう、●計画は●悪くなかった。舞踏会の●参加者は●皆●ショックを●受けていた。
+Verrin Ravari (Shabby): そして●ソリア嬢が●目の●大きく●見開いた●当惑の●表情で「私の●口紅？コルヴァンの●錬金術師からの●プレゼントだったのよ…」と●言った。
+Verrin Ravari (Shabby): 幸いにも、●コルヴァンの●警備は●私の●相手にはならん。奴らには、●後で●お前の●首を●持ち帰った●時に●説明してやると●しよう。
+Anataeus (Shabby): …
+Verrin Ravari (Shabby): おかしなことと●思うかも●しれんが、●私は●タロス・コルヴァンの●暗殺と●彼の●家の●崩壊には●全く関心は●ない。
+Verrin Ravari (Shabby): タロスは●富や●財産を●約束する●話に●すぐ●騙されやすい●愚か者で、●コリヴァン家の●家長になる●資格など●なかった。
+Verrin Ravari (Shabby): 実は、●ヴァン・タッセン家への●攻撃は●全て●私の●考えだったのだ。感化されやすい●彼の●心に●考えを●植え付けたのさ。
+Verrin Ravari (Shabby): 何故●そうしたかって？
+Verrin Ravari (Shabby): 逆に●質問させて●もらおう。ヴァン・タッセン家が●お前に●仕えていた場合を●想像してみろ。●その逆では●なくな。
+Verrin Ravari (Shabby): お前が●指揮を●執っていたら、●優れた●知識と●戦術で●戦闘に●勝てただろうに。そうすれば●望むものが●手に入っただろう？
+Verrin Ravari (Shabby): では、●何故●そうしなかったんだ？
+Anataeus (Shabby): …
+Verrin Ravari (Shabby): 何世紀にも●渡って●続く●退廃により●名家は●衰弱して●きている。彼らは●彼らの●財産に●値しない。
+Verrin Ravari (Shabby): しかし●我々は●値する…●我らは●それを●連中から●奪えるのだからな！
+Verrin Ravari (Shabby): 私に●罪を●着せようとした●あの暗殺の●疑いが●晴れれば、●私は●たやすく●コルヴァン家を●支配して●みせよう。
+Verrin Ravari (Shabby): もちろん●爆発による●被害も●修復しなければ…
+Verrin Ravari (Shabby): 私は●寛大な●心の●持ち主だ。ヴァン・タッセン家の●残り物を●お前に●やろう。
+Verrin Ravari (Shabby): 他の●名家は●制覇していきながら●分け合おうでは●ないか…
+Verrin Ravari (Shabby): どうだ？私は…●私は…●お前は●一体●どうした？
+Verrin Ravari (Shabby): どうして●口を●つぐんだままで●いる？
+Action: Change, Anataeus (Shabby), Mannequin
+Mannequin: …
+Verrin Ravari (Shabby): これは…●いや…●違う！
+Verrin Ravari (Shabby): お前！しまった！
+Verrin Ravari (Shabby): ここにいない！すでに●去っていたか。
+Verrin Ravari (Shabby): 分かった。フフ…
+Verrin Ravari (Shabby): 面白い●冗談だな、●アンテウス。実際●大したものだ。
+Verrin Ravari (Shabby): ハ、ハ、ハ…●ああ！
+Verrin Ravari (Shabby): 私の計画…●私のオーパス・マグナム…

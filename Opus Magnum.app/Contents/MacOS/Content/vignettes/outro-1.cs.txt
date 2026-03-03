@@ -1,0 +1,23 @@
+Portraits: Anataeus, Concordia
+
+Concordia: A tehdy jsem se rozhodla, že musíme znovu zinventarizovat všechno, co je v budově. Měl jsi vidět, jak se Armand tvářil!
+Anataeus: Mm...
+Concordia: Anataee, vnímáš mě?
+Anataeus: Hm?
+Concordia: Na něco jsem se ptala.
+Anataeus: Co?
+Concordia: Ty jsi zase nabručený.
+Anataeus: Já _nejsem_ nabručený. Já mám jen... sklíčenou náladu.
+Concordia: A pročpak je veliký alchymista rodu Van Tassen tak sklíčený?
+Anataeus: Ále... Přemýšlím, proč tady vlastně jsem.
+Concordia: Jsi tady, protože jsi náš alchymista.
+Anataeus: Myslel jsem to v širším významu...
+Action: Enter, Captain Gelt
+Captain Gelt: Alchymista je tady, že?
+Anataeus: Kapitáne Gelte, co pro vás mohu udělat?
+Captain Gelt: V hlavním sále je žádána vaše přítomnost. A je to velmi naléhavé.
+Concordia: Co se děje?
+Captain Gelt: Zaskočily nás agresivní akce jiného rodu... Je třeba rychle reagovat.
+Anataeus: Moje alchymie je ti k dispozici.
+Concordia: Vypadáš, že tě to povzbudilo.
+Anataeus: Ano! Konečně se děje něco významného!

@@ -1,0 +1,12 @@
+﻿Henley: Para realizar transmutaciones, usamos glifos. Por ejemplo, digamos que quiero calcificar un elemento-
+Anataeus (Student): Colocarías un glifo de calcificación en el tablero y moverías el elemento que quieres calcificar sobre él.
+Henley: ¡Anataeus! Quiero decir, sí, eso es correcto, ¡pero al menos déjame dar la explicación primero!
+Anataeus (Student): Me diste toda la explicación que necesitaba.
+
+-----------
+
+Anataeus (Student): Es bastante rápido, este glifo.
+Henley: Sí, bienvenido a la ingeniería alquímica moderna.
+Anataeus (Student): ¿Cuántas transmutaciones están disponibles como glifos?
+Henley: La mayoría de las comunes, hasta ahora.
+Henley: Hay investigaciones en curso para desarrollar más, algo que sabría si prestara atención a las investigaciones recientes.

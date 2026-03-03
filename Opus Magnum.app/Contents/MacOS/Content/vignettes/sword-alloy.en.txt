@@ -1,0 +1,17 @@
+Anataeus (Shabby): Finally, something a modern alchemist does!
+Concordia (Shabby): You really think Taros will notice the quality of your sword?
+Clara: You should see the one our alchemist made for my brother.
+Clara: It’s practically limp.
+Concordia (Shabby): Really? I’d have thought House Soria would do better.
+Clara: A surprising number of our “treasures” are holdovers from our earlier days, when we only pretended to be an important House.
+Concordia (Shabby): Now that you truly are one, though, you deserve better.
+
+-----------
+
+Anataeus (Shabby): It’s a shame I never got to do this for House Van Tassen. I dare say I would have been very good at it.
+Concordia (Shabby): If everything had gone the way Armand wished it, you’d be making a sword for Clara anyway.
+Anataeus (Shabby): That’s true. I hadn’t thought of that.
+Clara: It’s a strange thing to consider. We’d know each other under very different circumstances.
+Anataeus (Shabby): I might have assumed you were just another cosseted heir.
+Clara: And I would have thought you just another smug, self-important alchemist.
+Concordia (Shabby): ...not that you’re very far off on that account.

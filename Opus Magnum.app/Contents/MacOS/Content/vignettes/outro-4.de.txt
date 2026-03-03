@@ -1,0 +1,24 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): Nils? Bist du das?
+Action: Enter, Nils
+Nils: Tut mir leid, dich in deinem alchemistischen Treiben zu stören, aber ich bin zurückgekommen, um dir zu sagen, dass Haus Colvan in den Grenzzonen weitere Patrouillen einsetzt.
+Nils: Sie haben womöglich bemerkt, dass einige Gefangene entkommen sind ...
+Concordia (Shabby): Das hat auch lange genug gedauert.
+Anataeus (Shabby): Danke für die Warnung. Ich muss noch ein paar Dinge erledigen, aber dann verschwinden wir sofort von hier.
+Nils: Lasst euch nicht zu viel Zeit, sie sind ganz eindeutig auf der Suche nach jemanden.
+Anataeus (Shabby): Clara, das ist Nils. Man könnte sagen, dass er einen etwas zwielichtigen Charakter hat ...
+Clara: Ich weiß.
+Anataeus (Shabby): Was? Du kennst Nils?
+Clara: Ob ich ihn kenne? Er steht in meinen Diensten.
+Nils: Nur auf Teilzeitbasis.
+Concordia (Shabby): Ha! Ich habe mich schon die ganze Zeit gefragt, wie du uns so einfach finden konntest.
+Clara: Du beleidigst mich fast damit, dass du nicht schon früher dahintergekommen bist.
+Concordia (Shabby): Ich fürchte, deine Machenschaften übertreffen die unseren bei weitem.
+Anataeus (Shabby): Und ich dachte, ich hätte den einzigen vertrauenswürdigen Dieb der Stadt gefunden ...
+Nils: Lady Soria, ich rate dazu, nun nach Hause zurückzukehren, bevor Euch jemand entdeckt.
+Clara: Das ist wohl das Beste, einverstanden.
+Anataeus (Shabby): Wir müssen noch die Angelegenheit mit dem Lippenstift klären.
+Clara: Wenn er fertig ist, kann Nils ihn mir am Abend des Balls bringen.
+Anataeus (Shabby): So machen wir es. Noch eine Sache, Clara ... Es wird Chaos ausbrechen.
+Clara: Ich weiß. Und ich fürchte mich nicht davor.

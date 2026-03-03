@@ -1,0 +1,17 @@
+Concordia (Shabby): Fournis-moi juste le fil. Je m'occupe du reste.
+Anataeus (Shabby): Vraiment ? Tu vas faire toute la robe ?
+Concordia (Shabby): Je connais encore tous les fournisseurs en vêtements des Van Tassen. Ils sauront quoi faire.
+Clara: Il y a un sacré travail de production.
+Concordia (Shabby): Dommage que les Van Tassen n'en profitent pas.
+Anataeus (Shabby): Une robe de bal en fil d'or pur, ça aurait été parfaitement adapté à leur style.
+Clara: Ah, Frederick... si seulement tu pouvais être là pour la voir.
+
+-----------
+
+Concordia (Shabby): Tu vois ce fil ? Aussi fin et doux que de la soie.
+Clara: Et tu as l'intention de faire toute la robe avec ça ? Je ne vais pas passer inaperçue.
+Concordia (Shabby): C'est bien ça, le plan : que tous les yeux soient rivés sur toi.
+Clara: J'en suis angoissée d'avance. Et en même temps, j'ai tellement hâte de la voir terminée.
+Clara: Un vrai tourbillon d'émotions, je dois bien l'admettre...
+Concordia (Shabby): Tu es plus forte que tu ne le crois, Clara. Tu seras merveilleuse. J'en suis sûre.
+Clara: Concordia... merci.

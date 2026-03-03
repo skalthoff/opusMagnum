@@ -1,0 +1,24 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): 尼尔斯？是你吗？
+Action: Enter, Nils
+Nils: 抱歉打断你们讨论炼金术方面的计谋，不过我回来是想告诉你们，科尔文家族正派人在边界地区巡逻。
+Nils: 他们或许已经发现有人逃跑了……
+Concordia (Shabby): 他们的反应可真够慢的。
+Anataeus (Shabby): 感谢你来提醒我们。我还有几件事要去做，不过等我一忙完我们就离开这里。
+Nils: 别再犹豫了，他们显然是在找什么人。
+Anataeus (Shabby): 克拉拉，这位是尼尔斯。你或许会觉得他是个令人讨厌的人——
+Clara: 不会，我认识他。
+Anataeus (Shabby): 等等……你认识尼尔斯？
+Clara: 认识他？他为我工作。
+Nils: 只是偶尔兼一下职。
+Concordia (Shabby): 哈！我就说你怎么这么容易找到我们呢。
+Clara: 你不早点发现，我都差点生气了。
+Concordia (Shabby): 恐怕你的城府之深要远在我们之上。
+Anataeus (Shabby): 我还以为我找到的是城市里唯一一个值得信赖的盗贼呢……
+Nils: 索里亚小姐，我建议你现在立刻回家，不要让别人看到你在这里。
+Clara: 这可能是最好的做法，好吧。
+Anataeus (Shabby): 还有唇膏的事。
+Clara: 等你做好之后，舞会当晚尼尔斯会拿来给我的。
+Anataeus (Shabby): 那就好。还有一件事，克拉拉……到时候会很混乱。
+Clara: 我知道，我不怕。

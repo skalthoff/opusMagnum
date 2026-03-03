@@ -1,0 +1,17 @@
+Anataeus (Shabby): Endlich etwas, womit sich ein moderner Alchemist beschäftigen sollte!
+Concordia (Shabby): Denkst du wirklich, Taros wird zur Kenntnis nehmen, von welcher Qualität dein Schwert ist?
+Clara: Ihr solltet mal das Schwert sehen, das unser Alchemist für meinen Bruder angefertigt hat.
+Clara: Es ist fast wie Gummi.
+Concordia (Shabby): Wirklich? Ich hätte gedacht, Hause Soria hätte Besseres zu bieten.
+Clara: Eine überraschend große Anzahl an „Kostbarkeiten“ sind Überbleibsel aus unseren Anfangstagen, als wir lediglich vorgaben, ein wichtiges Haus zu sein.
+Concordia (Shabby): Nun seid ihr aber wirklich ein wichtiges Haus, also verdient ihr Besseres.
+
+-----------
+
+Anataeus (Shabby): Es ist eine Schande, dass ich das nie für Haus Van Tassen tun konnte. Ich wage zu behaupten, dass ich ziemlich gut darin gewesen wäre.
+Concordia (Shabby): Wenn alles so verlaufen wäre, wie Armand es wollte, würdest du jetzt sowieso ein Schwert für Clara herstellen.
+Anataeus (Shabby): Das ist wohl wahr. Das habe ich nicht bedacht.
+Clara: Ein seltsamer Gedanke. Wir hätten uns unter völlig anderen Umständen kennengelernt.
+Anataeus (Shabby): Ich hätte wahrscheinlich angenommen, dass du nur eine weitere verhätschelte Erbin bist.
+Clara: Und ich hätte gedacht, dass du nur ein weiterer selbstgefälliger, aufgeblasener Alchemist bist.
+Concordia (Shabby): Womit du gar nicht mal so falsch gelegen hättest ...

@@ -1,0 +1,17 @@
+Henley: 我想你需要了解的嬗变引擎使用方法就是这些了。
+Anataeus (Student): 我再制作一样产品来巩固一下。
+
+-----------
+
+Henley: 你毕业之后打算做什么？
+Anataeus (Student): 我想我会去其中一个奥古斯特家族当首席炼金术士。
+Henley: 你这想法——还真大胆。一毕业就去吗？
+Anataeus (Student): 有何不可？
+Henley: 也是。你永远都是这样雄心勃勃……
+Anataeus (Student): 那你呢？
+Henley: 我喜欢这里的生活。我想我会留在这里，希望能当个教授。
+Anataeus (Student): 你确实挺适合教书的。
+Henley: 你也这么想？那好吧，希望我们两个都能实现_抱负_吧！
+Anataeus (Student): _抱负……_我一直都觉得那是个做作的词，不过至少我同意你的想法。
+Anataeus (Student): 你笑什么啊？
+Henley: 居然会有东西让安纳泰俄斯·巴亚觉得做作？前所未闻啊……

@@ -1,0 +1,20 @@
+﻿Anataeus: Sonunda, bu yapılandırma işe yarar olmaya başladı.
+
+-----------
+
+Concordia: Nasıl çalıştığımız konusunda titiziz sanırım.
+Anataeus: Bir çalışma alanının rahat hissettirmesi önemli.
+Concordia: Rahat mı? İlginç. Simyacıların her zaman meşale ışığıyla aydınlatılan karanlık mağaralarda çalışmaktan hoşlandıklarını düşünürdüm...
+Anataeus: Tam tersi. Sana bunu ne düşündürdü?
+Concordia: ... ya da yalıtılmış bir yerde yalnız bir kulenin tepesinde...
+Anataeus: Bekle. _Sihirbaz_ olduğumuzu mu düşünüyorsun?
+Anataeus: Lütfen bana şaka yaptığını söyle. Simya bir bilimdir. Sihirbazlar gerçek değil! Bizi nasıl karşılaştırabilirsin?
+Concordia: Oh, evet. Tam da öyle düşünüyordum! Simyacılar, sihirbazlar - oldukça benziyorlar, değil mi?
+Concordia: Bana yaptığın şeyin tür sihir olduğunu düşündüğünde hiç hoşlanmadığını söyleme!
+Anataeus: Hiç de bile. Simya, yüzyıllar boyunca dikkatli deneyler ve teorileştirme üzerine geliştirilen titiz, kanıta dayalı bir disiplindir...
+Concordia: Görünüşe göre bu çok şişirilmiş bir disiplin.
+Anataeus: Sadece açıklamaya çalışıyorum. Simya kategorik olarak sihir değildir.
+Concordia: Anlıyorum, evet, anlıyorum. Şimdi neden biraz gevşemek için kendine bir büyü yapmıyorsun?
+Anataeus: Şu an benimle oynuyorsun.
+Concordia: Hadi bir şeyler yarat.
+Anataeus: Lütfen kes.

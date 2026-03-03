@@ -1,0 +1,20 @@
+﻿Portraits: Anataeus, Concordia
+
+Concordia: Alors, comment ça s'est passé ?
+Anataeus: Un vrai cauchemar.
+Anataeus: Armand n'arrêtait pas de ressasser ses vieilles histoires d'honneur et de droiture.
+Anataeus: On aurait dit que lady Van Tassen avait été embaumée.
+Anataeus: Frederick a fait tomber de la nourriture sur sa chemise.
+Concordia: Quel courage tu as d'avoir survécu à un dîner officiel !
+Anataeus: Je t'assure, c'était éprouvant. Je ne supporte pas cette atmosphère guindée.
+Anataeus: Armand avait oublié mon nom. Le capitaine Gelt a été obligé de le lui rappeler plusieurs fois.
+Concordia: Il faut dire que tu viens à peine de commencer.
+Anataeus: Oui, j'imagine que c'est trop demander. C'est si dur et si compliqué de se souvenir d'un seul nom, le nom du nouvel alchimiste.
+Anataeus: Celui qui a obtenu son diplôme de l'École d'ingénierie alchimique en arrivant premier de sa promotion...
+Concordia: Anataeus...
+Anataeus: Tu vois ! _Toi_, tu te souviens de mon nom.
+Concordia: Tu crois qu'Armand se souvient de _mon_ nom ? Alors que j'ai passé toute ma vie ici.
+Anataeus: La prochaine fois, tu pourrais peut-être y aller à ma place ! Il ne réaliserait peut-être même pas que c'est une autre personne.
+Concordia: « Hmmm, alchimiste... Intendante... vous êtes qui déjà ? Hmm, oui, mmgh... »
+Anataeus: Tu vas nous causer des problèmes.
+Concordia: Ce ne serait pas une première.

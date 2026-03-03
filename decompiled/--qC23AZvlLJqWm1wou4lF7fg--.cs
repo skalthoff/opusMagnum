@@ -1,0 +1,8 @@
+public sealed class _0023_003DqC23AZvlLJqWm1wou4lF7fg_003D_003D
+{
+	public _0023_003DqGXzinuaKdEuZmRVB4LBtoA_003D_003D _0023_003DqOoq2ezRFE4fa7a5FuhMGPg_003D_003D;
+
+	public Time _0023_003DqqTD1T_kJb3eCc_0024v9WVvb59YoSzDyX4_0024h_u7hd11lMLQ_003D;
+
+	public double _0023_003Dql0YLWv5x1OP_G90baC6nl0oBnXIvr9tNFBUdV_Q3CzY_003D;
+}

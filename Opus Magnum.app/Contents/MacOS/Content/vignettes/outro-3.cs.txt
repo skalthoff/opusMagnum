@@ -1,0 +1,17 @@
+Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): Zdá se, že je čas vyrazit.
+Concordia (Shabby): Hodně štěstí, Nilsi!
+Nils (Cloak): Až člun s olověnou rudou popluje po řece k vám, budete vědět, že jsem uspěl.
+Nils (Cloak): Později pošlu přesné pokyny, kam se má poslat můj podíl zlata.
+Concordia (Shabby): Ty se sem nevrátíš?
+Nils (Cloak): Ne, obávám se, že tady nemohu zůstat.
+Anataeus (Shabby): Tak jsi nám konečně uvěřil.
+Nils (Cloak): To je komické.
+Nils (Cloak): Když jsem vás poprvé našel, jak se skrýváte v tomto opuštěném obchodu, jako první mě napadlo vás ve spánku omráčit a vaše všci prodat. 
+Concordia (Shabby): Ach můj... Ještě že jsi to neudělal.
+Nils (Cloak): Jen jsem žertoval. Za ty vaše hadry bych toho stejně moc nadostal.
+Anataeus (Shabby): Dojemné.
+Concordia (Shabby): Nic dojemnějšího by se nedalo napsat.
+Anataeus (Shabby): Šťastnou cestu, Nilsi. Budeme tady, kdybys nás hledal.
+Nils (Cloak): Jsem si jistý, že společně brzy zase něco podnikneme.

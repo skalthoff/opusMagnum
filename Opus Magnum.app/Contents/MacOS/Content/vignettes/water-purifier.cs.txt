@@ -1,0 +1,19 @@
+Concordia (Shabby): Tahle voda je z řeky?
+Anataeus (Shabby): Jak jsi to uhodla?
+Concordia (Shabby): Prozradila mi to ta rozkošná šedá barva. Nebudeš to pít, že ne?
+Anataeus (Shabby): Když tady zatím chceme zůstat, budeme potřebovat vodu...
+Concordia (Shabby): Já vím, že jsi nikdy dřív nebyl v této části města, ale přece jen... Podívej se na to.
+Anataeus (Shabby): Dobře. Postarám se o to.
+
+-----------
+
+Anataeus (Shabby): Tak. Chceš se napít?
+Concordia (Shabby): Proč sám veliký alchymista nevyzkouší své dílo?
+Anataeus (Shabby): Protože ví, že je to v pořádku.
+Concordia (Shabby): Podivuhodná shoda. Já si to myslím také.
+Anataeus (Shabby): S tebou není žádná legrace. Dobře. Zkusím to sám...
+Concordia (Shabby): Dobrá?
+Anataeus (Shabby): V pořádku. Voda, Trochu... kyselá.
+Concordia (Shabby): Kyselá.
+Anataeus (Shabby): Také trochu hořká.
+Anataeus (Shabby): Na první pokus to není špatné. Ještě to budu muset trochu doladit.

@@ -1,0 +1,9 @@
+[DO NOT PARSE]
+
+Fontenelle’s Alchemical Observations
+
+#*FOREWORD.*
+
+Given the way alchemical engineers work today, it is easy to forget that most of the important alchemical devices in history were created under the constraint of a severely limited space. Working with miniaturized, production-model transmutation engines is sometimes called “production alchemy,” and, though interest in this particular approach has waned over the years, it remains an important part of the alchemical engineer’s work. That is why I have endeavored here to give some examples of the alchemical machines I have encountered in situ in my travels in and around the city, specifying only reagents and products, and for which clever alchemists studying this book will prepare their own solutions.
+
+— Augustine Fontenelle, Al. D., I.A.G.

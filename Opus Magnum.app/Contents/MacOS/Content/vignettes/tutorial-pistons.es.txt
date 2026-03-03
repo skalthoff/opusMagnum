@@ -1,0 +1,12 @@
+﻿Henley: Un brazo de pistón es un tipo especial de brazo que puede extenderse y retraerse.
+Anataeus (Student): ¿Y presumiblemente hay instrucciones que controlan el pistón?
+Henley: Eso es correcto. Voy a demostrar.
+
+-----------
+
+Anataeus (Student): Ya veo. Los brazos de pistón pueden alcanzar áreas que un brazo normal no puede.
+Henley: ¡Eso es lo que los hace tan útiles! Sin embargo, cuestan un poco más que los brazos regulares.
+Anataeus (Student): Y puedo usar la instrucción de reinicio para hacer que un brazo regrese a su estado inicial desde donde sea que esté. Eso es conveniente.
+Henley: Solo recuerda que la instrucción de reinicio lleva la misma cantidad de tiempo que tomaría emitir esas instrucciones individuales.
+Anataeus (Student): Sí, por supuesto que lo hará.
+Henley: Por supuesto.

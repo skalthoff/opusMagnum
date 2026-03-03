@@ -1,0 +1,17 @@
+Concordia (Shabby): Besorge mir einfach das Garn. Ich kümmere mich um den Rest.
+Anataeus (Shabby): Bist du sicher? Aus Garn ein ganzes Kleid herstellen?
+Concordia (Shabby): Ich kenne immer noch die ganzen Bekleidungszulieferer der Van Tassens. Sie wissen, was zu tun ist.
+Clara: Das ist ein ziemlicher Aufwand.
+Concordia (Shabby): Eine Schande, dass die Van Tassens nicht von dieser Arbeit profitieren werden.
+Anataeus (Shabby): Ein Ballkleid aus reinem Gold hätte sicherlich ihren Geschmack getroffen.
+Clara: Ah, Frederick ... Ich wünschte, du wärst hier, um das zu sehen.
+
+-----------
+
+Concordia (Shabby): Siehst du das Garn hier? Fein und weich wie Seide.
+Clara: Und du willst damit ein ganzes Kleid machen? Das ist eine ziemlich mutige Ansage für einen Schneider.
+Concordia (Shabby): Das ist der Plan, alle sollen nur auf dich schauen.
+Clara: Ziemlich beunruhigend. Gleichzeitig kann ich es kaum erwarten.
+Clara: Eine seltsame Gefühlsmischung, das gebe ich zu ...
+Concordia (Shabby): Du bist stärker als du denkst, Clara. Du wirst es toll machen. Da bin ich mir sicher.
+Clara: Concordia ... Danke!

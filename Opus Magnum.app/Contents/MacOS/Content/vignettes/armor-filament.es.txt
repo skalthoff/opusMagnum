@@ -1,0 +1,16 @@
+﻿Concordia: Capitán, ¿qué está haciendo con esa vieja armadura?
+Captain Gelt (Armor): ¿No es obvio? Debo dedicar mi vida a la batalla.
+Captain Gelt (Armor): Debo tomar responsabilidad por esta situación, de alguna manera...
+Concordia: ¡Pero esa es vieja! Deberíamos conseguirle algo más moderno.
+Captain Gelt (Armor): No, no. Si me deben ver en las calles, quiero que sea como vestían los héroes en la antigüedad.
+Concordia: ¡El primer proyectil será su fin!
+Anataeus: Si insiste con esta armadura, al menos déjeme reforzarla con filamento de armadura.
+
+-----------
+
+Captain Gelt (Armor): Es posible que aún queden esperanzas. Tal vez yo solo pueda cambiar el sentido de esta batalla.
+Anataeus: Supongo que todo es posible.
+Captain Gelt (Armor): Que circunstancias. Una ofensiva como esta no ha sucedido en generaciones. ¡En siglos!
+Anataeus: Aun así, aquí estamos.
+Captain Gelt (Armor): Juré defender la Casa Van Tassen de por vida... Y pensé que eso sería por mucho tiempo...
+Concordia: No importa que pasé, será recordado, Capitán.

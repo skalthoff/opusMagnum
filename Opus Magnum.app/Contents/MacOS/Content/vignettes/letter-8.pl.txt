@@ -1,0 +1,7 @@
+﻿[DO NOT PARSE]
+
+Uwaga!
+
+Eksperymenty opisane w _Dzienniku inżynierii alchemicznej_ to zaawansowane projekty naukowe prowadzone przez wybitnych alchemików na Uniwersytecie.
+
+Zalecamy ukończenie kilku pierwszych rozdziałów kampanii _Opus Magnum_ przed próbą ich replikacji.

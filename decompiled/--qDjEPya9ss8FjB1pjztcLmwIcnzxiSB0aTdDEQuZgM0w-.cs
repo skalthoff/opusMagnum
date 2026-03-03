@@ -1,0 +1,6 @@
+public sealed class _0023_003DqDjEPya9ss8FjB1pjztcLmwIcnzxiSB0aTdDEQuZgM0w_003D
+{
+	public HexIndex _0023_003DqJn8ZECDPuJq7NM9pj_0024pMo3Ji_p_0024j4917AKzYbuLrRWA_003D;
+
+	public HexRotation _0023_003DqaVQ5av1Bes_0024y_0024FsGPcUHZbbBOVa6bE_HB1FYVgl_00245Lg_003D;
+}

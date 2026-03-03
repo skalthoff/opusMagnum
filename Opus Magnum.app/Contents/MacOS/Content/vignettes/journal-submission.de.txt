@@ -1,0 +1,24 @@
+[DO NOT PARSE]
+
+*Einreichungsanleitung*
+
+#Das _Magazin für Alchemistisches Engineering_ ist eine Sammlung von Rätseln, die von Benutzern erstellt wurden und von Zachtronics verwaltet werden. Um ein Rätsel für das _Magazin_ einzureichen, lade dein Rätsel einfach in den Steam Workshop hoch und sende die folgenden Informationen an *zach@zachtronics.com*:
+ 
+• einen Link zu deinem Rätsel im Steam Workshop
+• eine Erklärung dessen, was dein Rätsel so interessant macht
+• eine Erklärung dessen, was das Erzeugnis deines Rätsels sein soll
+• den Namen, der unter deinem Rätsel stehen soll, in folgendem Format: „Nachname, V.“ (wenn dein vollständiger Name „Vorname Nachname“ wäre)
+
+#*Einreichungsregeln*
+
+#Indem du ein Rätsel für das _Magazin für Alchemistisches Engineering_ einreichst, gewährst du uns die uneingeschränkte Genehmigung, das Rätsel ohne Einschränkungen zu modifizieren und als Teil des Spiels zu vertreiben. Du erhältst keine finanziellen Leistungen für das Einreichen; unsere Berücksichtigung deines Rätsels sowie die Erwähnung deines Namens in oben aufgeführter Form werden die einzige und vollständige Vergütung sein.
+
+Du darfst nur Rätsel einreichen, die du selbst erstellt hast.
+
+Du erklärst dich damit einverstanden, an die Steam®-Abonnementvereinbarung gebunden zu sein.
+
+Bitte reiche kein Rätsel mehrmals ein.
+
+#*Tipps für die Gestaltung von Rätseln*
+
+#Versuche, etwas zu erstellen, was sowohl einzigartig als auch interessant ist, und was zum Setting und der Ästhetik des Spiels passt. Beispielsweise bedeutet die Tatsache, dass du für ein Erzeugnis oder ein Reagenz jeden Atomtyp verwenden kannst, nicht, dass du das auch tun solltest. Die besten Rätsel sind auf ihre eigene Weise interessant _und_ passen gut zur Atmosphäre der Spielwelt.

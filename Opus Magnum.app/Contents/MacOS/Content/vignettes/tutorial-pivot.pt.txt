@@ -1,0 +1,10 @@
+Henley: Em alguns casos, você vai querer que um braço rotacione o que está segurando—
+Anataeus (Student): Você quer dizer, uma operação diferente do que se o braço em si girasee.
+Henley: Isso mesmo. Nesses casos, você usará instruções de eixo.
+
+-----------
+
+Anataeus (Student): Tudo bastante simples e direto.
+Henley: Que bom que isso seja fácil assim para você.
+Anataeus (Student): Espera, quanto demorou para _você_ aprender tudo isso?
+Henley: ...Vamos prosseguir com os exercícios.

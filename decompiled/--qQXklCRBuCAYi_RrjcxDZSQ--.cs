@@ -1,0 +1,30 @@
+using System.Runtime.InteropServices;
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D
+{
+	public byte _0023_003DqUK7OKXwFcKTIjytu94z6gQ_003D_003D;
+
+	public byte _0023_003DqHr6J4IPMsrHaFR77d8KDhw_003D_003D;
+
+	public byte _0023_003DqtoGzM957sCeDO6DqYy8GYA_003D_003D;
+
+	public byte _0023_003DqE02HgaZxnhL_QC7uvVvNHg_003D_003D;
+
+	public static readonly _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D _0023_003Dq_gRtoGa0DULlu1yhHVgsrQ_003D_003D = new _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue);
+
+	public static readonly _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D _0023_003DqtE7dSjOUcf417fHTtD7o8A_003D_003D = new _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D(0, 0, 0, byte.MaxValue);
+
+	public _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D(byte _0023_003DqXEvm9wMCWMA_6tVhA5y_ig_003D_003D, byte _0023_003DqotMtswBDz9XqFYLKowDtjQ_003D_003D, byte _0023_003DqZ4Kg5c4TyLfwm7VTy1yfaQ_003D_003D, byte _0023_003Dqm6ChqxxnNwnAN4gcF7qP0Q_003D_003D)
+	{
+		_0023_003DqUK7OKXwFcKTIjytu94z6gQ_003D_003D = _0023_003DqXEvm9wMCWMA_6tVhA5y_ig_003D_003D;
+		_0023_003DqHr6J4IPMsrHaFR77d8KDhw_003D_003D = _0023_003DqotMtswBDz9XqFYLKowDtjQ_003D_003D;
+		_0023_003DqtoGzM957sCeDO6DqYy8GYA_003D_003D = _0023_003DqZ4Kg5c4TyLfwm7VTy1yfaQ_003D_003D;
+		_0023_003DqE02HgaZxnhL_QC7uvVvNHg_003D_003D = _0023_003Dqm6ChqxxnNwnAN4gcF7qP0Q_003D_003D;
+	}
+
+	public static _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D _0023_003Dqt23T85U1q1O_0024Zd9hAErBuw_003D_003D(int _0023_003Dqt0y7vEEyWHQWdstCk76aVQ_003D_003D)
+	{
+		return new _0023_003DqQXklCRBuCAYi_RrjcxDZSQ_003D_003D((byte)(_0023_003Dqt0y7vEEyWHQWdstCk76aVQ_003D_003D >> 16), (byte)(_0023_003Dqt0y7vEEyWHQWdstCk76aVQ_003D_003D >> 8), (byte)_0023_003Dqt0y7vEEyWHQWdstCk76aVQ_003D_003D, byte.MaxValue);
+	}
+}

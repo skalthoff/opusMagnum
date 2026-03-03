@@ -1,0 +1,14 @@
+public sealed class _0023_003DqZmQGV7NQgWz8hudSE3pGEw_003D_003D
+{
+	public _0023_003DqnEvXdvc8ap3SryZEJXz2rg_003D_003D _0023_003DqeKgFb9JSxLuKTvAq3UmCwQ_003D_003D;
+
+	public string _0023_003DqrreEu9hrQzW7rf07xxxwWg_003D_003D;
+
+	public Maybe<_0023_003Dq0Usu4la6abcTcLsjVJiQhQ_003D_003D> _0023_003DqHDw0YMr_0024_0024hItqf5LnvzG9Q_003D_003D;
+
+	public Maybe<int> _0023_003DqVJT4PQdR3AHKUBZ574ry2A_003D_003D;
+
+	public Maybe<int> _0023_003DqnwpVAFx62BFkTVtfMQ3bOg_003D_003D;
+
+	public Maybe<int> _0023_003Dq8s5Tg78Ulvu69hrw8QPmLA_003D_003D;
+}

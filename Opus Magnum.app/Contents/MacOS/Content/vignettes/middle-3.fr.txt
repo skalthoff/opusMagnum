@@ -1,0 +1,21 @@
+Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): Alors, marché conclu ?
+Nils: C'est une proposition intéressante.
+Nils: Mais il est encore plus difficile d'entrer dans l'ancienne enceinte des Van Tassen maintenant que les Colvan l'occupent. Leurs gardiens sont beaucoup plus vigilants.
+Anataeus (Shabby): On le sait, croyez-nous. Concordia et moi en sommes sortis, mais nous avons failli y laisser la vie. 
+Nils: Faites-moi entrer. Je me charge du reste.
+Concordia (Shabby): C'est un peu plus compliqué que ça.
+Concordia (Shabby): L'élément dont nous avons besoin n'est pas quelque chose qu'on peut transporter sur soi. C'est une cargaison.
+Anataeus (Shabby): Plus précisément, une cargaison de minerai de plomb.
+Nils: Je vois...
+Concordia (Shabby): Je vous donnerai une déclaration d'expédition, mais il vous faudra un cachet en bonne et due forme. Vous allez devoir trouver une vraie déclaration et récupérer son cachet.
+Nils: D'accord. Ensuite, je suppose que je me ferai passer pour un agent d'approvisionnement et que je descendrai le fleuve pour vous apporter la cargaison.
+Concordia (Shabby): Exactement !
+Nils: C'est encore plus... fantasque que je ne l'imaginais.
+Anataeus (Shabby): Au contraire, c'est tout à fait faisable.
+Anataeus (Shabby): Presque une sinécure pour quelqu'un de votre envergure, n'est-ce pas ?
+Concordia (Shabby): Et n'oubliez pas que nous vous fournirons le meilleur équipement qui soit.
+Anataeus (Shabby): Si je dois vous fabriquer cet or, je vais avoir besoin de ce plomb... après tout, l'alchimie fonctionne comme ça.
+Nils: De l'or. Oui, j'aime bien l'or.
+Anataeus (Shabby): Si vous réussissez, vous en aurez plus que vous n'en avez jamais rêvé. Je vous le promets.

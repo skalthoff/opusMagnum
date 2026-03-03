@@ -1,0 +1,17 @@
+Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): Es wird Zeit, dass ich gehe.
+Concordia (Shabby): Viel Glück, Nils.
+Nils (Cloak): Ihr werdet wissen, dass ich erfolgreich war, wenn ihr einen Kahn mit Bleierz den Fluss hinabtreiben seht.
+Nils (Cloak): Und später werde ich euch Anweisungen schicken, wohin mein Anteil des Goldes geliefert werden soll.
+Concordia (Shabby): Du kommst nicht hierher zurück?
+Nils (Cloak): Nein, ich fürchte, ich kann nicht bleiben.
+Anataeus (Shabby): Also vertraust du uns endlich.
+Nils (Cloak): Das ist schon etwas kurios.
+Nils (Cloak): Als ich euch zwei in diesem verlassenen Laden entdeckte, war mein erster Gedanke, euch im Schlaf zu erschlagen und euer Hab und Gut zu veräußern. 
+Concordia (Shabby): Oje ... Ich bin erleichtert, dass du es nicht getan hast.
+Nils (Cloak): Kleiner Scherz am Rande. Für eure Lumpen hätte ich sowieso nur Almosen bekommen.
+Anataeus (Shabby): Wie rührselig.
+Concordia (Shabby): Solche eine rührselige Geschichte habe ich noch nie gehört.
+Anataeus (Shabby): Pass auf dich auf, Nils. Wir bleiben vorerst hier, solltest du uns suchen.
+Nils (Cloak): Ich bin mir sicher, dass wir uns schon bald wiedersehen.

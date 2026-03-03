@@ -1,0 +1,12 @@
+Henley: Un bras à piston est un type de bras spécial qui peut s'étendre et se rétracter.
+Anataeus (Student): Et je présume qu'il y a des instructions qui contrôlent le piston.
+Henley: Exactement. Je vais te montrer.
+
+-----------
+
+Anataeus (Student): Je vois. Les bras à piston peuvent atteindre des zones inaccessibles aux bras normaux. 
+Henley: C'est ce qui les rend si utiles ! Ils coûtent quand même un peu plus cher que les bras standard.
+Anataeus (Student): Et je peux utiliser l'instruction de réinitialisation pour faire revenir un bras à son état initial, où qu'il soit. C'est pratique.
+Henley: N'oublie pas que cette instruction de réinitialisation prend autant de temps que d'émettre les instructions individuelles.
+Anataeus (Student): Oui, oui, bien sûr.
+Henley: Bien sûr.

@@ -1,0 +1,21 @@
+﻿Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): 어떻습니까?
+Nils: 흥미로운 제안이군요.
+Nils: 하지만 구 반 타쎈 가문 거리는 이제 콜반 가문이 차지하고 있어서 들어가기가 더 어렵습니다. 콜반 가문의 경비병들은 훨씬 유능합니다.
+Anataeus (Shabby): 그건 저희도 잘 압니다. 콩코디아와 제가 간신히 살아남아서 도망쳤으니까.
+Nils: 안에 들여보내주기만 하면, 제가 가지고 나올 수 있습니다마는.
+Concordia (Shabby): 그것보다는 좀 복잡한 일입니다.
+Concordia (Shabby): 우리가 원하는 물품은 사람이 들고 올 수 있을 만한 물건이 아닙니다. 수송물품이죠.
+Anataeus (Shabby): 정확히는, 납 광석이죠.
+Nils: 어... 그렇군요.
+Concordia (Shabby): 가짜 수송 계약서는 써 드릴 수 있지만, 인장이 필요합니다. 당신은 진짜 계약서를 찾아서 인장을 떼오면 되는거죠.
+Nils: 아하. 그리고 제가 공급관인 척 하고 그 수송품을 이 강으로 가져오면 되겠군요.
+Concordia (Shabby): 바로 그거에요!
+Nils: 그거 참... 생각보다 거창한 계획이군요.
+Anataeus (Shabby): 아니, 이 정도면 현실적인 계획이죠.
+Anataeus (Shabby): 당신 실력이라면 마치 산책하는 것 처럼 해낼 수 있겠지요?
+Concordia (Shabby): 그리고 최고의 장비도 지원해줄테니까요.
+Anataeus (Shabby): 의뢰비로 드릴 금을 마련하기 위해서는 납이 필요합니다. 연금술이란 그런 거니까요.
+Nils: 금이라. 그거 좋지요.
+Anataeus (Shabby): 이걸 해낸다면, 충분한 보상을 드리지요. 약속합니다.

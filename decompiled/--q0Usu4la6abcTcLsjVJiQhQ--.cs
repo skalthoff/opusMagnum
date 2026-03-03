@@ -1,0 +1,6 @@
+public sealed class _0023_003Dq0Usu4la6abcTcLsjVJiQhQ_003D_003D
+{
+	public int _0023_003DqWyzGtdanvbnWShzt_0024R6XHg_003D_003D;
+
+	public float[] _0023_003Dqt4_0024YuZvqaBqzWhdbxBicG8_5ZmqepUZYnG9l5qUx0Is_003D;
+}

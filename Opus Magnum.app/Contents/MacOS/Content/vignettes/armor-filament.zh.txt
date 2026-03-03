@@ -1,0 +1,16 @@
+Concordia: 上尉，你穿着那套旧盔甲做什么？
+Captain Gelt (Armor): 这不是明摆着吗？我必须战斗至最后一口气。
+Captain Gelt (Armor): 我多少都得为这样的状况负点责任……
+Concordia: 可那套真的很旧了！我们应该去军械库帮你找几件新一点的。
+Captain Gelt (Armor): 别，别。如果我非得在街头上被别人看到的话，我希望我看起来是昔日英雄的模样。
+Concordia: 可一枚火箭弹就能要了你的命！
+Anataeus: 如果你坚持要穿这一套的话，那至少让我用护甲纤维来加固一下。
+
+-----------
+
+Captain Gelt (Armor): 也许还有希望。或许我单枪匹马就能就能扭转战斗的局面。
+Anataeus: 我想一切皆有可能。
+Captain Gelt (Armor): 什么情况。这样的总攻好几十年，好几百年都没遇过！
+Anataeus: 我们就遇上了。
+Captain Gelt (Armor): 我发过誓，要一辈子守护范塔森家族……我还以为这一辈子会很久很久……
+Concordia: 不管发生什么，你都会被铭记的，上尉。

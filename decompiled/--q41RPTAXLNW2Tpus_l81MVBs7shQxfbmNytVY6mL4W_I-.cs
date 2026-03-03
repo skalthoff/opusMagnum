@@ -1,0 +1,16 @@
+using System.Collections.Generic;
+
+public sealed class _0023_003Dq41RPTAXLNW2Tpus_l81MVBs7shQxfbmNytVY6mL4W_I_003D
+{
+	public string _0023_003DqAJ87ssuRKzM1OzIZ9UoEzA_003D_003D;
+
+	public HashSet<HexIndex> _0023_003DqdLZIVDt7PMYkCOk26t5Ehw_003D_003D;
+
+	public HashSet<HexIndex> _0023_003DqTLQkrpbguk75LLNzPBDRQg_003D_003D;
+
+	public _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D _0023_003DqCdeCxIBP_H7CQ7tEuM78vA_003D_003D;
+
+	public _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D _0023_003DqpQAyx_0024BjzcAWI1hoFxiV1A_003D_003D;
+
+	public _0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D _0023_003DqNJbU6jcatI0zytXqcEIusA_003D_003D;
+}

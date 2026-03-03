@@ -1,0 +1,34 @@
+﻿Portraits: Verrin Ravari (Shabby), Anataeus (Shabby)
+
+Verrin Ravari (Shabby): Überraschung! Hab ich dich also gefunden. In dieser armseligen Hütte, wo du dich versteckst wie eine Ratte.
+Verrin Ravari (Shabby): Du Bastard von einem Alchemisten. Glaube ja nicht, dass ich nicht jedes Detail deines Plans kenne, und die Namen all deiner Komplizen.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Ich muss zugeben, der Plan war nicht übel. Alle Anwesenden auf dem Ball waren ziemlich schockiert.
+Verrin Ravari (Shabby): Und dann Lady Sorias verwirrter Gesichtsausdruck, ihre weit aufgerissenen Augen: „Mein Lippenstift? Ach, der war nur ein Geschenk vom Alchemisten der Colvans ...“
+Verrin Ravari (Shabby): Glücklicherweise sind mir die Wachen von Haus Colvan nicht gewachsen. Ich werde ihnen später alles erklären, wenn ich mit deinem Kopf zurückkehre.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Das Lustige an der Sache ist, die Ermordung von Taros Colvan und der Zusammenbruch seines Hauses sind mir eigentlich relativ egal.
+Verrin Ravari (Shabby): Taros war ein Narr, mit Versprechungen von Reichtum und Wohlstand ganz einfach um den Finger zu wickeln, und er hatte es nicht verdient, das Oberhaupt seines Hauses zu sein.
+Verrin Ravari (Shabby): In Wirklichkeit war der Angriff auf Haus Van Tassen ganz allein meine Idee. Ich habe ihn lediglich manipuliert.
+Verrin Ravari (Shabby): Warum ich es getan habe?
+Verrin Ravari (Shabby): Lass mich im Gegenzug dir eine Frage stellen. Stell dir vor, die Van Tassens hätten für dich gearbeitet, nicht du für sie.
+Verrin Ravari (Shabby): Wenn du das Sagen gehabt hättest, hättest du die Schlacht dann nicht mit deinem überlegenen Wissen und deinen Taktiken gewonnen? Hättest du so nicht erreicht, was du wolltest?
+Verrin Ravari (Shabby): Warum hast du es also nicht getan?
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Nach Jahrhunderten der Dekadenz sind die Häuser schwach. Sie verdienen nicht, was sie haben.
+Verrin Ravari (Shabby): Aber wir verdienen es – ganz einfach, weil wir es ihnen entreißen können!
+Verrin Ravari (Shabby): Ich werde die Herrschaft über Haus Colvan mühelos an mich reißen, sobald ich von jeglicher Schuld an der Ermordung freigesprochen wurde, die du mir anheften wolltest.
+Verrin Ravari (Shabby): Die Schäden, die die Explosionen verursacht haben, müssen natürlich auch repariert werden ...
+Verrin Ravari (Shabby): Ich bin nicht knauserig. Du kannst die Überreste von Haus Van Tassen haben.
+Verrin Ravari (Shabby): Anschließend können wir die anderen Häuser übernehmen und gleichmäßig untereinander aufteilen ...
+Verrin Ravari (Shabby): Was sagst du dazu? Ich ... Ich ... Was ist los mit dir?
+Verrin Ravari (Shabby): Warum sagst du nichts?
+Action: Change, Anataeus (Shabby), Mannequin
+Mannequin: ...
+Verrin Ravari (Shabby): Ist ... das ... Nein!
+Verrin Ravari (Shabby): Du! Nein!
+Verrin Ravari (Shabby): Du bist gar nicht hier! Du hast dich schon davongemacht.
+Verrin Ravari (Shabby): Jetzt verstehe ich. Ha ...
+Verrin Ravari (Shabby): Nicht schlecht, Anataeus! Wirklich, nicht schlecht.
+Verrin Ravari (Shabby): Ha, ha, ha ... aaaaah.
+Verrin Ravari (Shabby): Meine Pläne ... Mein Opus Magnum ...

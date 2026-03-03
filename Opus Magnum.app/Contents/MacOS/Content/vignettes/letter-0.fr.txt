@@ -1,0 +1,10 @@
+﻿[DO NOT PARSE]
+
+Règles de transmutation :
+#L'accès est réservé aux diplômés en ingénierie alchimique et aux membres de la faculté uniquement.
+#(Toute exception doit être approuvée par le chancelier)
+#Conservez votre permis et votre insigne d'étudiant en alchimie en tout temps dans l'enceinte du laboratoire.
+#La nourriture et les boissons sont interdites dans le laboratoire.
+#Ne vous asseyez pas et ne vous appuyez pas sur les moteurs de transmutation ou leurs composants.
+#Dans l'intérêt de tous, veuillez garder cet espace propre.
+#Ça s'adresse à toi, Anataeus !

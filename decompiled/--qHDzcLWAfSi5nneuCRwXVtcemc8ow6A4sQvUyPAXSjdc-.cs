@@ -1,0 +1,6 @@
+using System.Collections.Generic;
+
+public static class _0023_003DqHDzcLWAfSi5nneuCRwXVtcemc8ow6A4sQvUyPAXSjdc_003D
+{
+	public static Stack<_0023_003DqMK2_00242S2JDRrl_NCbp9J35PWQkPMo10Ar8sSu5psIMoU_003D> _0023_003Dqh6AIYflea6lV36UgVIc18w_003D_003D = new Stack<_0023_003DqMK2_00242S2JDRrl_NCbp9J35PWQkPMo10Ar8sSu5psIMoU_003D>();
+}

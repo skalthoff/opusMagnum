@@ -1,0 +1,18 @@
+Concordia (Shabby): Ich fühle mich gezwungen, darauf hinzuweisen, dass du wieder Blei in Gold verwandelst.
+Anataeus (Shabby): Es ist dir also aufgefallen. Ja, anscheinend will die Welt mich unbedingt verhöhnen.
+Clara: Du bist schließlich ein Alchemist.
+Anataeus (Shabby): Das hat man mir so gesagt.
+Clara: Ist das ein wunder Punkt bei ihm?
+Concordia (Shabby): Hat irgendwas damit zu tun, dass er nicht auf einen bestimmten Typ reduziert werden will ... glaube ich.
+Anataeus (Shabby): Blei in Gold verwandeln ist ein einfacher Taschenspielertrick.
+Clara: Zumindest machst du es dieses Mal zu deinem eigenen Nutzen.
+
+-----------
+
+Concordia (Shabby): Das ist mehr Gold, als ich in meinem Leben jemals gesehen habe.
+Anataeus (Shabby): Wir müssen ein wenig davon für Nils‘ Bezahlung behalten. Den Rest verwenden wir für Claras Kleid.
+Clara: Ihr verwendet das Gold, um mich zu schmücken?
+Clara: Aber bitte keine goldene Rüstung oder so etwas.
+Concordia (Shabby): Nein, ich habe eine viel bessere Idee. Darüber wird man in der Stadt noch lange sprechen.
+Clara: Das hört sich so an, als würde es bei dem Ball sonst nichts Ungewöhnliches geben.
+Concordia (Shabby): Stimmt. Manchmal vergesse ich den Rest unseres Planes.

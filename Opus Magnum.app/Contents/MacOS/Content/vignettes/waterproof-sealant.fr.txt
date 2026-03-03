@@ -1,0 +1,17 @@
+﻿Anataeus: Tu t'y connais en navires, Concordia ?
+Concordia: Notre marine marchande rapporte des marchandises du monde entier environ une fois par mois. Pourquoi ?
+Anataeus: Le capitaine Gelt m'a dit qu'ils avaient un produit qu'ils mettaient sur les coques des navires pour les empêcher de pourrir.
+Concordia: Je n'en ai jamais entendu parler. Tu es déjà monté sur un navire ?
+Anataeus: Non. Et toi ?
+Concordia: Jamais. Ça a l'air horrible ! Être brinquebalée en mer pour finir dévorée par des monstres marins...
+Anataeus: Je doute que _tous_ les voyages en mer se déroulent comme ça.
+Concordia: Beaucoup se déroulent comme ça.
+
+-----------
+
+Anataeus: Grâce à cet enduit, la flotte devrait bientôt pouvoir repartir en mer et ramener... ce qu'elle ramène d'habitude.
+Concordia: Les navires sont chargés de tout plein de choses. Tissus, poteries, minerais, herbes rares... pierres exotiques.
+Concordia: Et parfois même des animaux.
+Anataeus: Ça doit être un commerce rentable.
+Concordia: Je n'en suis pas si sûre. Certains contrats ont été signés il y a plusieurs siècles.
+Concordia: Je doute même qu'Armand en connaisse les détails.

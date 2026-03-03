@@ -1,0 +1,17 @@
+Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): On dirait que le moment est venu pour moi de partir.
+Concordia (Shabby): Bonne chance, Nils !
+Nils (Cloak): Vous saurez que j'ai réussi lorsque vous verrez une barge remplie de minerai de plomb arriver dans votre direction.
+Nils (Cloak): Je vous enverrai plus tard les instructions détaillant où m'envoyer ma part d'or.
+Concordia (Shabby): Vous ne reviendrez pas ici ?
+Nils (Cloak): Non, je ne peux malheureusement pas rester.
+Anataeus (Shabby): Alors vous nous faites confiance, maintenant.
+Nils (Cloak): Oui, c'est drôle.
+Nils (Cloak): Lorsque je vous ai trouvés cachés dans cette boutique abandonnée, ma première idée a été de vous trancher la gorge dans votre sommeil et de revendre vos effets personnels. 
+Concordia (Shabby): Mon Dieu... Contente que vous ayez changé d'avis.
+Nils (Cloak): Je plaisante. De toute façon, j'aurais gagné une misère en revendant ces vieilles guenilles.
+Anataeus (Shabby): Comme c'est touchant.
+Concordia (Shabby): Oui, ça me donnerait presque envie de verser une petite larme...
+Anataeus (Shabby): Faites attention à vous, Nils. Nous restons là encore un moment, si vous voulez revenir nous voir.
+Nils (Cloak): Je parie que nous nous retrouverons très bientôt.

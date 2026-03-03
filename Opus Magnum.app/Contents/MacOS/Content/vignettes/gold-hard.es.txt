@@ -1,0 +1,18 @@
+﻿Concordia (Shabby): Me siento obligada a notar que estás convirtiendo plomo en oro nuevamente.
+Anataeus (Shabby): Lo notaste. Sí, parece que el mundo está decidido a burlarse de mí.
+Clara: Eres un alquimista, después de todo.
+Anataeus (Shabby): Eso me han dicho.
+Clara: ¿Es esto acaso una cuestión sensible para él?
+Concordia (Shabby): Me ha dicho algo sobre cómo no le gusta estar encasillado, creo.
+Anataeus (Shabby): Plomo a oro puede ser mi truco de salón.
+Clara: Al menos esta vez lo estás haciendo para tus propios fines.
+
+-----------
+
+Concordia (Shabby): Esta es la cantidad de oro más grande que he visto en mi vida.
+Anataeus (Shabby): Necesitamos reservar algo para el pago de Nils. El resto lo usaremos para el vestido de Clara.
+Clara: ¿Van a usar ese oro para adornarme?
+Clara: Por favor no sugieras que me ponga una armadura ni nada del estilo.
+Concordia (Shabby): No, tengo una idea mucho mejor. Serás tema de conversación en toda la ciudad durante generaciones.
+Clara: Dices eso como si no hubiera otras cosas inusuales en este baile.
+Concordia (Shabby): Es cierto. A veces olvido el resto de nuestro plan.

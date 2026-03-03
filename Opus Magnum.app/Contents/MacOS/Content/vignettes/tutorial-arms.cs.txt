@@ -1,0 +1,10 @@
+Henley: Tak se podíváme na první a nejdůležitější součástku: manipulátor.
+Anataeus (Student): Chápu. Co je další?
+Henley: Počkej, nepředbíhej. Nech mě dokončit výklad. Musíš to vidět.
+
+-----------
+
+Anataeus (Student): Dobře, takže manipulátor uchopí a přenáší symboly elementů po povrchu transmutačního stroje.
+Henley: Správně. A ty řídíš jejich chování -
+Anataeus (Student): — pomocí instrukcí. Samozřejmě.
+Henley: Samozřejmě.

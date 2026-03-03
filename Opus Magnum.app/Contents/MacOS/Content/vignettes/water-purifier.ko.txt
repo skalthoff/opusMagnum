@@ -1,0 +1,19 @@
+﻿Concordia (Shabby): 그거 강에서 떠온 물이야?
+Anataeus (Shabby): 어떻게 알았어?
+Concordia (Shabby): 그 예쁜 회색 빛을 봐. 그걸 마시고 싶진 않겠지?
+Anataeus (Shabby): 우리가 여기에 계속 있으려면 물이 좀 필요할거야...
+Concordia (Shabby): 네가 도시의 이런 곳 까지 와본 적 없는 것을 알고있지만, 이것 봐.
+Anataeus (Shabby): 그래. 음, 내가 고쳐볼게.
+
+-----------
+
+Anataeus (Shabby): 자. 한 모금 마셔볼래?
+Concordia (Shabby): 왜 훌륭한 연금술사가 직접 안하고?
+Anataeus (Shabby): 난 그게 좋다는 것을 확신하니까.
+Concordia (Shabby): 그거 우연이네! 나도 그렇게 생각하고 있었어.
+Anataeus (Shabby): 재미없게. 그래, 내가 마실게...
+Concordia (Shabby): 어때?
+Anataeus (Shabby): 괜찮아! 물이야. 약간... 신.
+Concordia (Shabby): 시다고.
+Anataeus (Shabby): 좀 쓰기도 하네.
+Anataeus (Shabby): 이제 문제 없으니까, 다시 작업을 해봐야겠어.

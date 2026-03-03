@@ -1,0 +1,103 @@
+﻿Concordia: Ver tu motor de transmutación en acción me está dando buenos recuerdos de haber jugado al Jardín de Sigmar.
+Anataeus: ¿El qué de quién?
+Concordia: ¿Nunca jugaste al Jardín de Sigmar? Pensé que todos conocían este juego. Pones las canicas en un cierto patrón, y—
+Anataeus: ¿Canicas?
+Concordia: ¿No es eso lo que son?
+Anataeus: ¡Son representaciones elementales! Esferas de vidrio que representan diversos tipos de átomos.
+Concordia: Las pequeñas esferas de vidrio son comúnmente conocidas como canicas.
+Anataeus: Nunca las llamamos canicas.
+Concordia: Para cualquier persona que no sea un alquimista altamente entrenado, eso es lo que son. Ahora, ¿por qué no le das una chance al Jardín de Sigmar?
+Anataeus: De acuerdo.
+
+----- After winning 1 game.
+ 
+Concordia: Divertido, ¿no es así?
+Anataeus: ¡Así no funciona la alquimia en absoluto! Los elementos cardinales, por ejemplo—
+Concordia: Es solo un juego, Anataeus. Cuando éramos niños solíamos escabullirnos aquí y jugar cuando el alquimista no estaba.
+Anataeus: ¿Qué? ¿Estabas totalmente sin supervisión cerca del motor de transmutación?
+Concordia: Sólo usamos las canicas, Anataeus. Tranquilízate.
+Anataeus: ¡No son canicas, son representaciones de los bloques de construcción fundamentales del universo!
+Concordia: También son pequeñas esferas de vidrio. ¡Te lanzaré uno!
+Anataeus: ¡Ah! ¡Basta! No debes arrojar cosas delicadas como ésta.
+Concordia: Son mucho más baratos que el resto de tus cosas, ya sabes, siendo que son canicas.
+Anataeus: Aun así, apreciaría si las trataras con más cuidado.
+Concordia: Bueno, lo hicimos por años. ¿Realmente no conocías al Jardín de Sigmar?
+Anataeus: No, en absoluto. ¿Por qué la universidad se molestaría en enseñar algo tan frívolo?
+ 
+----- After winning 10 games.
+ 
+Concordia: Para algo "tan frívolo", parece que lo estás disfrutando.
+Anataeus: Tal vez un poco. Hay algunas estrategias para aprender...
+Concordia: Sí, puedes ganar de manera más certera con un poco de práctica y atención.
+Anataeus: Entonces, ¿quién era Sigmar? ¿Por qué estoy limpiando su jardín?
+Concordia: Tú dime.
+Anataeus: ¿Yo? ¿Por qué iba yo a saber?
+Concordia: Porque fue un alquimista de hace mucho tiempo. ¿O no?
+Anataeus: Nunca he oído hablar de alguien llamado Sigmar.
+Concordia: ¿Estás seguro?
+Anataeus: Es posible que fuera uno de esos alquimistas apócrifos y héroes populares... Imaginario, en otras palabras.
+Concordia: O es posible que no hayas prestado atención en tus clases de historia.
+Anataeus: Por favor. Yo era un estudiante excepcional.
+
+----- After winning 25 games.
+ 
+Concordia: ¡Un estudiante excepcional sin duda! No conocías al Jardín de Sigmar, y ahora resulta tampoco has oído hablar de Sigmar.
+Anataeus: ¡Ni siquiera hemos establecido que fue una persona real!
+Concordia: Ve a investigarlo en una biblioteca, entonces. Seguramente encontrarás algo interesante.
+Anataeus: Supongo que podría... esperar, ¿me acabas de dar una orden?
+Concordia: Para alguien que se especializa en alquimia, te resistes extrañamente a aprender más sobre su pasado.
+Anataeus: Ese tipo de temas estaba mal visto en la universidad... había algunos especialistas en las historias y leyendas, pero los estudiantes serios se enfocaban en la práctica moderna.
+Anataeus: Nadie cree que haya buenas razones para quedarse en el pasado.
+Concordia: Que pena. Cuando las personas que no son alquimistas piensan en la alquimia, piensan en las viejas historias. Sería bueno estar familiarizado con ellas, al menos.
+Anataeus: Me temo que esas viejas historias no siempre dan una visión muy positiva de nuestra profesión...
+Concordia: Varía, desde luego.
+Anataeus: Por ahora, creo que voy a jugar un poco más.
+Concordia: Una decisión perfectamente aceptable.
+ 
+----- After winning 50 games.
+ 
+Anataeus: ¿Así que cuando jugabas a esto de niña, los alquimistas de Van Tassen nunca se opusieron a tener un grupo de niños corriendo en el laboratorio?
+Concordia: Nunca sabían que estábamos allí.
+Anataeus: Seguramente notarán las representaciones elementales esparcidas por todas partes. Las “canicas”, como les gusta llamarlas.
+Concordia: Los alquimistas de Van Tassen, antes de que tú, apenas ponía un pie en el laboratorio.
+Anataeus: Buena broma.
+Concordia: No, en absoluto. Creo que menospreciaban la alquimia y se veían a sí mismos más como parte de la familia.
+Anataeus: Ridículo.
+Concordia: Ayudaban en los intereses de la familia, se involucraban en sus alianzas, vigilaban a sus rivales...
+Anataeus: Mi profesor me aconsejó deliberadamente que evitara todo eso.
+Concordia: Estoy de acuerdo con tu profesor. No me gusta ese tipo de persona engañosa.
+Anataeus: Debe estar acostumbrada a que sus consejos no sean escuchados.
+Concordia: Muy probablemente. Lo creas o no, ¡eres el primer alquimista que conozco que realmente se centra en la alquimia!
+
+----- After winning 75 games.
+ 
+Anataeus: Dime, ¿quién fue el que te enseñó a jugarlo originalmente?
+Concordia: Mi padre. También fue proveedor, en tiempos mejores que estos...
+Anataeus: Y supongo que alguien también le enseñó a él cuando era niño, y se transmitió de esa manera... pero ¿por qué? ¿De qué sirve preservar este conocimiento?
+Concordia: Es bueno para dejar de pensar en los problemas, ¿no es así?
+Anataeus: Supongo...
+Concordia: De hecho, lo sugerí específicamente porque he notado que estas bajo mucha presión, últimamente.
+Anataeus: ¿De veras? Yo... no me había dado cuenta de que se estaba mostrando tan claramente.
+Concordia: Es bastante obvio.
+Anataeus: Ya veo...
+Concordia: En tiempos como estos, puede ayudar poner la mente en una actividad simple.
+Concordia: De lo contrario, vagará hacia otros pensamientos más grandes y más aterradores.
+Anataeus: Supongo que encuentro el juego bastante relajante, después de un rato.
+Concordia: Me alegra oírlo.
+ 
+----- After winning 100 games.
+ 
+Anataeus: Concordia, gracias por sugerir este juego. Resulta ser que me gusta.
+Concordia: De nada, Anataeus. Me hace feliz ver que lo estás disfrutando.
+Concordia: Especialmente después de que lo llamaras frívolo al principio.
+Anataeus: ¡Pero es frívolo! Es... perfectamente frívolo.
+Concordia: Es bueno aprender sobre cosas que no son alquimia, ¿no crees?
+Anataeus: Eso no tiene sentido. Este pequeño juego resulta ser una excepción a la regla.
+Concordia: Hasta ahora has dedicado tu vida a convertirte en alquimista.
+Concordia: Pero ahora que eres uno, debes aprender el resto.
+Anataeus: ¿El resto?
+Concordia: El resto de la vida. Las partes que no tienen que ver con la alquimia.
+Anataeus: Te refieres a las partes inútiles.
+Concordia: Simplemente tendrás que permitirme ser tu instructora en esos temas.
+Anataeus: ¿En serio? Parece que no me estás dando ninguna opción.
+Concordia: Hay algo que me gusta de ti, Anataeus. Sabes cuando no tienes opción.

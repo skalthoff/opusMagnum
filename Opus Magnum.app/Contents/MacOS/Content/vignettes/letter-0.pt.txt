@@ -1,0 +1,10 @@
+﻿[DO NOT PARSE]
+
+Regras do Laboratório de Transmutação:
+#Acesso é restrito a estudantes do bacharelado de engenharia alquímica e funcionários apenas!
+#(Exceções devem ser aprovadas pelo Chanceler)
+#Sempre mantenha seu Símbolo e Passe de Alquimista Estudante consigo enquanto estiver no laboratório.
+#Não é permitido comer ou beber no laboratório.
+#Não sente ou se apoie em mecanismos de transmutação ou seus componentes relacionados.
+#Por favor mantenha a área limpa para todos os outros.
+#Isso inclui o senhor, Anataeus!

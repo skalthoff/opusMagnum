@@ -1,0 +1,12 @@
+﻿Henley: Pour effectuer des transmutations, nous utilisons des glyphes. Par exemple, si je veux calcifier un élément...
+Anataeus (Student): Tu places un glyphe de calcification sur le plateau et tu déplaces l'élément que tu veux calcifier au-dessus.
+Henley: Anataeus ! Enfin... oui, c'est exact, mais laisse-moi au moins terminer mes explications !
+Anataeus (Student): J'ai eu toutes les explications dont j'avais besoin.
+
+-----------
+
+Anataeus (Student): Ce glyphe est assez rapide.
+Henley: Oui, c'est ça, l'ingénierie alchimique moderne. 
+Anataeus (Student): Combien y a-t-il de transmutations possibles sous forme de glyphes ?
+Henley: Pour l'instant, la plupart des transmutations courantes.
+Henley: Il y a des travaux pour en développer d'autres. Tu le saurais si tu portais plus attention aux récents progrès dans ton domaine. 

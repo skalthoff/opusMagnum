@@ -1,0 +1,17 @@
+﻿Concordia (Shabby): Sólo dame el hilo. Yo me encargaré del resto.
+Anataeus (Shabby): ¿Estás segura? ¿Un vestido entero con un solo hilo?
+Concordia (Shabby): Conozco a todos los proveedores de la vestimenta de Van Tassen. Ellos sabrán qué hacer.
+Clara: Esto se está convirtiendo en una gran producción.
+Concordia (Shabby): Es una pena que los Van Tassen no salgan beneficiados con este trabajo.
+Anataeus (Shabby): Un vestido de gala hecho de oro puro ciertamente habría encajado bien con su estilo.
+Clara: Ah, Frederick... cómo me gustaría que pudiera estar allí para verlo.
+
+-----------
+
+Concordia (Shabby): ¿Ves el hilo aquí? Tan fino y suave como la seda.
+Clara: ¿Y planeas hacer todo el vestido de esto? Es una declaración muy atrevida.
+Concordia (Shabby): Ese es el plan: tener todos los ojos sobre ti.
+Clara: Esa idea me pone angustiosa. Al mismo tiempo, estoy prácticamente llena de ansias por ello.
+Clara: Una extraña mezcla de emociones, lo admito...
+Concordia (Shabby): Eres más fuerte de lo que crees, Clara. Te ira maravillosamente bien. Estoy segura de ello.
+Clara: Concordia... gracias.

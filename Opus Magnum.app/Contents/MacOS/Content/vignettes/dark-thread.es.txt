@@ -1,0 +1,17 @@
+﻿Nils: Esto es un poco demasiado. Me siento como si me estuviese vistiendo como un soldado. 
+Concordia (Shabby): Quédese quieto, o no podré tomarle las medidas correctamente.
+Nils: ¿Realmente me debes vestir de esta manera?
+Anataeus (Shabby): Cuanta más luz a absorba, más fácil será para ti esconderte entre las sombras.
+Nils: Ya puedo hacer eso. Parece que subestimas mis habilidades.
+Anataeus (Shabby): No quiero dejar nada a la suerte.
+
+-----------
+
+Concordia (Shabby): Es un aspecto bastante sorprendente, ¿no le parece?
+Nils (Cloak): Me he convertido. Nunca creí que estaría tan a la moda.
+Anataeus (Shabby): Deberíamos entrar en el negocio de la vestimenta.
+Anataeus (Shabby): De todas maneras, no puedo hacer mucha más alquimia… hemos utilizado todo nuestro mercurio en eso.
+Concordia (Shabby): Pero que idea maravillosa. Buscaré más provisiones para coser y tejer.
+Anataeus (Shabby): Consigue un maniquí, también.
+Concordia (Shabby): Considéralo hecho.
+Anataeus (Shabby): Perfecto.

@@ -1,0 +1,10 @@
+﻿Henley: En algunos casos, querrás que un brazo gire lo que ha recogido -
+Anataeus (Student): Quieres decir, en contraposición a la rotación del brazo.
+Henley: Correcto. En esos casos, usarás instrucciones de eje.
+
+-----------
+
+Anataeus (Student): Todo muy sencillo y simple.
+Henley: Qué bueno que esto sea tan fácil para ti.
+Anataeus (Student): ¿Por qué? ¿Cuánto tardaste tú en aprender todo esto?
+Henley: Sigamos adelante.

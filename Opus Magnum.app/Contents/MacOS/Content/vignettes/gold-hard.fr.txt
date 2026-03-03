@@ -1,0 +1,18 @@
+Concordia (Shabby): Je me sens obligée de remarquer que tu transformes encore du plomb en or.
+Anataeus (Shabby): Bien remarqué. On dirait que tout le monde a décidé de se moquer de moi.
+Clara: Après tout, tu es un alchimiste.
+Anataeus (Shabby): Oui, à ce qu'il paraît.
+Clara: C'est un sujet sensible pour lui ?
+Concordia (Shabby): Je crois qu'il n'aime pas être mis dans une case, c'est tout.
+Anataeus (Shabby): Transformer du plomb en or n'est qu'un vulgaire tour de passe-passe.
+Clara: Au moins, cette fois, tu le fais à tes propres fins.
+
+-----------
+
+Concordia (Shabby): C'est une quantité d'or bien supérieure à ce que j'ai vu dans toute ma vie.
+Anataeus (Shabby): Nous devons en garder un peu pour payer Nils. Le reste servira à confectionner la tenue de Clara.
+Clara: Tu vas utiliser tout cet or pour m'habiller ?
+Clara: J'espère que tu ne penses pas à me faire porter une armure ou quelque chose du genre...
+Concordia (Shabby): Non, j'ai une bien meilleure idée. Toute la ville parlera de toi pendant une génération.
+Clara: Tu dis cela comme s'il n'y avait rien d'autre d'inhabituel concernant ce bal.
+Concordia (Shabby): Exact. Parfois, j'oublie le reste de notre plan.

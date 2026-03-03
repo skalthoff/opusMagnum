@@ -1,0 +1,21 @@
+Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): Umowa stoi?
+Nils: Intrygująca propozycja.
+Nils: Ale od kiedy Colvan okupuje stary teren Van Tassenów, o wiele trudniej jest się tam dostać. Jego strażnicy są dużo czujniejsi.
+Anataeus (Shabby): My z Konkordią przekonaliśmy się o tym na własnej skórze.
+Nils: Muszę dostać się do środka. Stamtąd sobie poradzę.
+Concordia (Shabby): To chyba trochę bardziej skomplikowane.
+Concordia (Shabby): To, czego potrzebujemy, nie może być tak po prostu przyniesiony. To transport.
+Anataeus (Shabby): Transport rudy ołowiu, mówiąc dokładniej.
+Nils: Widzę...
+Concordia (Shabby): Dam ci dokument z zamówieniem, ale potrzebna jest pieczęć. Będziesz musiał znaleźć prawdziwy dokument i stamtąd wziąć pieczęć. 
+Nils: W porządku. Potem, zakładam, podszyję się pod dostawcę i po prostu przywiozę transport do was.
+Concordia (Shabby): Dokładnie!
+Nils: Trochę bardziej... fantazyjne niż myślałem.
+Anataeus (Shabby): Wręcz przeciwnie - jak najbardziej wykonalne.
+Anataeus (Shabby): Dla kogoś twojego kalibru to tylko spacerek po parku, czyż nie?
+Concordia (Shabby): I pamiętaj, że dostarczymy ci najlepsze wyposażenie, jakie gdziekolwiek znajdziesz.
+Anataeus (Shabby): Jeżeli mam ci dać to złoto, potrzebuję ołowiu, tak w końcu działa alchemia.
+Nils: Złoto, tak. Lubię złoto.
+Anataeus (Shabby): Zrób to, a będziesz miał go pod dostatkiem. Obiecuję.

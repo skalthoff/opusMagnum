@@ -1,0 +1,24 @@
+﻿Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): ¿Nils? ¿Es usted?
+Action: Enter, Nils
+Nils: Lamento interrumpir sus intrigas alquímicas, pero regresé para hacerles saber que la Casa Colvan está intensificando las patrullas a través de las zonas fronterizas.
+Nils: Se habrán dado cuenta de que había algunos fugitivos...
+Concordia (Shabby): Les tomó suficiente tiempo.
+Anataeus (Shabby): Gracias por la advertencia. Tengo algunas cosas más que hacer, pero saldremos de aquí tan pronto termine con ellas.
+Nils: No lo duden, están claramente buscando a alguien.
+Anataeus (Shabby): Clara, este es Nils. Se podría decir que es un personaje un tanto rebelde.
+Clara: Sí, lo sé.
+Anataeus (Shabby): Espera... ¿conoces a Nils?
+Clara: ¿Si lo conozco? Yo lo empleo.
+Nils: Sólo temporalmente.
+Concordia (Shabby): ¡Ja! Siempre me pregunté cómo fue que nos encontró tan fácilmente.
+Clara: Estoy casi ofendida de que no se hayan dado cuenta antes.
+Concordia (Shabby): Me temo que tus maquinaciones están a un nivel muy superior al nuestro.
+Anataeus (Shabby): Y yo que pensé que había encontrado al único ladrón confiable en la ciudad...
+Nils: Señora Soria, le aconsejo que vuelvas a la Casa antes de que la vean aquí.
+Clara: Probablemente una buena idea, estoy de acuerdo.
+Anataeus (Shabby): Todavía queda la cuestión del lápiz labial.
+Clara: Una vez que lo tengan, Nils me lo puede traer en la misma noche del baile.
+Anataeus (Shabby): Muy bien. Una cosa más, Clara... habrá caos.
+Clara: Lo sé. Y no le temo.

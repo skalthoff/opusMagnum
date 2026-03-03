@@ -1,0 +1,12 @@
+using System.Collections.Generic;
+
+public interface _0023_003Dqvrr83rgNDU5BZZiYZphDgA_003D_003D
+{
+	PartSimState _0023_003DqUsq_0024K3ZTspdSP3IP_zDymc2mM2ZISRihx_wTbNc_0024UMM_003D(Part _0023_003DqPhEYKjkmmtzzcixhRA6mOw_003D_003D);
+
+	Maybe<Molecule> _0023_003Dqy4AC1xIZjWE0F8_6wBJtJ3yBlSCBmIgy_0024DjQa6nTDP4_003D(Part _0023_003DqQzV_hAw1ppiMIbbYRpfSkA_003D_003D);
+
+	IEnumerable<Molecule> _0023_003DqDvPTFxCbDqOBicOGSQ1EFg_003D_003D();
+
+	IEnumerable<HexIndex> _0023_003DquAn4n4QWYdnASuIWouMP3A_003D_003D();
+}

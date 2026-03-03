@@ -1,0 +1,24 @@
+[DO NOT PARSE]
+
+*Consignes pour l'envoi d'énigmes*
+
+#Le _Journal d'ingénierie alchimique_ est un recueil d'énigmes créées par les utilisateurs et géré par Zachtronics. Pour envoyer une énigme à intégrer dans le _Journal_, téléchargez votre énigme sur Steam Workshop et envoyez les informations suivantes à *zach@zachtronics.com* :
+ 
+• un lien vers votre énigme sur Steam Workshop,
+• une explication de ce qui rend votre énigme intéressante,
+• une explication de ce que vous imaginez comme résultat(s) et
+• le nom que vous voudriez associer à l'énigme, au format « Nom, P. » (si votre nom complet est Prénom Nom).
+
+#*Règles d'envoi*
+
+#En envoyant une énigme à intégrer dans le _Journal d'ingénierie alchimique_, vous nous autorisez pleinement et sans limitation à modifier et distribuer cette énigme comme partie intégrante du jeu. Vous ne recevrez aucune compensation financière pour votre envoi. Notre prise en considération de votre énigme et le crédit attribué de la manière décrite ci-dessus seront votre seule et unique compensation.
+
+Vous ne pouvez envoyer que des énigmes que vous avez créées vous-même, personnellement.
+
+Vous vous engagez à respecter les termes du contrat d'abonnement Steam®.
+
+N'envoyez pas la même énigme plusieurs fois.
+
+#*Conseils pour la conception d'énigmes*
+
+#Créez quelque chose qui soit à la fois intéressant, unique et conforme à l'environnement et à l'esthétique du jeu. Par exemple, ce n'est pas parce que vous pouvez utiliser chaque type d'atome d'un produit ou réactif que vous devez forcément le faire. Les meilleures énigmes sont prenantes en tant que telles _et_ évoquent l'univers du jeu.

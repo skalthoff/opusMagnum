@@ -1,0 +1,10 @@
+public interface IScreen
+{
+	bool _0023_003Dq6jjMWCCPD7zyImCe_Ednn52UN_002409ORHfsBBqJtTTFgI_003D();
+
+	void _0023_003DqTzgirF3oCT3isLJUEwiiZA_003D_003D(float _0023_003DqB6fjaPuRyzkLDRqYjW9o0w_003D_003D);
+
+	void _0023_003DqQlW6FrlY4VdTXFlumRYInw_003D_003D(bool _0023_003DqsVgdqZXGaVevy91qhqXoAA_003D_003D);
+
+	void _0023_003Dq1xgSU8Y_6ixL_9UQLd6wtw_003D_003D();
+}

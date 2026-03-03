@@ -1,0 +1,34 @@
+Portraits: Verrin Ravari (Shabby), Anataeus (Shabby)
+
+Verrin Ravari (Shabby): Překvápko! Našel jsem vás. Schováváte se v téhle chatrči jako krysy. Jste krysy.
+Verrin Ravari (Shabby): Vy alchymističtí bastardi. Nemyslete si, že nezmám každou část vašeho spiknutí a jména vašich kompliců.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): musím přiznat, že to byl dobrý plán. Všechny na plese to v šokovalo.
+Verrin Ravari (Shabby): A pak paní Soria a její zmatený pohled, její veliké oči: “Moje rtěnka? Co je s ní, to byl dar alchymisty rodu Colvan...”
+Verrin Ravari (Shabby): Naštěstí stráže rodu Colvan na mě nemají. Vysvětlím jim to později, až se vrátím s tvojí hlavou.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Víš co je zábavné? Zavraždění Tarose Colavana a zhroucení jeho rodu mě skoro vůbec nezajímá.
+Verrin Ravari (Shabby): Taros je idiot, který se nechá oblbnout sliby a bohatstvím a jeho rod si nezaslouží být v jeho rukách.
+Verrin Ravari (Shabby): Útok na rod Van Tassen byl ve skutečnosti můj nápad. Prostě jsem tohle semínko zasadil do jeho citlivé mysli.
+Verrin Ravari (Shabby): A proč jsem to udělal?
+Verrin Ravari (Shabby): Dovol, abych se tě na oplátku zeptal také. Představ si, že by Van Tassen pracoval pro tebe a ne opačně.
+Verrin Ravari (Shabby): Kdybys byl na tahu, nevyhrál bys boj se svými vyššími znalostmi a taktikou? Nedostal bys, co chceš?
+Verrin Ravari (Shabby): Tak proč ne, že?
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Rody jsou po staletích úpadku slabé. Nezaslouží si to, co mají.
+Verrin Ravari (Shabby): Ale my ano a můžeme si to od nich vzít!
+Verrin Ravari (Shabby): Lehce ovládnu rod Colvan, jakmile utichne rozruch kolem atentátu, který jste chtěli přifařit mě.
+Verrin Ravari (Shabby): Samozřejmě bude třeba opravit také škody, vzniklé explozí...
+Verrin Ravari (Shabby): Jsem velkorysý. Můžete získat to, co zbude z rodu Van Tassen.
+Verrin Ravari (Shabby): Pak si můžeme rozdělit další rody, které porazíme...
+Verrin Ravari (Shabby): Co říkáš? Já jsem... Já jsem... Co je to s tebou?
+Verrin Ravari (Shabby): Proč nic neříkáš?
+Action: Change, Anataeus (Shabby), Mannequin
+Mannequin: ...
+Verrin Ravari (Shabby): Je... to... ne!
+Verrin Ravari (Shabby): Ty! Ne!
+Verrin Ravari (Shabby): Ty tady nejsi! Už jsi pryč.
+Verrin Ravari (Shabby): Já tě dostanu. Ha...
+Verrin Ravari (Shabby): Dobrá, Anataee. Dobrá. Dobrá.
+Verrin Ravari (Shabby): Ha, ha, ha... aaaaah.
+Verrin Ravari (Shabby): Moje plány... moje opus magnum...

@@ -1,0 +1,21 @@
+Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): Haben wir eine Abmachung?
+Nils: Es ist ein interessanter Vorschlag.
+Nils: Aber nun, da Haus Colvan das alte Gelände der Van Tassens besetzt, ist es viel schwieriger, dort hineinzugelangen. Ihre Wachen sind viel wachsamer.
+Anataeus (Shabby): Das wissen wir, glaub mir. Concordia und ich sind nur knapp mit unserem Leben davongekommen. 
+Nils: Schafft mich nur irgendwie rein. Der Rest ist kein Problem.
+Concordia (Shabby): Die Sache ist ein wenig komplizierter.
+Concordia (Shabby): Was wir brauchen, kann man nicht einfach so mit sich herumtragen. Es ist eine Ladung.
+Anataeus (Shabby): Eine Ladung Bleierz, um genau zu sein.
+Nils: Ich ... verstehe.
+Concordia (Shabby): Ich kann dir einen Frachtauftrag besorgen, aber er muss mit einem Siegel versehen werden. Du musst einen echten Auftrag finden und davon das Siegel nehmen.
+Nils: In Ordnung. Dann gebe ich mich wahrscheinlich als Versorgungsoffizier aus und lasse die Ladung einfach per Kahn zu euch den Fluss hinabtreiben.
+Concordia (Shabby): Ganz genau!
+Nils: Das ist etwas ... fantasiereicher, als ich gedacht hatte.
+Anataeus (Shabby): Ganz im Gegenteil, praktischer geht‘s kaum.
+Anataeus (Shabby): Eigentlich ein Spaziergang für jemanden deines Kalibers, oder?
+Concordia (Shabby): Und vergiss nicht, wenn du unterwegs Ausrüstung findest, bring sie uns, wir verbessern sie für dich.
+Anataeus (Shabby): Wenn ich Gold für dich herstellen soll, brauche ich Blei ... So funktioniert die Alchemie schließlich.
+Nils: Gold, genau. Ein bisschen Gold wäre schon nicht schlecht.
+Anataeus (Shabby): Wenn wir Erfolg haben, wirst du mehr als nur ein bisschen Gold haben. Versprochen.

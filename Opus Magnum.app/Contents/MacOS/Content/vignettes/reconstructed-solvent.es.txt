@@ -1,0 +1,9 @@
+﻿[DO NOT PARSE]
+
+No. 189
+
+#Solvente Reconstruido
+
+#Aunque tenemos la suerte de que la traición que tuvo lugar en la Casa Colvan fue al final expuesta, todavía hay algunos elementos del crimen que no se han entendido completamente. ¿Por qué, por ejemplo, se encontró a Verrin Ravari en una tienda de sastre abandonada en Las Barracas Ribereñas? Un solvente poderoso encontrado en la escena sugiere la participación de otro alquimista altamente entrenado, tal vez un rival o un co-conspirador. Existe una teoría, apoyada por los más propensos a los rumores, de que el joven Jefe Alquimista de la Casa Van Tassen sobrevivió al asalto inicial de los Colvan y pudo llevar a cabo algún tipo de represalia desde este lugar oculto, aunque eso parece muy poco probable.
+
+Desafortunadamente, puede que nunca se encuentra una respuesta a este enigma. Aun así, con el interés de avanzar en el tema a mi manera, he intentado reproducir un solvente del tipo que creo que el misterioso alquimista pudo haber usado.

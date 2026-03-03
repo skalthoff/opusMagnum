@@ -1,0 +1,10 @@
+Henley: 有些时候，你会想让机械臂把抓住的东西——
+Anataeus (Student): 你是想说，让机械臂反向旋转对吧。
+Henley: 没错。在这种情况下，你就要用到枢轴指令了。
+
+-----------
+
+Anataeus (Student): 这太简单了。
+Henley: 你觉得简单就好。
+Anataeus (Student): 怎么，_你_学这些花了多长时间？
+Henley: 我们还是继续往下讲吧。

@@ -1,0 +1,17 @@
+Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): Looks like it’s time for me to go.
+Concordia (Shabby): Good luck, Nils!
+Nils (Cloak): You’ll know I succeeded when a barge of lead ore floats down the river toward you.
+Nils (Cloak): And I’ll send instructions detailing where to send my share of the gold later.
+Concordia (Shabby): You won’t be returning here?
+Nils (Cloak): No, I’m afraid I can’t stay.
+Anataeus (Shabby): So you do trust us, finally.
+Nils (Cloak): A funny thing about that.
+Nils (Cloak): When I first found the two of you hiding out in this abandoned shop, my first thought was to cut you both down as you slept and sell your personal effects. 
+Concordia (Shabby): Oh my... I’m glad you didn’t.
+Nils (Cloak): I’m just kidding. I would have collected only a pittance for your mediocre clothes, anyway.
+Anataeus (Shabby): How touching.
+Concordia (Shabby): I expect a more touching story couldn’t be written.
+Anataeus (Shabby): Safe travels, Nils. We’ll be here for the time being, should you want to find us.
+Nils (Cloak): I’m sure we’ll run into each other again before long.

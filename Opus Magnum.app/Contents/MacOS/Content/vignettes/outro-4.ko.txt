@@ -1,0 +1,24 @@
+﻿Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): 닐스? 당신인가요?
+Action: Enter, Nils
+Nils: 연금술적 음모를 방해해서 미안하지만, 콜반 가문이 경계 지역의 경비를 강화하고 있습니다.
+Nils: 아마도 도망자가 있는 걸 알아차린 모양이군요...
+Concordia (Shabby): 이제야 알아차리는군.
+Anataeus (Shabby): 알려줘서 고맙습니다. 여기서 몇가지 할 게 더 있지만, 끝나는 대로 바로 탈출해야겠군요.
+Nils: 서두르시는 게 좋을 겁니다. 누군가를 찾고 있는게 분명하니까.
+Anataeus (Shabby): 클라라, 이 분은 닐스에요. 다소 수상한 사람이라고도—
+Clara: 아니, 알고 있습니다.
+Anataeus (Shabby): 뭐... 닐스를 알고 계시다구요?
+Clara: 알고 있다니? 전 그의 고용주랍니다.
+Nils: 시간제 계약으로 말이지요.
+Concordia (Shabby): 하! 어떻게 우리를 그렇게 쉽게 찾았나 했더니.
+Clara: 아직도 몰랐다니, 약간 기분이 상하려고 하는군요.
+Concordia (Shabby): 클라라, 안타깝지만 당신의 계획은 우리의 상상을 한참 넘어서는군요.
+Anataeus (Shabby): 난 도시에서 유일하게 믿을만한 도둑을 찾았다고 생각했는데...
+Nils: 소리아 아가씨, 여기있는 것을 들키기 전에 저택으로 돌아가는 것을 추천드립니다.
+Clara: 그게 최선인것 같군요, 갑시다.
+Anataeus (Shabby): 립스틱 관련한 문제가 아직 남아 있습니다.
+Clara: 만들면 닐스가 무도회날 밤에 제게 가져다 줄 수 있을 겁니다.
+Anataeus (Shabby): 좋습니다. 한가지 더, 클라라... 혼란이 있을 겁니다.
+Clara: 알고 있습니다. 전 두렵지 않아요.

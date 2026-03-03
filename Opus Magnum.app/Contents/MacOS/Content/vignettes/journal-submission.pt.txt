@@ -1,0 +1,24 @@
+﻿[DO NOT PARSE]
+
+*Instruções de Envio*
+
+#O _Periódico de Engenharia Alquímica_ é uma coleção de desafios criados por usuários, e avaliados pela Zachtronics. Para enviar um quebra-cabeças para inclusão no _Periódico_, envie seu quebra-cabeças para a Oficina do Steam e envie as seguintes informações para *zach@zachtronics.com*:
+ 
+• um link para o seu quebra-cabeças na Oficina do Steam,
+• uma explicação do que torna o seu quebra-cabeças interessante,
+• uma explicação do que você imagina que os produtos do seu quebra-cabeças sejam, e
+• o nome que você gostaria de ver ligado ao quebra-cabeças, no formato ""Último, P."" (caso o seu nome completo fosse ""Primeiro Último"").
+
+#*Regras de Envio*
+
+#Ao enviar um quebra-cabeças para inclusão no _Periódico de Engenharia Alquímica_, você nos garante permissão completa e sem limites para modificar e distribuir esse quebra-cabeças como parte do jogo. Você não receberá compensação monetária por sua submissão; nossa consideração de seu quebra-cabeças e atribuição de crédito da forma descrita acima será a única e total compensação.
+
+Você só pode enviar quebra-cabeças que você mesmo(a) tenha criado.
+
+Você concorda com os termos do Acordo de Assinatura do Steam®.
+
+Não envie o mesmo quebra-cabeças mais de uma vez.
+
+#*Dicas de Criação de Quebra-Cabeças*
+
+#Busque criar algo que seja únicamente interessante, e consistente com a ambientação e estética do jogo. Por exemplo, só por que é possível usar cada tipo de átomo em um único produto ou reagente, não quer dizer que você deveria. Os melhore4s quebra cabeças são cativantes por si só _e_ evocativos do mundo do jogo.

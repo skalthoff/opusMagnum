@@ -1,0 +1,17 @@
+Henley: Ich denke, das ist alles, was du wissen musst, um die Transmutationsmaschine korrekt zu bedienen.
+Anataeus (Student): Ich stelle noch ein weiteres Erzeugnis her, sicherheitshalber.
+
+-----------
+
+Henley: Und, was hast du nach deinem Abschluss vor?
+Anataeus (Student): Ich denke, ich werde mich bei einem der Hohen Häuser als Chefalchemist bewerben.
+Henley: Das klingt ... gewagt. So direkt nach dem Abschluss?
+Anataeus (Student): Warum nicht?
+Henley: Stimmt auch wieder. Du hast dir schon immer hohe Ziele gesteckt ...
+Anataeus (Student): Und wie sieht‘s mit dir aus?
+Henley: Mir gefällt es hier. Ich glaube, ich bleibe hier und werde hoffentlich Professor.
+Anataeus (Student): Ja, ich denke, eine Lehrtätigkeit würde dir gut zu Gesicht stehen.
+Henley: Denkst du? Also dann, mögen wir beide unser _Opus Magnum_ zustande bringen.
+Anataeus (Student): _Opus Magnum ..._ Ich fand diesen Ausdruck schon immer etwas wichtigtuerisch, aber selbstverständlich pflichte ich dir bei.
+Anataeus (Student): Warum lachst du?
+Henley: Anataeus Vaya findet etwas wichtigtuerisch? Wer hätte das gedacht ...

@@ -1,0 +1,6 @@
+public sealed class _0023_003DquBkTOLR2k76qHn6i8uQcr9MfeXYDMJh_x5p9KuT6dkc_003D
+{
+	public InstructionType _0023_003DqksJWu_Qkg7tvayeA4h18oQ_003D_003D;
+
+	public InstructionType[] _0023_003DqZmttNA4eyU8PIshICuILyg_003D_003D;
+}

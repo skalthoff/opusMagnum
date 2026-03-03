@@ -1,0 +1,17 @@
+﻿Henley: Creo que eso es todo lo que necesita saber para usar el motor de transmutación de manera efectiva.
+Anataeus (Student): Haré un producto más para asegurarme de entenderlo.
+
+-----------
+
+Henley: Dime, ¿cuáles son tus planes después de que te gradúes?
+Anataeus (Student): Creo que seré Jefe de Alquimistas de una de las Casas de Agosto.
+Henley: Eso es... audaz. ¿Apenas te gradúes?
+Anataeus (Student): ¿Por qué no?
+Henley: Es cierto. Ninguna ambición podría ser demasiado grande para ti...
+Anataeus (Student): ¿Y tú?
+Henley: Me gusta aquí. Creo que me quedaré y espero ser profesor.
+Anataeus (Student): Puedo ver tu afinidad por la enseñanza.
+Henley: ¿De verdad? Pues bien, ¡que cada uno de nosotros encontremos nuestro _opus magnum!_
+Anataeus (Student): _Opus magnum..._ Siempre he encontrado que es un término bastante pretencioso, pero al menos estoy de acuerdo con el sentimiento.
+Anataeus (Student): ¿Por qué te ríes?
+Henley: ¿Anataeus Vaya encontró algo pretencioso? Cuéntame más...

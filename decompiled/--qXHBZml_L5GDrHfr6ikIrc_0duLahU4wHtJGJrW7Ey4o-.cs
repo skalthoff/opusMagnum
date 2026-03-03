@@ -1,0 +1,12 @@
+public static class _0023_003DqXHBZml_L5GDrHfr6ikIrc_0duLahU4wHtJGJrW7Ey4o_003D
+{
+	public static string _0023_003Dq6MYDOByr77PCAYgTg7C_0024Zg_003D_003D(this string _0023_003Dq9nF0JG2kwez5PtqyEXBCHQ_003D_003D)
+	{
+		return _0023_003Dq9nF0JG2kwez5PtqyEXBCHQ_003D_003D.ToLower(_0023_003DqlfEvrNJFRsktTV9VbTbyJw_003D_003D._0023_003Dqoy33bs7VkUtSKPpiRvAEFA_003D_003D());
+	}
+
+	public static string _0023_003DqWNzk6lS_0024FsPV0TRkS0je0w_003D_003D(this string _0023_003DqSSaAfvcwkqRZNjWfhocqrw_003D_003D)
+	{
+		return _0023_003DqSSaAfvcwkqRZNjWfhocqrw_003D_003D.ToUpper(_0023_003DqlfEvrNJFRsktTV9VbTbyJw_003D_003D._0023_003Dqoy33bs7VkUtSKPpiRvAEFA_003D_003D());
+	}
+}

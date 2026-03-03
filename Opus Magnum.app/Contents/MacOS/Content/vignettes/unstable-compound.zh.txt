@@ -1,0 +1,27 @@
+﻿Anataeus (Shabby): 肯考迪亚，我能问你一个奇怪的问题吗？
+Concordia (Shabby): 如果你非要问，那就问吧。
+Anataeus (Shabby): 你还怀着复仇的念头吗？
+Concordia (Shabby): 当然了。每当我回想起那天发生的事情，我就跟当时一样生气。
+Concordia (Shabby): 科尔文家族毁了我们，还杀了那么多人……为了什么呀？
+Concordia (Shabby): 为了告慰那些逝去的人，我必须要报仇。
+Anataeus (Shabby): 我明白了。
+Concordia (Shabby): 可安纳泰俄斯，你为了什么要陪我走上这条路呢？
+Anataeus (Shabby): 我不知道。我还没怎么想过这个问题……
+Concordia (Shabby): 我们一路走了这么远了，你居然还没想清楚这个问题。
+Anataeus (Shabby): 我想，这是个关乎我是谁的问题。
+Anataeus (Shabby): 如果不去实现我们的目标，那我存在的理由是什么呢？
+Anataeus (Shabby): 我必须把炼金术发挥出来。这是我的目的。
+
+-----------
+
+Anataeus (Shabby): 你看，你觉得这看起来可不可疑？
+Concordia (Shabby): 既然你这么一问，我不禁觉得它有点可疑。
+Anataeus (Shabby): 那如果我没问呢，你看到它会不会觉得它可疑？
+Concordia (Shabby): 可能不会吧。没在现场看到的话很难说。
+Anataeus (Shabby): 我们只有相信尼尔斯知道该如何神不知鬼不觉地放置炸药。
+Concordia (Shabby): 我感觉他以前干过这样的事……
+Anataeus (Shabby): 你确定他知道把东西放哪吗？
+Concordia (Shabby): 这方面克拉拉已经办妥了。她弄来了一张记录着科尔文家全部地产的地图……包括他们的哨所和军械库。
+Anataeus (Shabby): 啊，那就好。
+Concordia (Shabby): 我会很乐意看到周围的家族抢占科尔文的地产的情景。
+Concordia (Shabby): 这就叫做恶有恶报。

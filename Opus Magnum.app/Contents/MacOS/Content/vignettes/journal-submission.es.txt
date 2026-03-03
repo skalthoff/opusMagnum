@@ -1,0 +1,24 @@
+﻿[DO NOT PARSE]
+
+*Instrucciones de Publicacion*
+
+#El _El Diario de Ingeniera Alquímica_ es una colección de rompecabezas creados por usuarios y revisados por Zachtronics. Para publicar un rompecabezas para que sea incluido en _El Diario_, carga tu rompecabezas en Steam Workshop y envía la siguiente información a *zach@zachtronics.com*:
+
+• el hipervínculo a tu rompecabezas en Steam Workshop,
+• una explicación de lo que hace que tu rompecabezas sea interesante,
+• una explicación de lo que imaginas que son los productos de tu rompecabezas, y
+• el nombre que le gustaría adjuntar al rompecabezas, en el formato ""Apellido, N."" (si su nombre completo fuera ""Nombre Apellido"").
+
+#*Reglas de Publicación*
+
+#Al enviar un rompecabezas para ser incluido en el _El Diario de Ingeniera Alquímica_, nos concede permiso total sin limitaciones para modificar y distribuir ese rompecabezas como parte del juego. No recibirá compensación monetaria por su publicación; nuestra consideración de su rompecabezas y atribución de crédito de la manera descrita anteriormente será su única compensación.
+
+Solo se permite publicar rompecabezas que usted ha creado.
+
+Usted acepta regirse por los términos del Acuerdo de Suscriptor de Steam®.
+
+No publique el mismo rompecabezas más de una vez.
+
+#*Consejos para Diseñar Rompecabezas*
+
+#Intente crear algo que sea a la vez interesante y coherente con el entorno y la estética del juego. Por ejemplo, solo porque pueda usar cada tipo de átomo en un solo producto o reactivo no significa que deba hacerlo. Los mejores rompecabezas son entretenidos _y_ están relacionados al mundo del juego.

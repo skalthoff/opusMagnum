@@ -1,0 +1,103 @@
+﻿Concordia: Wenn ich deine Transmutationsmaschine in Aktion sehe, erinnert mich das an das Spiel Sigmars Garten.
+Anataeus: Sigmars was?
+Concordia: Du hast noch nie Sigmars Garten gespielt? Ich hätte gedacht, dass jeder dieses Spiel kennt. Man ordnet die Murmeln in einem besti...
+Anataeus: Murmeln?
+Concordia: Sind das hier keine Murmeln?
+Anataeus: Das sind Repräsentationen von Elementen! Glaskugeln, die für verschiedene Atome stehen.
+Concordia: Kleine Glaskugeln werden gemeinhin als Murmeln bezeichnet.
+Anataeus: So nennen wir sie nicht.
+Concordia: Für alle anderen als ausgebildete Alchemisten sind das Murmeln. So, willst du jetzt wissen, wie man Sigmars Garten spielt, oder nicht?
+Anataeus: Na gut.
+ 
+----- Nach einer gewonnenen Partie.
+ 
+Concordia: Macht Spaß, oder?
+Anataeus: So funktioniert Alchemie doch überhaupt nicht! Die Hauptelemente zum Beisp...
+Concordia: Das ist doch nur ein kleiner Zeitvertreib, Anataeus. Als wir klein waren, haben wir uns immer hier reingeschlichen und es gespielt, wenn der Alchemist nicht da war.
+Anataeus: Was? Ihr habt euch völlig unbeaufsichtigt an der Transmutationsmaschine zu schaffen gemacht?
+Concordia: Wir haben nur mit den Murmeln gespielt, Anataeus. Beruhig dich.
+Anataeus: Das sind keine Murmeln, das sind Repräsentationen der grundlegenden Bausteine des Universums!
+Concordia: Und außerdem sind sie kleine Glaskügelchen. Hier, ich schnips dir mal eine rüber!
+Anataeus: Ah, lass das! Man spielt nicht mit empfindlichen Utensilien.
+Concordia: Sie sind wesentlich erschwinglicher als der Rest deiner Ausrüstung, weißt du? Das sind schließlich nur Murmeln.
+Anataeus: Ich würde es trotzdem begrüßen, wenn du sie nicht wie Spielzeug behandeltest.
+Concordia: Ach, das haben wir jahrelang gemacht. Du kanntest Sigmars Garten wirklich nicht?
+Anataeus: Hatte ich noch nie von gehört. Warum sollte man an der Universität so etwas Belangloses beigebracht bekommen?
+ 
+----- Nach zehn gewonnenen Partien.
+ 
+Concordia: „So etwas Belangloses“ scheint dir aber doch relativ viel Spaß zu machen.
+Anataeus: Vielleicht ein bisschen. Man kann doch einigermaßen strategisch vorgehen ...
+Concordia: Ja, mit ein bisschen Übung und Aufmerksamkeit kann man durchaus öfter gewinnen.
+Anataeus: Und wer war dieser Sigmar? Warum räume ich seinen Garten auf?
+Concordia: Sag du‘s mir.
+Anataeus: Ich? Woher soll ich das wissen?
+Concordia: Weil er ein Alchemist war, vor langer Zeit. Nicht wahr?
+Anataeus: Der Name Sigmar sagt mir überhaupt nichts.
+Concordia: Bist du dir da auch ganz sicher?
+Anataeus: Es ist durchaus möglich, dass er einer dieser apokryphen Volkshelden ist. Mit anderen Worten, er ist fiktiv.
+Concordia: Oder könnte es sein, dass du in deinen Geschichtskursen nicht aufgepasst hast?
+Anataeus: Also, bitte. Ich war ein Musterstudent.
+ 
+----- Nach 25 gewonnenen Partien.
+ 
+Concordia: Du bist mir vielleicht ein Musterstudent! Erst kennst du Sigmars Garten nicht, und jetzt stellt sich heraus, dass du noch nicht einmal von Sigmar gehört hast.
+Anataeus: Du hast mir nicht einmal gesagt, ob er real ist!
+Concordia: Dann mach dich mal in der Bibliothek schlau. Du findest bestimmt etwas Interessantes heraus.
+Anataeus: Das könnte ich wohl tun – Moment mal, hast du mir gerade einen Befehl erteilt?
+Concordia: Für jemanden, der auf Alchemie spezialisiert ist, bist du seltsam widerwillig, wenn es darum geht, mehr über ihre Geschichte zu erfahren.
+Anataeus: Dieses Sachgebiet war an der Universität verpönt ... Es gab eine Handvoll Spezialisten, die sich mit der Geschichte und den Legenden befassten, aber die seriösen Studenten konzentrierten sich auf die moderne Praxis.
+Anataeus: Niemand ist der Ansicht, dass es sich lohnt, in der Vergangenheit zu leben.
+Concordia: So eine Schande. Wenn die Menschen, die keine Alchemisten sind, an Alchemie denken, kommen ihnen die alten Geschichten in den Sinn. Es wäre nicht von Nachteil, sie zumindest zu kennen.
+Anataeus: Ich fürchte, diese alten Geschichten werfen nicht immer ein gutes Licht auf die Alchemie ...
+Concordia: Das ist natürlich von Fall zu Fall verschieden.
+Anataeus: Ich glaube, ich spiele einfach ein bisschen weiter.
+Concordia: Dagegen gibt es absolut nichts einzuwenden.
+ 
+----- Nach 50 gewonnenen Partien.
+ 
+Anataeus: Als du das früher gespielt hast, hatten Van Tassens Alchemisten nie etwas dagegen, dass ein Haufen Kinder das Labor unsicher gemacht hat?
+Concordia: Sie wussten ja nie etwas davon.
+Anataeus: Ihnen müssen doch die Repräsentationen der Elemente aufgefallen sein, die überall herumlagen. Du weißt schon, deine „Murmeln“.
+Concordia: Die Alchemisten der Van Tassens vor deiner Zeit haben selten einen Fuß in das Alchemielabor gesetzt. 
+Anataeus: Das soll wohl ein Scherz sein?
+Concordia: Ganz und gar nicht. Ich glaube, sie haben Alchemie eigentlich verachtet und haben sich selbst mehr als eine Art Berater gesehen. 
+Anataeus: Das ist ja lächerlich.
+Concordia: Sie waren auf ihren eigenen Vorteil bedacht, schmiedeten Allianzen und waren an Intrigen beteiligt, um Rivalen auszustechen ... 
+Anataeus: Meine Dozentin hat mich immer gezielt darauf hingewiesen, derartige Dinge nicht zu tun. 
+Concordia: Ein weiser Rat. Ich kann hinterhältige Menschen nicht ausstehen.
+Anataeus: Sie muss daran gewöhnt sein, dass ihre Ratschläge auf taube Ohren stoßen.
+Concordia: Vermutlich. Ob du es glaubst oder nicht, du bist der erste Alchemist, den ich kenne, der sich tatsächlich mit Alchemie befasst!
+ 
+----- Nach 75 gewonnenen Partien.
+ 
+Anataeus: Wer hat dir das Spiel eigentlich beigebracht?
+Concordia: Mein Vater. Er war auch ein Prokurist, in besseren Zeiten als diesen ...
+Anataeus: Und ich gehe davon aus, dass ihm das Spiel ebenfalls als Kind beigebracht wurde, und so wurde es von Generation zu Generation weitergegeben ... Aber, warum? Welchen Nutzen hat das Bewahren dieses Wissens?
+Concordia: Es ist ganz gut, um sich von seinen Sorgen abzulenken, oder?
+Anataeus: Kann schon sein ...
+Concordia: Genau deshalb habe ich es vorgeschlagen. Ich kann sehen, dass du in letzter Zeit gewaltig unter Stress stehst.
+Anataeus: Das kannst du? Ich ... Mir war nicht bewusst, dass das so leicht zu erkennen ist.
+Concordia: Das war schon ziemlich offensichtlich.
+Anataeus: Ich verstehe ...
+Concordia: In Zeiten wie diesen kann es helfen, sich mit ganz simplen Dingen zu beschäftigen.
+Concordia: Andernfalls schweifen die Gedanken zu größeren und beängstigenderen Dingen ab.
+Anataeus: Ich muss zugeben, dass ich das Spiel irgendwie doch recht entspannend finde.
+Concordia: Es freut mich, das zu hören.
+ 
+----- Nach 100 gewonnenen Partien.
+ 
+Anataeus: Concordia, danke, dass du mir dieses Spiel gezeigt hast. Es gefällt mir wirklich gut.
+Concordia: Gern geschehen, Anataeus! Es freut mich, dass es dir Spaß macht.
+Concordia: Besonders, nachdem du es zunächst als belanglos bezeichnet hast.
+Anataeus: Aber es ist belanglos! Es ist nur ... ziemlich gut darin.
+Concordia: Es ist zur Abwechslung auch mal ganz nett, etwas zu lernen, was nichts mit Alchemie zu tun hat, oder?
+Anataeus: Das kann man so nicht sagen. Dieses kleine Spielchen ist einfach nur eine Ausnahme. 
+Concordia: Du hast bis zum heutigen Tag dein Leben damit verbracht, ein Alchemist zu werden.
+Concordia: Aber nun, da du einer bist, solltest du dich auch anderen Dingen widmen.
+Anataeus: Anderen Dingen?
+Concordia: Ja, es gibt noch andere Dinge im Leben. Dinge, die nichts mit Alchemie zu tun haben.
+Anataeus: Du meinst unnütze Dinge.
+Concordia: In diesen Angelegenheiten musst du mich einfach als deine Lehrmeisterin akzeptieren.
+Anataeus: Ich muss, hm? Klingt so, als würdest du mir keine Wahl lassen.
+Concordia: Da gibt es etwas, was ich sehr an dir mag, Anataeus. Du weißt, wann du keine andere Wahl hast.

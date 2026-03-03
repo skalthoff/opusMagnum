@@ -1,0 +1,21 @@
+Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): Temos um acordo?
+Nils: É uma proposta intrigante.
+Nils: Mas o antigo complexo Van Tassen é muito mais difícil de infiltrar agora que Colvan o ocupa. Os guardas deles são muito mais vigilantes.
+Anataeus (Shabby): Acredite, eu sei. Concordia e eu mal escapamos vivos.
+Nils: Só me coloque lá dentro. Eu cuido do resto.
+Concordia (Shabby): É um pouco mais complicado do que isso.
+Concordia (Shabby): O objeto que precisamos não é algo que você pode carregar nas mãos. É um carregamento.
+Anataeus (Shabby): Especificamente, uma carga de minério de chumbo.
+Nils: Eu... entendo.
+Concordia (Shabby): Eu vou te fornecer uma ordem de permissão, mas ela precisa de um selo. Você precisa encontrar uma ordem real e pegar o selo dela.
+Nils: Certo. E então, assumo que eu deva me fingir de oficial de suprimentos, e simplesmente levar a carga rio abaixo até você.
+Concordia (Shabby): Exato!
+Nils: Isso é um pouco mais... elaborado do que eu pensava.
+Anataeus (Shabby): Do contrário, é das missões mais factíveis que há.
+Anataeus (Shabby): Praticamente um passeio no parque para alguém do seu calibre, não?
+Concordia (Shabby): E não se esqueça, vamos te fornecer com o melhor equipamento que você poderia encontrar.
+Anataeus (Shabby): E para eu fazer o seu ouro, eu preciso do chumbo... é como a alquimia funciona, afinal de contas.
+Nils: Ouro, sim. De fato, eu gostaria de um pouco de ouro.
+Anataeus (Shabby): Consiga isso, e você vai ter mais do que só um pouco. Eu prometo.

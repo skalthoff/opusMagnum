@@ -1,0 +1,15 @@
+﻿Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): ¿Estás seguro de que no te meterás en problemas? ¿Deambulando en la parte fea de la ciudad con un alquimista buscado?
+Clara: Mis padres no lo saben. Paso mucho tiempo en el Observatorio y siempre asumen que estoy allí.
+Clara: No es como si lo comprobaran por sí mismos.
+Anataeus (Shabby): Es una pena que nunca hayas usado el Observatorio de Van Tassen cuando visitaste. Me encargaron arreglarlo justo después.
+Clara: Está bien. Aun así, la pasé muy bien.
+Anataeus (Shabby): ¿Aunque estabas con Frederick?
+Clara: ¿Disculpa? Yo amaba a Frederick.
+Anataeus (Shabby): Tú- ¿qué?
+Clara: Él fue amable conmigo. Quizás el único que lo fue.
+Clara: Fue muy agradable pasar tiempo con él.
+Concordia (Shabby): Es cierto que la bondad es una característica inusual en un heredero de la Casa.
+Clara: Ojalá hubiera podido protegerlo. No merecía el mundo en el que nació.
+Anataeus (Shabby): Ninguno de nosotros lo merecemos.

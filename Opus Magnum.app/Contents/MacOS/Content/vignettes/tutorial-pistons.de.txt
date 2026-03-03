@@ -1,0 +1,12 @@
+﻿Henley: Ein Hydraulikarm ist ein besonderer Arm, der aus- und eingefahren werden kann.
+Anataeus (Student): Und es gibt vermutlich Anweisungen, mit denen sich die Hydraulik steuern lässt?
+Henley: Korrekt. Ich zeig‘s dir mal.
+
+-----------
+
+Anataeus (Student): Ah ja. Mit Hydraulikarmen erreicht man Gegenstände, die für einen normalen Arm zu weit weg sind. 
+Henley: Das macht sie so nützlich! Sie kosten jedoch etwas mehr als konventionelle Arme.
+Anataeus (Student): Und mit der Zurücksetzen-Anweisung kann man einen Arm von seiner aktuellen Position in seine Grundstellung zurücksetzen. Wie praktisch.
+Henley: Vergiss aber nicht, dass die Zurücksetzen-Anweisung genauso viel Zeit in Anspruch nimmt wie die einzelnen Anweisungen, mit denen der Arm in seine Grundstellung zurückgesetzt wird.
+Anataeus (Student): Selbstverständlich. Ist doch logisch.
+Henley: Selbstverständlich.

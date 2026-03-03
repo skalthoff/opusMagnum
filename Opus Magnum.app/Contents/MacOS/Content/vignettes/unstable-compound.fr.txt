@@ -1,0 +1,27 @@
+Anataeus (Shabby): Concordia, puis-je te poser une question un peu étrange ?
+Concordia (Shabby): Si c'est nécessaire.
+Anataeus (Shabby): Est-ce que cette idée de vengeance te motive toujours ?
+Concordia (Shabby): Oui, bien sûr. Quand je repense à ce qui s'est passé, je suis toujours autant en colère que le jour où c'est arrivé.
+Concordia (Shabby): La Maison Colvan a causé notre ruine et tué tant de personnes... et dans quel but ?
+Concordia (Shabby): Je le dois à ceux qui n'auront pas la chance de se voir un jour vengés.
+Anataeus (Shabby): Je comprends.
+Concordia (Shabby): Mais Anataeus, qu'est-ce qui t'a poussé à suivre ce chemin avec moi ?
+Anataeus (Shabby): Je ne sais pas. Je n'y ai pas trop réfléchi...
+Concordia (Shabby): Tu as parcouru un long chemin pour quelqu'un qui ne sait pas ce qui le motive.
+Anataeus (Shabby): J'imagine que ça vient... de ma personnalité.
+Anataeus (Shabby): En dehors de notre mission, quelle raison aurais-je d'exister ?
+Anataeus (Shabby): Je dois pratiquer l'alchimie. C'est mon but.
+
+-----------
+
+Anataeus (Shabby): Voilà. Est-ce que ça te semble suspect ?
+Concordia (Shabby): Maintenant que tu me le demandes, j'ai l'impression que c'est louche, oui.
+Anataeus (Shabby): Mais si tu l'avais vu sans que je te le demande, tu aurais trouvé ça suspect ?
+Concordia (Shabby): Peut-être pas. C'est difficile à dire tant que ce n'est pas en place.
+Anataeus (Shabby): Nous devrons faire confiance à Nils et à ses compétences pour placer une charge explosive sans se faire remarquer.
+Concordia (Shabby): J'ai l'impression que c'est le genre de mission auquel il est habitué...
+Anataeus (Shabby): Et tu es sûre qu'il saura où les placer ?
+Concordia (Shabby): Clara s'est chargée de ça. Elle a réussi à se procurer une carte de toutes les propriétés de la Maison Colvan... y compris les postes de garde et les armureries.
+Anataeus (Shabby): Ah, ça ne m'étonne pas d'elle.
+Concordia (Shabby): J'ai hâte de voir les Maisons voisines se précipiter pour essayer de s'emparer des propriétés des Colvan.
+Concordia (Shabby): C'est tout ce qu'ils méritent.

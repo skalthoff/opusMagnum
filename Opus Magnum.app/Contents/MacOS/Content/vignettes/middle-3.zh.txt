@@ -1,0 +1,21 @@
+Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): 成交不？
+Nils: 你这提议我很感兴趣。
+Nils: 可以前范塔森家的宅院现在被科尔文占了，要想进去可就难多了。他们的守卫警觉性很高的。
+Anataeus (Shabby): 相信我，这我们知道。肯考迪亚和我好不容易才脱的险。 
+Nils: 你们帮我进去。进了里面我就能得手。
+Concordia (Shabby): 没那么简单。
+Concordia (Shabby): 我们要的东西你一个人搬不了。那是一大批货物。
+Anataeus (Shabby): 准确点来说，是一大批铅矿石。
+Nils: 我……明白了。
+Concordia (Shabby): 我会给你一张装货单，可还缺一个印章。你得去找一张真的货单，然后把它的印章拿过来。
+Nils: 没问题。我想接着我就要假装成供需官，把货物顺河而下运过来给你们。
+Concordia (Shabby): 没错！
+Nils: 这比我想像的……异想天开多了。
+Anataeus (Shabby): 恰好相反，这是绝对可行的。
+Anataeus (Shabby): 对你这样的高手来说，这就是小菜一碟，对吧？
+Concordia (Shabby): 还有别忘了，我们会为你提供最精良的装备。
+Anataeus (Shabby): 如果我要给你制作黄金的话，我就需要铅啊……毕竟这就是炼金术的原理。
+Nils: 黄金，没错。我的确想要点黄金。
+Anataeus (Shabby): 拿下这一票，你得到的将不止一点黄金。我向你保证。

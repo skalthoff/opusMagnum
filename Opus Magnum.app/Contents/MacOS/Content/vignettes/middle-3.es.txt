@@ -1,0 +1,21 @@
+﻿Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): ¿Tenemos un trato?
+Nils: Es una propuesta intrigante.
+Nils: Pero el viejo recinto Van Tassen es mucho más difícil de penetrar ahora que los Colvan lo ocupan. Sus guardias son mucho más vigilantes.
+Anataeus (Shabby): Créame, lo sabemos. Concordia y yo apenas escapamos con nuestras vidas.
+Nils: Solo métanme adentro. Yo haré el resto.
+Concordia (Shabby): Es un poco más complicado que eso.
+Concordia (Shabby): El elemento que necesitamos no es algo que pueda llevar en su persona. Es un cargamento.
+Anataeus (Shabby): Específicamente, un cargamento de mineral de plomo.
+Nils: Oh... Ya veo.
+Concordia (Shabby): Le proporcionaré un pedido de envío, pero necesita un sello. Tendrá que encontrar una orden real y quitarle el sello.
+Nils: Está bien. Y luego supongo que me haré pasar por un oficial de transporte y simplemente llevaré el envío por el río hacia ustedes.
+Concordia (Shabby): ¡Exactamente!
+Nils: Eso es un poco más... complejo de lo que esperaba.
+Anataeus (Shabby): Por el contrario, es lo simple que hay.
+Anataeus (Shabby): Prácticamente un paseo por el parque para alguien de su calibre, ¿verdad?
+Concordia (Shabby): Y no olvide que le proporcionaremos el mejor equipamiento que hay.
+Anataeus (Shabby): Si debo hacerle este oro, necesitaré el plomo... así es como funciona la alquimia, después de todo.
+Nils: Oro, sí. Me gustaría un poco de oro.
+Anataeus (Shabby): Haga esto, y tendrá más que un poco. Le prometo.

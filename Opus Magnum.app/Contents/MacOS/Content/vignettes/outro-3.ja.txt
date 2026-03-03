@@ -1,0 +1,17 @@
+﻿Portraits: Anataeus (Shabby), Nils (Cloak), Concordia (Shabby)
+
+Nils (Cloak): そろそろ●行くと●しようか。
+Concordia (Shabby): 幸運を●祈ってるわ、●ニルス！
+Nils (Cloak): 俺が●成功すれば、●鉛鉱石を●乗せた●「はしけ」が●川を●流れてくるから●分かるだろう。
+Nils (Cloak): そのあとで、●俺の●取り分の●黄金を●届けるべき●場所の●指示を送るよ。
+Concordia (Shabby): あなたは●ここに●戻って●こないの？
+Nils (Cloak): ああ、●ここに●留まる訳には●いかない。
+Anataeus (Shabby): じゃあ、●やっと●我々を●信用して●くれたんだな。
+Nils (Cloak): まったく●おかしな●話さ。
+Nils (Cloak): この無人の●店に●人が●隠れているのを●見つけた時、●俺は●最初、●二人の●寝込みを●襲って●所持品を●売り飛ばしてやろうと●思ってたんだ。 
+Concordia (Shabby): まあ……そんなことに●ならなくて●良かったわ。
+Nils (Cloak): 冗談さ。あんたたちの●二流品の●服を●売ったって●大した●金には●ならないよ。
+Anataeus (Shabby): 感動的だね。
+Concordia (Shabby): これ以上●感動的な●物語なんて●書けないでしょうね。
+Anataeus (Shabby): ニルス、●無事を●祈ってるよ。僕たちは●しばらくは●ここに●とどまっている。●もし●会いに●きたいならね。
+Nils (Cloak): いずれ●また●会うことに●なるだろうさ。

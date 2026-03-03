@@ -1,0 +1,6 @@
+using System.Collections.Generic;
+
+public sealed class _0023_003DqKYuJGbytUkf2YwXktoGt8Qeu8xEFMb_0024tRFW8xyxKZjk_003D
+{
+	public SortedDictionary<int, _0023_003DquBkTOLR2k76qHn6i8uQcr9MfeXYDMJh_x5p9KuT6dkc_003D> _0023_003Dq9buXmtGFAtljeTx2qFiqDg_003D_003D = new SortedDictionary<int, _0023_003DquBkTOLR2k76qHn6i8uQcr9MfeXYDMJh_x5p9KuT6dkc_003D>();
+}

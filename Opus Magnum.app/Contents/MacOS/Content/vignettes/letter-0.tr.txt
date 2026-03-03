@@ -1,0 +1,10 @@
+﻿[DO NOT PARSE]
+
+Dönüşüm Laboratuvarı Kuralları:
+#Erişim sadece mezun seviyesindeki simya mühendisliği öğrencileri ve öğretim üyeleri ile sınırlıdır!
+#(Herhangi bir istisna Şansölye tarafından onaylanmalıdır)
+#Laboratuardayken Öğrenci Simyacı İzninizi ve Mühürü'nüzü yanınızda bulundurun.
+#Laboratuarda yiyecek ve içecek bulundurulmamalıdır.
+#Dönüşüm motorlarına veya ilgili bileşenlerine yaslanmayın veya dayanmayın.
+#Lütfen alanı herkes için temiz tutun.
+#Seni kastediyor Anataeus!

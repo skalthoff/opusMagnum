@@ -1,0 +1,19 @@
+﻿Concordia (Shabby): ¿Es eso un vaso con agua del río?
+Anataeus (Shabby): ¿Cómo adivinaste?
+Concordia (Shabby): Ese hermoso color gris lo conozco. No ibas a beberlo, ¿verdad?
+Anataeus (Shabby): Vamos a necesitar agua si queremos permanecer aquí por el momento...
+Concordia (Shabby): Sé que nunca antes has estado en esta parte de la ciudad, pero, en serio. Mira eso.
+Anataeus (Shabby): Bueno, entonces lo arreglaré.
+
+-----------
+
+Anataeus (Shabby): Listo. ¿Te apetece un sorbo?
+Concordia (Shabby): ¿Por qué el gran alquimista no prueba su propio trabajo?
+Anataeus (Shabby): Porque estoy seguro de mi trabajo.
+Concordia (Shabby): ¡Qué coincidencia! Yo también estoy segura de tu trabajo.
+Anataeus (Shabby): No eres nada divertida. Bueno, aquí voy...
+Concordia (Shabby): ¿Y bien?
+Anataeus (Shabby): ¡Está bien! Agua. Un poco... agria.
+Concordia (Shabby): Agria.
+Anataeus (Shabby): Un poco amarga, también.
+Anataeus (Shabby): Tendremos que vivir con eso por ahora. Voy a volver al trabajo.

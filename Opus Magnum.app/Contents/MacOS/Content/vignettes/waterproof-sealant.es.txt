@@ -1,0 +1,17 @@
+﻿Anataeus: ¿Sabes mucho sobre barcos, Concordia?
+Concordia: Nuestra flota mercante entrega mercancías desde el extranjero aproximadamente una vez al mes. ¿Por qué?
+Anataeus: El capitán Gelt me dijo que solían tener algún tipo de sustancia que se ponen en los cascos para que no se pudran.
+Concordia: No sé nada al respecto. ¿Has estado alguna vez en un barco?
+Anataeus: No, nunca. ¿Tú?
+Concordia: No, en absoluto. ¡Suena horrible! Ser zamarreado por el océano, luego ser devorado por monstruos marinos.
+Anataeus: No estoy seguro de que todos los viajes por mar sean así.
+Concordia: Muchos lo son.
+
+-----------
+
+Anataeus: Con este sellador, la flota pronto debería estar lista para zarpar de nuevo y regresar con... lo que sea que traiga.
+Concordia: Están cargados con todo tipo de cosas. Tela, cerámica, minerales, hierbas raras... piedras extrañas.
+Concordia: A veces incluso animales.
+Anataeus: Suena como un buen negocio.
+Concordia: No estoy segura. Esos contratos fueron firmados hace siglos.
+Concordia: Dudo que incluso Armand sepa los detalles.

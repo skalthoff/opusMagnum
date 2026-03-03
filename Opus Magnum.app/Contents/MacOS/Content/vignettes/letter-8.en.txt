@@ -1,0 +1,7 @@
+﻿[DO NOT PARSE]
+
+Warning!
+
+The experiments described in the _Journal of Alchemical Engineering_ are advanced research projects conducted by prominent alchemists at the University.
+
+We advise completing the first few chapters of the _Opus Magnum_ campaign before attempting to replicate them.

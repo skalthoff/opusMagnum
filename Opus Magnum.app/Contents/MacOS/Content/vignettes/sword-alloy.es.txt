@@ -1,0 +1,17 @@
+﻿Anataeus (Shabby): ¡Finalmente, algo que hace un alquimista moderno!
+Concordia (Shabby): ¿De verdad crees que Taros notará la calidad de tu espada?
+Clara: Deberías ver la que nuestro alquimista hizo para mi hermano.
+Clara: Está prácticamente floja.
+Concordia (Shabby): ¿En serio? Habría pensado que la casa Soria haría un mejor trabajo.
+Clara: Un sorprendente número de nuestros "tesoros" son restos de nuestros días pasados, cuando solo pretendíamos ser una casa importante.
+Concordia (Shabby): Ahora que realmente son una, merecen algo mejor.
+
+-----------
+
+Anataeus (Shabby): Es una pena que nunca haya podido hacer esto para la Casa Van Tassen. Me atrevo a decir que habría hecho muy buen trabajo.
+Concordia (Shabby): Si todo hubiera salido como Armand lo deseaba, estarías haciendo una espada para Clara de todos modos.
+Anataeus (Shabby): Eso es cierto. No había pensado en eso.
+Clara: Es una extraña consideración, habernos conocido en circunstancias muy diferentes.
+Anataeus (Shabby): Podría haber asumido que no eras más que otra heredera frustrada.
+Clara: Y yo habría pensado que eras otro alquimista engreído.
+Concordia (Shabby): ... no hubieras estado tan lejos.

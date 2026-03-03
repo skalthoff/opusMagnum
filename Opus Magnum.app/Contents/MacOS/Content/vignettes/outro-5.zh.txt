@@ -1,0 +1,34 @@
+Portraits: Verrin Ravari (Shabby), Anataeus (Shabby)
+
+Verrin Ravari (Shabby): 意外吧！我找到你了。像只耗子一样躲在这间破茅屋里。
+Verrin Ravari (Shabby): 你这个炼金术士的败类。别以为我不知道你的阴谋，我还知道你所有同伙的名字。
+Anataeus (Shabby): ……
+Verrin Ravari (Shabby): 我得承认——这真是个巧妙的计划。舞会上的每个人都惊呆了。
+Verrin Ravari (Shabby): 然后索里亚小姐带着一脸疑惑的神情，瞪大着双眼说：“我的唇膏？怎么会这样，那是科尔文家的炼金术士给我的礼物……”
+Verrin Ravari (Shabby): 幸好，科尔文家的守卫都不是我的对手。待会等我提着你的脑袋回去的时候，我会跟他们解释清楚的。
+Anataeus (Shabby): ……
+Verrin Ravari (Shabby): 有趣的是，塔洛斯·科尔文遇刺和他的家族崩塌跟我都没关系。
+Verrin Ravari (Shabby): 塔洛斯是个蠢货，轻易相信荣华富贵的承诺，他不配支配他的家族。
+Verrin Ravari (Shabby): 事实上，进攻范塔森家族全是我一个人的主意。是我把思想灌输进了他那容易受影响的脑子。
+Verrin Ravari (Shabby): 我为什么要这样做？
+Verrin Ravari (Shabby): 我来问你一个问题吧。想像一下，如果不是你来为范塔森家卖命，而是他们反过来为你卖命，会怎么样。
+Verrin Ravari (Shabby): 如果由你来做主，凭借你高超的学识和技艺，你早就打赢那场战争了不是吗？你早就已经得偿所愿了不是吗？
+Verrin Ravari (Shabby): 那你为什么不这样做呢？
+Anataeus (Shabby): ……
+Verrin Ravari (Shabby): 经过几个世纪的衰颓，各大名门早已懦弱不堪。他们已经不配拥有他们如今的地位。
+Verrin Ravari (Shabby): 可我们配得上——我们可以把这一切从他们手上夺过来！
+Verrin Ravari (Shabby): 等我洗脱你强加在我身上的暗杀罪名之后，我将轻而易举地主宰科尔文家族。
+Verrin Ravari (Shabby): 当然了，爆炸造成的损害也会得到修复……
+Verrin Ravari (Shabby): 我是个大度的人。我可以把范塔森家族剩余的家当给你。
+Verrin Ravari (Shabby): 然后我们再把其他几大家族灭了，你我平分天下……
+Verrin Ravari (Shabby): 你觉得如何？我会……我会……你怎么了？
+Verrin Ravari (Shabby): 你怎么一句话也不说？
+Action: Change, Anataeus (Shabby), Mannequin
+Mannequin: ……
+Verrin Ravari (Shabby): 这……是……不！
+Verrin Ravari (Shabby): 你！不！
+Verrin Ravari (Shabby): 你不该在这里的！你早就不在了。
+Verrin Ravari (Shabby): 我明白了。哈……
+Verrin Ravari (Shabby): 好啊，安纳泰俄斯。好啊，你厉害。
+Verrin Ravari (Shabby): 哈哈哈……啊。
+Verrin Ravari (Shabby): 我的计划……我的抱负……

@@ -1,0 +1,15 @@
+﻿Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): 이렇게 누추한 곳에, 그것도 떠돌이 연금술사의 소굴에 찾아오시다니, 이걸로 혹시 큰일 나지 않겠습니까?
+Clara: 부모님은 모르고 계십니다. 분명 제가 늘 그랬듯이 천문대에 있는 줄 알고 계시겠죠. 
+Clara: 아마 확인조차 안 해 보실 겁니다.
+Anataeus (Shabby): 반 타쎈 가문의 천문대를 사용해보지 못하신 게 유감입니다. 돌아간 직후에 제가 고치는 일을 맡았거든요.
+Clara: 괜찮습니다. 그래도 즐거웠거든요.
+Anataeus (Shabby): 프레드릭이랑 있었는데도요?
+Clara: 실례합니다만? 전 그이를 사랑했다고요.
+Anataeus (Shabby): 그이를— 뭐?
+Clara: 프레드릭은 저한테 친절하게 대해 주었습니다. 어쩌면 제 인생 유일하게 친절했던 사람이었는지도.
+Clara: 그이와 같이 있기만 해도 좋았는데.
+Concordia (Shabby): 가문 후계자에게서 친절함이란 건 찾아보기 힘든 건 사실이죠.
+Clara: 그를 지켜 줄 수 있었다면 좋았을 텐데. 이 세상은 그에게 너무 가혹했습니다.
+Anataeus (Shabby): 우리 모두에게 힘든 세상이지요.

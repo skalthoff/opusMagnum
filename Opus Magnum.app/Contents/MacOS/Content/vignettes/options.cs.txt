@@ -1,0 +1,20 @@
+﻿Anataeus: Koneckonců tohle nastavení je celkem použitelné.
+
+-----------
+
+Concordia: Nebuďme příliš puntičkářští.
+Anataeus: Pracovat pohodlně je důležité.
+Concordia: Pohodlně? Toje zajímavé. Vždycky jsem si myslela, že alchynisti rádi pracují v temných jeskyních, osvětlených loučemi...
+Anataeus: Právě naopak. Jak jsi na to přišla?
+Concordia: ... nebo v nejvyšším patře věže na nějakém opuštěném místě...
+Anataeus: Zadrž. Máš na mysli _mágy_?
+Concordia: Ach, ano, to jsem měla na mysli! Alchymisti a mágové jsou si dost podobní, nemyslíš?
+Anataeus: To snad jen žertuješ, že? Alchymie je věda. Mágové vlastně neexistují! Jak je můžeš srovnávat?
+Concordia: Neříkej mi, že jsi nikdy nepovažoval to, co děláš, za určitý druh magie!
+Anataeus: V žádném případě. Alchymie je exaktni disciplína, založená na staletích pečlivých experimentů a teorií...
+Concordia: Zřejmě je to také velmi zatuchlá disciplína.
+Anataeus: Snažil jsem se ti to jen vysvětlit. Alchymie rozhodně není magie.
+Concordia: Já tomu rozumím, ano, chápu to. Nemohl bys teď pronést nějaké zaklínání?
+Anataeus: Děláš si ze mě legraci.
+Concordia: Určitě bys mohl něco vyčarovat.
+Anataeus: Prosím tě, nech toho.

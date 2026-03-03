@@ -1,0 +1,24 @@
+﻿[DO NOT PARSE]
+
+*Gönderme Talimatları*
+
+_Simya Mühendisliği Dergisi_ Zachtronics küratörlüğünde kullanıcı tarafından oluşturulan bulmacalar topluluğudur. Bir bulmacayı _Dergi_'ye dahil edilmek üzere göndermek için öncelikle Steam Atölyesi'ne yükleyin ve *zach@zachtronics.com* adresine aşağıdaki bilgilerle birlikte gönderin:
+ 
+• Steam Atölyesi'ndeki bulmacanın bağlantısı,
+• bulmacanızı ilginç kılan şeyin açıklaması,
+• bulmacanızın tamsil ettiği hayali ürün(ler)e dair bir açıklama ve
+• bulmacanın içine eklemek istediğiniz isim, ""Soyisim, İ."" (tam adınız ""İsim Soyisim"" ise).
+
+#*Gönderi Kuralları*
+
+#_Simya Mühendisliği Dergisi_ dahil edilmek üzere bir bulmaca göndererek, bu bulmacayı oyunun bir parçası olarak değiştirmek ve dağıtmamız için herhangi bir sınırlama olmaksızın bize tam izin veriyorsunuz. Gönderiniz için parasal bir ödeme almayacaksınız; bulmacanızı sizinle ilişkilendirerek yukarıda açıklanan şekilde değerlendirmemiz tek karşılığı olacaktır.
+
+Yalnızca kendi oluşturduğunuz bulmacaları gönderebilirsiniz.
+
+Steam® Abone Sözleşmesi şartlarına tabi olmayı kabul edersiniz.
+
+Aynı bulmacayı bir kereden fazla göndermeyin.
+
+#*Bulmaca Tasarım İpuçları*
+
+#Oyun ortamı ve estetiği ile tutarlı benzersiz ve ilginç bir şey yaratmayı hedefleyin. Örneğin, her tür atomu tek bir üründe veya reaktifte kullanabilmeniz, yapmanız gerektiği anlamına gelmez. En iyi bulmaca kendince ilgi çekici _ve_ oyun dünyası ile alakalı olanlardır.

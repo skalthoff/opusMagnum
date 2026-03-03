@@ -1,0 +1,34 @@
+Portraits: Verrin Ravari (Shabby), Anataeus (Shabby)
+
+Verrin Ravari (Shabby): Sürpriz! Seni buldum. Sıçan gibi bu çürüyen kulede saklanıyorsun.
+Verrin Ravari (Shabby): Bir simyacının piçisin. Planının her bölümünü ve tüm katılanların adlarını bilmediğimi düşünme.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Kabul etmeliyim - bu iyi bir plandı. Balodaki herkes oldukça şok oldu.
+Verrin Ravari (Shabby): Ve sonra Bayan Soria’nın şaşkın bakışı, en büyük gözleri: “Rujum? Niçin, Colvan simyacısının armağanıydı...”
+Verrin Ravari (Shabby): Neyse ki, Colvan Sarayı'nın gardiyanları benim için çocuk oyuncağı. Beyninizin yanması bitince, hepsini daha sonra açıklayacağım.
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Komik olan şey, Taros Colvan'a suikast ve Sarayı'nın yıkılması benim için neredeyse hiç önemli değil.
+Verrin Ravari (Shabby): Taros, zenginlik ve zenginlik vaatleriyle kolayca kandırılan bir salaktı ve Sarayı onun elinde olmayı hak etmedi.
+Verrin Ravari (Shabby): Aslında, Van Tassen Sarayı'na yapılan saldırı tamamen benim fikrimdi. Ben sadece tohumunu etkilenebilir zihnine diktim.
+Verrin Ravari (Shabby): Peki neden yaptım?
+Verrin Ravari (Shabby): Sana karşılığında bir soru sorayım. Van Tassens'ın tam tersi şekilde senin için çalıştığını düşün.
+Verrin Ravari (Shabby): Eğer sorumlu sen olsaydın, bu savaşı üstün bilgin ve taktiklerinle kazanmaz mıydın? İstediğin şeye sahip olmaz mıydın?
+Verrin Ravari (Shabby): Öyleyse neden kazanamadın?
+Anataeus (Shabby): ...
+Verrin Ravari (Shabby): Yüzyıllar süren çöküşten sonra Saraylar zayıflar. Sahip olduklarını hak etmiyorlar.
+Verrin Ravari (Shabby): Ama biz hak ediyoruz - onlardan alabileceğimiz gerçeğiyle!
+Verrin Ravari (Shabby): Bana yüklemeye çalıştığınız suikastten kurtulduktan sonra Colvan Sarayı'nı kolayca yöneteceğim.
+Verrin Ravari (Shabby): Patlamalardan kaynaklanan hasarın da elbette onarılması gerekecek…
+Verrin Ravari (Shabby): Ben cömertim. Van Tassen Sarayı'nın kalıntılarını alabilirsin.
+Verrin Ravari (Shabby): Öyleyse, Saraylar'ı aldıkça, aramızdaki Saraylar'ı aramızdaki eşit bölebiliriz...
+Verrin Ravari (Shabby): Ne düşünüyorsun? Ben… ben… senin sorunun ne?
+Verrin Ravari (Shabby): Neden bir şey söylemiyorsun?
+Action: Change, Anataeus (Shabby), Mannequin
+Mannequin: ...
+Verrin Ravari: Peki... bu... hayır!
+Verrin Ravari (Shabby): Sen! Hayır!
+Verrin Ravari (Shabby): Burada bile değilsin! Çoktan gittin.
+Verrin Ravari (Shabby): Anlıyorum. Ha...
+Verrin Ravari (Shabby): Güzeldi, Anataeus. Güzeldi, evet.
+Verrin Ravari (Shabby): Ha, ha, ha ... aaaaaah.
+Verrin Ravari (Shabby): Planlarım... opus magnumum...

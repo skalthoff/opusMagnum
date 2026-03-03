@@ -1,0 +1,10 @@
+Henley: In some cases, you’ll want an arm to rotate what it’s gripping—
+Anataeus (Student): You mean, as opposed to the arm itself rotating.
+Henley: That’s right. In those cases, you’ll use pivot instructions.
+
+-----------
+
+Anataeus (Student): All very straightforward and simple.
+Henley: How nice that this is so easy for you.
+Anataeus (Student): Why, how long did it take _you_ to learn all this?
+Henley: Let’s just keep going.

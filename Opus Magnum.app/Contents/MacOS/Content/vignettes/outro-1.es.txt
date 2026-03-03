@@ -1,0 +1,23 @@
+﻿Portraits: Anataeus, Concordia
+
+Concordia: Ahí fue cuando decidí que necesitábamos volver a hacer un inventario de todo el edificio. ¡Deberías haber visto la mirada en la cara de Armand!
+Anataeus: Mm...
+Concordia: Anataeus, ¿estás prestando atención?
+Anataeus: ¿Hm?
+Concordia: Eso responde mi pregunta.
+Anataeus: ¿Qué?
+Concordia: Estás abatido.
+Anataeus: _No_ estoy abatido. Estoy meramente... desanimado.
+Concordia: ¿Y qué ha desanimado al gran alquimista de la Casa Van Tassen?
+Anataeus: Nada. Quiero decir, estoy pensando por qué estoy aquí.
+Concordia: Estás aquí porque eres nuestro Alquimista.
+Anataeus: Me refiero en un sentido más amplio...
+Action: Enter, Captain Gelt
+Captain Gelt: El alquimista está aquí, ¿no es así?
+Anataeus: Capitán Gelt, ¿qué puedo hacer por usted?
+Captain Gelt: Se requiere su presencia en la sala principal. Es una cuestión de urgencia.
+Concordia: ¿Qué pasó?
+Captain Gelt: Una maniobra agresiva de otra Casa nos ha tomado por sorpresa... necesitamos responder de inmediato.
+Anataeus: Mi alquimia está a su disposición.
+Concordia: Casi suenas emocionado.
+Anataeus: ¡Lo estoy! ¡Finalmente, algo interesante está sucediendo!

@@ -1,0 +1,10 @@
+﻿Anataeus (Student): ¿Qué sigue?
+Henley: A continuación, tenemos carriles, que son como caminos que puedes colocar en el tablero. Es más fácil mostrarte...
+
+-----------
+
+Anataeus (Student): Ya veo. Cuando colocas un brazo en un carril, el brazo puede avanzar o retroceder a lo largo del camino.
+Henley: Los carriles pueden ser bastante poderosas, pero todavía estoy aprendiendo cómo usarlas de manera efectiva en mis diseños.
+Anataeus (Student): ¿Podrías poner múltiples brazos en un solo carril?
+Henley: Creo que sí. Nunca intenté eso...
+Anataeus (Student): Tendré que experimentar más tarde.

@@ -1,0 +1,24 @@
+Portraits: Anataeus (Shabby), Concordia (Shabby)
+
+Concordia (Shabby): Si seulement nous étions retournés là-bas...
+Anataeus (Shabby): Nous n'avions pas d'autre choix.
+Concordia (Shabby): Mais j'aurais tellement voulu que ce soit le cas ! Si au moins Frederick avait survécu, il y aurait eu un espoir de sauver la lignée des Van Tassen.
+Anataeus (Shabby): Maintenant, il est trop tard. Nous devrions plutôt penser à la suite des événements.
+Concordia (Shabby): Il n'y a pas de suite ! Tu ne comprends donc pas ? Personne ne prendra le risque de traiter avec nous. Nous passerons le reste de nos misérables vies à nous cacher.
+Concordia (Shabby): J'aurais dû y retourner et mourir avec eux.
+Anataeus (Shabby): Concordia...
+Concordia (Shabby): Tu n'es pas en colère ?
+Anataeus (Shabby): En colère ? Je... Je ne sais pas. Je ne suis pas sûr que nous méritions autre chose après la façon dont nous... dont j'ai mal défendu la Maison.
+Anataeus (Shabby): Ma carrière d'alchimiste est détruite.
+Anataeus (Shabby): Tous ces efforts réduits à néant ! Ce serait peut-être mieux de tout oublier...
+Concordia (Shabby): Écoute, Anataeus. Fais ce que tu veux, mais la prochaine étape pour moi, c'est la vengeance.
+Concordia (Shabby): J'ignore comment je vais y arriver, mais c'est la seule chose qui compte pour moi désormais.
+Anataeus (Shabby): Est-ce une de ces « traditions des Maisons » ? L'honneur, la trahison, les promesses de vengeance ?
+Concordia (Shabby): Non. Il s'agit de mon désir de planter une dague dans le cœur de ces détestables Colvan.
+Concordia (Shabby): Comment peuvent-ils être aussi cruels ?
+Anataeus (Shabby): Concordia...
+Concordia (Shabby): Je vais sortir. Je sais que c'est dangereux, mais j'ai besoin de marcher.
+Anataeus (Shabby): Attends, Concordia.
+Concordia (Shabby): Quoi ?
+Anataeus (Shabby): J'allais juste dire... que... euh, quoi que nous décidions, nous aurons d'abord besoin de provisions pour le moteur de transmutation.
+Anataeus (Shabby): Je viens avec toi.

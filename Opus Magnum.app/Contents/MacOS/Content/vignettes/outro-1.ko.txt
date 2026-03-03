@@ -1,0 +1,23 @@
+﻿Portraits: Anataeus, Concordia
+
+Concordia: 그떄 건물의 모든 것에 대해 목록을 새로 작성해야겠다고 마음먹었어. 그때 네가 아르망드 씨의 얼굴을 봤어야 하는데!
+Anataeus: 음...
+Concordia: 아나테우스, 집중하고 있어?
+Anataeus: 흠?
+Concordia: 그게 답변이라 이거지.
+Anataeus: 뭐?
+Concordia: 뭘 멍때리고 있는거야.
+Anataeus: 난 멍때린게 _아니야._ 난 그... 낙담한 것에 가깝지.
+Concordia: 그럼 반 타쎈 가문의 훌륭한 연금술사께서 무엇 때문에 그렇게 낙담하셨을까?
+Anataeus: 아무것도. 그러니까, 내가 왜 여기있는지 생각하고 있었어.
+Concordia: 우리 가문의 연금술사니까 여기 있겠지?
+Anataeus: 좀 더 큰 그림의 의미에서 말한건데...
+Action: Enter, Captain Gelt
+Captain Gelt: 연금술사가 여기 있지 않나?
+Anataeus: 겔트 장군님, 무엇을 도와드릴까요?
+Captain Gelt: 중앙 홀로 가게. 긴급한 일이 있네.
+Concordia: 무엇이 일어난거죠?
+Captain Gelt: 다른 가문이 깜짝 선물로 무장한 병사들을 보내왔네... 즉시 응대해줘야겠지.
+Anataeus: 제 연금술은 당신의 것입니다.
+Concordia: 너 신나 보이는데.
+Anataeus: 맞아. 드디어! 중요한 일을 맡을 수 있게 되었어!

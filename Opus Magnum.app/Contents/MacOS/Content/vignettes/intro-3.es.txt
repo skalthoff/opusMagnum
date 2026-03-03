@@ -1,0 +1,24 @@
+﻿Portraits: Anataeus (Shabby), Concordia (Shabby)
+
+Concordia (Shabby): Ojalá hubiéramos vuelto...
+Anataeus (Shabby): Estaba claro que no teníamos otra opción.
+Concordia (Shabby): ¡Cómo me hubiera gustado haberlo hecho! Si al menos Frederick hubiera sobrevivido, habría alguna pequeña esperanza de que el legado Van Tassen pudiera continuar.
+Anataeus (Shabby): Es demasiado tarde para eso. Deberíamos estar pensando en qué hacer ahora.
+Concordia (Shabby): ¡No hay nada para hacer! ¿No entiendes? Nadie querrá arriesgarse a trabajar con nosotros. Viviremos el resto de nuestras miserables vidas en la clandestinidad.
+Concordia (Shabby): Debería haber vuelto y morir con ellos.
+Anataeus (Shabby): Concordia...
+Concordia (Shabby): ¿No estás enojado también?
+Anataeus (Shabby): ¿Enojado? Yo... no lo sé. No estoy seguro de que merezcamos nada más después de lo mal que nosotros- de lo mal que yo defendí a la Casa.
+Anataeus (Shabby): Mi carrera como alquimista está en ruinas.
+Anataeus (Shabby): ¡Qué inútil profesión ha resultado ser! Tal vez sería mejor olvidarlo todo...
+Concordia (Shabby): Escucha, Anataeus. Haz lo que quieras, pero sé que el único próximo paso para mí es la venganza.
+Concordia (Shabby): Todavía no sé cómo lo lograré, pero ese es el propósito de mi vida ahora.
+Anataeus (Shabby): ¿Es esa otra de las “costumbres de las Casas”? ¿Honor, traición, jurar venganza?
+Concordia (Shabby): No. Se trata de querer poner una daga en el corazón de esos desgraciados de Colvan.
+Concordia (Shabby): ¿Cómo podrían ser tan despiadados?
+Anataeus (Shabby): Concordia...
+Concordia (Shabby): Voy a salir. Sé que es peligroso, pero necesito dar un paseo muy largo.
+Anataeus (Shabby): Espera, Concordia.
+Concordia (Shabby): ¿Qué?
+Anataeus (Shabby): Sólo iba a decir... que... bueno, sea lo que sea que decidamos hacer, necesitaremos provisiones para el motor de transmutación.
+Anataeus (Shabby): Iré contigo.

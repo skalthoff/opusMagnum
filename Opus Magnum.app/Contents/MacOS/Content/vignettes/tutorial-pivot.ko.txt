@@ -1,0 +1,10 @@
+﻿Henley: 어쩔땐, 팔이 잡고있는 것을 회전시키고 싶을 때도—
+Anataeus (Student): 팔 자체를 회전 시키는거 말고 말이야.
+Henley: 맞아. 이런 경우에는 축 회전 명령을 사용해야 해.
+
+-----------
+
+Anataeus (Student): 모두 직관적이고 간단하네.
+Henley: 너에겐 다 쉽겠지.
+Anataeus (Student): 왜, _너_는 이거 배우는 데 얼마나 걸렸는데?
+Henley: 다음으로 넘어가자.

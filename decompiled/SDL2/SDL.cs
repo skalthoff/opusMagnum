@@ -1,0 +1,3380 @@
+using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
+namespace SDL2;
+
+public static class SDL
+{
+	public struct _0023_003Dq_00246IiyynVXTFuPsycXh4pARu0YQZXMIiNvz0iqozAok0_003D
+	{
+		[StructLayout(LayoutKind.Sequential, Size = 64)]
+		[UnsafeValueType]
+		public struct _0023_003DqpgEMbWyjvpYY2simrZ4hERUa2VpwZ50MOaf3j90VV_0024uZ5lzuT8ShMIvvEomyYwP4
+		{
+			public uint _0023_003DqnN7pZLUtp37pVPaC7kDHD_gZfQIszJ80RwoxGJHaCd8_003D;
+		}
+
+		public IntPtr _0023_003DqRf7wL8Y_0024P35HIhHHmLFPoA_003D_003D;
+
+		public uint _0023_003DqFTPWLFxdtZrmmKnl3xrCWQ_003D_003D;
+
+		public uint _0023_003DqFrr_0024hG0YVXJVpzpifIk2B1WtyBJbYGx0HBWjXnOhP_0024Q_003D;
+
+		public unsafe fixed uint _0023_003DqLeMcs58L0hsTcx8h8BLbkENjxywORVbCque4vo9Hjsk_003D[16];
+
+		public int _0023_003DqemAN_0024hDpGidwN41jXygaTEIOHeXUCTpld0cfKNr_52U_003D;
+
+		public int _0023_003DqxE_0024czi85FJbSUPPpvvFB_yJYmGeC_0024C0zQSPH0pb24SE_003D;
+	}
+
+	public struct _0023_003Dq_0024ySAPqi8moYv7KbheORgABXsHTgIUqVDP_PquqVLBxk_003D
+	{
+		[StructLayout(LayoutKind.Sequential, Size = 6)]
+		[UnsafeValueType]
+		public struct _0023_003Dq8cLFdXCiitua1FYnLTiWK2XIarO13jfrLRKvv4hJ9vg_003D
+		{
+			public short _0023_003Dq5X9mb2o7yBGd_0024MdC7jNuV67bvAyESvN44kpdXPg59FQ_003D;
+		}
+
+		[StructLayout(LayoutKind.Sequential, Size = 6)]
+		[UnsafeValueType]
+		public struct _0023_003DqHW_00241cxA03q84P14NyV4Nq1HQ9qy_0024HsdJ_00242Zyhn2yZi8_003D
+		{
+			public ushort _0023_003DqhmWY9_002469kmhpkrGJrlwm8Qa_C9Es5XymxQCoCYVsu88_003D;
+		}
+
+		[StructLayout(LayoutKind.Sequential, Size = 6)]
+		[UnsafeValueType]
+		public struct _0023_003DqkdKkkz3mrUZiJ0PR_0024UvyeZctrBuI49A_1pGOLYNTdBA_003D
+		{
+			public ushort _0023_003DqNzxNoIIjSboYPqo_2LZ16Iai51jD6tyFXNcg1WqyAvQ_003D;
+		}
+
+		[StructLayout(LayoutKind.Sequential, Size = 6)]
+		[UnsafeValueType]
+		public struct _0023_003DqKUQR5bL20_0024_SPkdPRjeqM1xrlW0Q8G6kxWB0sXJ_uds_003D
+		{
+			public short _0023_003DquKzgXyVArNc3aYvKqtK5Gtw6iplCgv_vdEUAsGVy5i4_003D;
+		}
+
+		[StructLayout(LayoutKind.Sequential, Size = 6)]
+		[UnsafeValueType]
+		public struct _0023_003DqZcW_UYVZPhJypudE5dXSV1Vsl53PMSDAHbkBJTAC6Sc_003D
+		{
+			public ushort _0023_003Dq82P8y7KqgAdTUiczKDh7AdwI8KprKG4gvuOxV9ExbY8_003D;
+		}
+
+		[StructLayout(LayoutKind.Sequential, Size = 6)]
+		[UnsafeValueType]
+		public struct _0023_003DqZt1XmKZgL2aTJSnJg2JGugpC82caktXASQHVV6U58CM_003D
+		{
+			public short _0023_003DqmrJ9WCkd1PgImbK2zlxGLjT4gkh_0024qTw6v3769YoG7LA_003D;
+		}
+
+		public ushort _0023_003DqUGprJmr9fkclUcXJCAhuDQ_003D_003D;
+
+		public _0023_003DqErFVVlLPmGbjTlziHhMC41f3iCfjgfDutzMw82EYV08_003D _0023_003DqavR4ywJmOkJFutEiyrsZFQ_003D_003D;
+
+		public uint _0023_003DqvBsZoTyXuSzRbGKG4LohTQ_003D_003D;
+
+		public ushort _0023_003DqY6h7R31smoPgBFQq7YDSIg_003D_003D;
+
+		public ushort _0023_003DqNEFsAgoa05rso_wfDpvc5Q_003D_003D;
+
+		public ushort _0023_003DqH4v1ES40pAnqDgebBnwk6w_003D_003D;
+
+		public unsafe fixed ushort _0023_003Dqc7P6B4OtcbzDS79N2JksFQ_003D_003D[3];
+
+		public unsafe fixed ushort _0023_003Dq24sUQkaGLCKeMDlxFZyrzQ_003D_003D[3];
+
+		public unsafe fixed short _0023_003DqrN_0024SLrqYcg9agge8f1nsbg_003D_003D[3];
+
+		public unsafe fixed short _0023_003Dq2UYbKB6ne7RJol0f85zUsA_003D_003D[3];
+
+		public unsafe fixed ushort _0023_003DqcKmS9Bwmu8AcOIeyXk0z5A_003D_003D[3];
+
+		public unsafe fixed short _0023_003Dqtcv6c_ZsClZhDhmaXil_0024sg_003D_003D[3];
+	}
+
+	public struct _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D
+	{
+		public int _0023_003Dq2z9ZciZRdM3M37vkchCwXw_003D_003D;
+
+		public int _0023_003Dq93yPVK59bBmsqbf_0024WH2bMQ_003D_003D;
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	public struct _0023_003Dq_gpoccYTlObRS0HlG1zh2Bdfdwadystox25Tp6wa3wo_003D
+	{
+		[FieldOffset(0)]
+		public _0023_003DqsxHFZK_aE6DM5WJeaQYOGrGFGvQbfBJDCObu7hYcSAo_003D _0023_003DqDPj7oXEkrf0KMWBw6tD5sQ_003D_003D;
+
+		[FieldOffset(4)]
+		public int _0023_003DqowUPrDZsrwPpmb_AeRfnXw_003D_003D;
+
+		[FieldOffset(4)]
+		public int _0023_003DqUGgj_0024PBgugCLVE4vtTuYYQ_003D_003D;
+
+		[FieldOffset(4)]
+		public _0023_003Dq9m4_0024hrSNlVUUpV6XDbTRSlptujSHsjFU0p70OzLUx4ttZ6AqPtOU76LgVN55o8pY _0023_003DqoupWKfpHR_fm1F0LT4UMTA_003D_003D;
+	}
+
+	public struct _0023_003Dq_XJacP6FI5wmtxN7_0024caW9wEka0hsViOWVuYs9lHiyLg_003D
+	{
+		public IntPtr _0023_003DqEjB_AmWKboOs4bwfJvMx2g_003D_003D;
+	}
+
+	public struct _0023_003Dq0Dfrij1ijOLgMO8lEsJrLg_003D_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqpnYO_tLT6oxBC_0024mZ57GKug_003D_003D;
+
+		public uint _0023_003DqiL9k1_UjGeX6ajpDBsTgwA_003D_003D;
+
+		public IntPtr _0023_003Dq2QDVeRNq17UszFXfrSrxHw_003D_003D;
+	}
+
+	public struct _0023_003Dq2Fx9y0QtTtWnTHtRdzK_00245g_003D_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqX_0024oXf80FGF_0024R5PO3f_EtWQ_003D_003D;
+
+		public uint _0023_003Dq1Ha5QWeQWscnhobQc7rQxw_003D_003D;
+
+		public IntPtr _0023_003DqkLvILpbZPyPaLZ9LeTX1uQ_003D_003D;
+	}
+
+	public struct _0023_003Dq3AaKUtC_0024KYWwHPGm_0024NKU96IsCDZZs7xcEQIxNB5gyqs_003D
+	{
+		public IntPtr _0023_003DqtN5B1jwbS8ypDP5dos_ujw_003D_003D;
+
+		public IntPtr _0023_003DqN6atCEknq41WxLf8Kle2zw_003D_003D;
+	}
+
+	public enum _0023_003Dq3DgPOJKX6vzxfk6VFJBCxyOd2nYzOWfTzxEC2DJuH7s_003D
+	{
+
+	}
+
+	public struct _0023_003Dq3gacCyEqzXSAXUE8e422bnS2dLkcOufZBrSNGjMnggA_003D
+	{
+		public ushort _0023_003DqxzVVz2R1rlsGUs84Q5IsUw_003D_003D;
+
+		public _0023_003DqErFVVlLPmGbjTlziHhMC41f3iCfjgfDutzMw82EYV08_003D _0023_003DqgEc30tkqzwmJnjEOrh1x1w_003D_003D;
+
+		public uint _0023_003DqxjZr3X5hX3H9_uxWXqFwfg_003D_003D;
+
+		public ushort _0023_003DqFlnZnXoJEEWpiCTcTa3THw_003D_003D;
+
+		public ushort _0023_003Dq13YFckbpqi7JCeiheHt_jg_003D_003D;
+
+		public ushort _0023_003Dq3iYSeb3DR5A0NynP71pABg_003D_003D;
+
+		public short _0023_003DqVhBeI9fAG_0024ljIZjTih_0024d7A_003D_003D;
+
+		public ushort _0023_003DqLMplI2hXkob3LlG1Mb2XPA_003D_003D;
+
+		public ushort _0023_003Dqb_0024iXh1KVlbZRj5nlvlBjkA_003D_003D;
+
+		public ushort _0023_003DqpjActe8FVECoTM7_jjDBCA_003D_003D;
+
+		public ushort _0023_003Dq4aoTrrr62WR1UO8xNmGtGQ_003D_003D;
+	}
+
+	public struct _0023_003Dq3L9fTz49AiVmMyDuImiyGg_003D_003D
+	{
+		public byte _0023_003Dq7_0024Qtf6AvPhoXx1vtoseoYw_003D_003D;
+
+		public byte _0023_003Dqt_W6q1LncUAG14djsY7hKA_003D_003D;
+
+		public byte _0023_003Dq5bNNoguWf_00241DXKzpT2he_0024w_003D_003D;
+
+		public byte _0023_003DqiWQM45YhfIaC8H7HWIPD_0024A_003D_003D;
+	}
+
+	public enum _0023_003Dq44yQpyX6Jgzr7As_0024rWYuj3_002450XqT6eV9zouW1u0FfaY_003D : uint
+	{
+
+	}
+
+	public struct _0023_003Dq577d8s_fUh4gIvMHN9BKHA_003D_003D
+	{
+		public _0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D _0023_003DqqYIqJMlMX5o6za7xsKfOuQ_003D_003D;
+
+		public _0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D _0023_003DqmoI26peQPibTdMfbXSZuJQ_003D_003D;
+
+		public _0023_003DqDVQS1AeGg0qMJYnt32yRDA_003D_003D _0023_003Dq_0024jmtWvNL_0024fFkAuJhJzhpQw_003D_003D;
+
+		public uint _0023_003Dq_nyrsMZgmQ0eQFloUQunGQ_003D_003D;
+	}
+
+	public enum _0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D
+	{
+		SDLK_UNKNOWN = 0,
+		SDLK_RETURN = 13,
+		SDLK_ESCAPE = 27,
+		SDLK_BACKSPACE = 8,
+		SDLK_TAB = 9,
+		SDLK_SPACE = 32,
+		SDLK_EXCLAIM = 33,
+		SDLK_QUOTEDBL = 34,
+		SDLK_HASH = 35,
+		SDLK_PERCENT = 37,
+		SDLK_DOLLAR = 36,
+		SDLK_AMPERSAND = 38,
+		SDLK_QUOTE = 39,
+		SDLK_LEFTPAREN = 40,
+		SDLK_RIGHTPAREN = 41,
+		SDLK_ASTERISK = 42,
+		SDLK_PLUS = 43,
+		SDLK_COMMA = 44,
+		SDLK_MINUS = 45,
+		SDLK_PERIOD = 46,
+		SDLK_SLASH = 47,
+		SDLK_0 = 48,
+		SDLK_1 = 49,
+		SDLK_2 = 50,
+		SDLK_3 = 51,
+		SDLK_4 = 52,
+		SDLK_5 = 53,
+		SDLK_6 = 54,
+		SDLK_7 = 55,
+		SDLK_8 = 56,
+		SDLK_9 = 57,
+		SDLK_COLON = 58,
+		SDLK_SEMICOLON = 59,
+		SDLK_LESS = 60,
+		SDLK_EQUALS = 61,
+		SDLK_GREATER = 62,
+		SDLK_QUESTION = 63,
+		SDLK_AT = 64,
+		SDLK_LEFTBRACKET = 91,
+		SDLK_BACKSLASH = 92,
+		SDLK_RIGHTBRACKET = 93,
+		SDLK_CARET = 94,
+		SDLK_UNDERSCORE = 95,
+		SDLK_BACKQUOTE = 96,
+		SDLK_a = 97,
+		SDLK_b = 98,
+		SDLK_c = 99,
+		SDLK_d = 100,
+		SDLK_e = 101,
+		SDLK_f = 102,
+		SDLK_g = 103,
+		SDLK_h = 104,
+		SDLK_i = 105,
+		SDLK_j = 106,
+		SDLK_k = 107,
+		SDLK_l = 108,
+		SDLK_m = 109,
+		SDLK_n = 110,
+		SDLK_o = 111,
+		SDLK_p = 112,
+		SDLK_q = 113,
+		SDLK_r = 114,
+		SDLK_s = 115,
+		SDLK_t = 116,
+		SDLK_u = 117,
+		SDLK_v = 118,
+		SDLK_w = 119,
+		SDLK_x = 120,
+		SDLK_y = 121,
+		SDLK_z = 122,
+		SDLK_CAPSLOCK = 1073741881,
+		SDLK_F1 = 1073741882,
+		SDLK_F2 = 1073741883,
+		SDLK_F3 = 1073741884,
+		SDLK_F4 = 1073741885,
+		SDLK_F5 = 1073741886,
+		SDLK_F6 = 1073741887,
+		SDLK_F7 = 1073741888,
+		SDLK_F8 = 1073741889,
+		SDLK_F9 = 1073741890,
+		SDLK_F10 = 1073741891,
+		SDLK_F11 = 1073741892,
+		SDLK_F12 = 1073741893,
+		SDLK_PRINTSCREEN = 1073741894,
+		SDLK_SCROLLLOCK = 1073741895,
+		SDLK_PAUSE = 1073741896,
+		SDLK_INSERT = 1073741897,
+		SDLK_HOME = 1073741898,
+		SDLK_PAGEUP = 1073741899,
+		SDLK_DELETE = 127,
+		SDLK_END = 1073741901,
+		SDLK_PAGEDOWN = 1073741902,
+		SDLK_RIGHT = 1073741903,
+		SDLK_LEFT = 1073741904,
+		SDLK_DOWN = 1073741905,
+		SDLK_UP = 1073741906,
+		SDLK_NUMLOCKCLEAR = 1073741907,
+		SDLK_KP_DIVIDE = 1073741908,
+		SDLK_KP_MULTIPLY = 1073741909,
+		SDLK_KP_MINUS = 1073741910,
+		SDLK_KP_PLUS = 1073741911,
+		SDLK_KP_ENTER = 1073741912,
+		SDLK_KP_1 = 1073741913,
+		SDLK_KP_2 = 1073741914,
+		SDLK_KP_3 = 1073741915,
+		SDLK_KP_4 = 1073741916,
+		SDLK_KP_5 = 1073741917,
+		SDLK_KP_6 = 1073741918,
+		SDLK_KP_7 = 1073741919,
+		SDLK_KP_8 = 1073741920,
+		SDLK_KP_9 = 1073741921,
+		SDLK_KP_0 = 1073741922,
+		SDLK_KP_PERIOD = 1073741923,
+		SDLK_APPLICATION = 1073741925,
+		SDLK_POWER = 1073741926,
+		SDLK_KP_EQUALS = 1073741927,
+		SDLK_F13 = 1073741928,
+		SDLK_F14 = 1073741929,
+		SDLK_F15 = 1073741930,
+		SDLK_F16 = 1073741931,
+		SDLK_F17 = 1073741932,
+		SDLK_F18 = 1073741933,
+		SDLK_F19 = 1073741934,
+		SDLK_F20 = 1073741935,
+		SDLK_F21 = 1073741936,
+		SDLK_F22 = 1073741937,
+		SDLK_F23 = 1073741938,
+		SDLK_F24 = 1073741939,
+		SDLK_EXECUTE = 1073741940,
+		SDLK_HELP = 1073741941,
+		SDLK_MENU = 1073741942,
+		SDLK_SELECT = 1073741943,
+		SDLK_STOP = 1073741944,
+		SDLK_AGAIN = 1073741945,
+		SDLK_UNDO = 1073741946,
+		SDLK_CUT = 1073741947,
+		SDLK_COPY = 1073741948,
+		SDLK_PASTE = 1073741949,
+		SDLK_FIND = 1073741950,
+		SDLK_MUTE = 1073741951,
+		SDLK_VOLUMEUP = 1073741952,
+		SDLK_VOLUMEDOWN = 1073741953,
+		SDLK_KP_COMMA = 1073741957,
+		SDLK_KP_EQUALSAS400 = 1073741958,
+		SDLK_ALTERASE = 1073741977,
+		SDLK_SYSREQ = 1073741978,
+		SDLK_CANCEL = 1073741979,
+		SDLK_CLEAR = 1073741980,
+		SDLK_PRIOR = 1073741981,
+		SDLK_RETURN2 = 1073741982,
+		SDLK_SEPARATOR = 1073741983,
+		SDLK_OUT = 1073741984,
+		SDLK_OPER = 1073741985,
+		SDLK_CLEARAGAIN = 1073741986,
+		SDLK_CRSEL = 1073741987,
+		SDLK_EXSEL = 1073741988,
+		SDLK_KP_00 = 1073742000,
+		SDLK_KP_000 = 1073742001,
+		SDLK_THOUSANDSSEPARATOR = 1073742002,
+		SDLK_DECIMALSEPARATOR = 1073742003,
+		SDLK_CURRENCYUNIT = 1073742004,
+		SDLK_CURRENCYSUBUNIT = 1073742005,
+		SDLK_KP_LEFTPAREN = 1073742006,
+		SDLK_KP_RIGHTPAREN = 1073742007,
+		SDLK_KP_LEFTBRACE = 1073742008,
+		SDLK_KP_RIGHTBRACE = 1073742009,
+		SDLK_KP_TAB = 1073742010,
+		SDLK_KP_BACKSPACE = 1073742011,
+		SDLK_KP_A = 1073742012,
+		SDLK_KP_B = 1073742013,
+		SDLK_KP_C = 1073742014,
+		SDLK_KP_D = 1073742015,
+		SDLK_KP_E = 1073742016,
+		SDLK_KP_F = 1073742017,
+		SDLK_KP_XOR = 1073742018,
+		SDLK_KP_POWER = 1073742019,
+		SDLK_KP_PERCENT = 1073742020,
+		SDLK_KP_LESS = 1073742021,
+		SDLK_KP_GREATER = 1073742022,
+		SDLK_KP_AMPERSAND = 1073742023,
+		SDLK_KP_DBLAMPERSAND = 1073742024,
+		SDLK_KP_VERTICALBAR = 1073742025,
+		SDLK_KP_DBLVERTICALBAR = 1073742026,
+		SDLK_KP_COLON = 1073742027,
+		SDLK_KP_HASH = 1073742028,
+		SDLK_KP_SPACE = 1073742029,
+		SDLK_KP_AT = 1073742030,
+		SDLK_KP_EXCLAM = 1073742031,
+		SDLK_KP_MEMSTORE = 1073742032,
+		SDLK_KP_MEMRECALL = 1073742033,
+		SDLK_KP_MEMCLEAR = 1073742034,
+		SDLK_KP_MEMADD = 1073742035,
+		SDLK_KP_MEMSUBTRACT = 1073742036,
+		SDLK_KP_MEMMULTIPLY = 1073742037,
+		SDLK_KP_MEMDIVIDE = 1073742038,
+		SDLK_KP_PLUSMINUS = 1073742039,
+		SDLK_KP_CLEAR = 1073742040,
+		SDLK_KP_CLEARENTRY = 1073742041,
+		SDLK_KP_BINARY = 1073742042,
+		SDLK_KP_OCTAL = 1073742043,
+		SDLK_KP_DECIMAL = 1073742044,
+		SDLK_KP_HEXADECIMAL = 1073742045,
+		SDLK_LCTRL = 1073742048,
+		SDLK_LSHIFT = 1073742049,
+		SDLK_LALT = 1073742050,
+		SDLK_LGUI = 1073742051,
+		SDLK_RCTRL = 1073742052,
+		SDLK_RSHIFT = 1073742053,
+		SDLK_RALT = 1073742054,
+		SDLK_RGUI = 1073742055,
+		SDLK_MODE = 1073742081,
+		SDLK_AUDIONEXT = 1073742082,
+		SDLK_AUDIOPREV = 1073742083,
+		SDLK_AUDIOSTOP = 1073742084,
+		SDLK_AUDIOPLAY = 1073742085,
+		SDLK_AUDIOMUTE = 1073742086,
+		SDLK_MEDIASELECT = 1073742087,
+		SDLK_WWW = 1073742088,
+		SDLK_MAIL = 1073742089,
+		SDLK_CALCULATOR = 1073742090,
+		SDLK_COMPUTER = 1073742091,
+		SDLK_AC_SEARCH = 1073742092,
+		SDLK_AC_HOME = 1073742093,
+		SDLK_AC_BACK = 1073742094,
+		SDLK_AC_FORWARD = 1073742095,
+		SDLK_AC_STOP = 1073742096,
+		SDLK_AC_REFRESH = 1073742097,
+		SDLK_AC_BOOKMARKS = 1073742098,
+		SDLK_BRIGHTNESSDOWN = 1073742099,
+		SDLK_BRIGHTNESSUP = 1073742100,
+		SDLK_DISPLAYSWITCH = 1073742101,
+		SDLK_KBDILLUMTOGGLE = 1073742102,
+		SDLK_KBDILLUMDOWN = 1073742103,
+		SDLK_KBDILLUMUP = 1073742104,
+		SDLK_EJECT = 1073742105,
+		SDLK_SLEEP = 1073742106
+	}
+
+	public struct _0023_003Dq5kvoBljmz2OFx_otPoJQKqP4XSTTmwrRVG_0024O8Z4t0GM_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003Dq7T3sDVEBRiA8Y8kNWNbHAw_003D_003D;
+
+		public uint _0023_003Dqv13Rzt_HBwZAqAbd7yT3Lw_003D_003D;
+
+		public uint _0023_003DqKDmGuHgVR28IWGkceZcXMw_003D_003D;
+
+		public byte _0023_003Dqv03KjL78DnmIWpCIhVC8hQ_003D_003D;
+
+		public byte _0023_003DqqBqOtHPPF863ZMNZDXaCxA_003D_003D;
+
+		private byte _0023_003DqFKQdaOzWLKO1pGWiE4_0024i3A_003D_003D;
+
+		private byte _0023_003Dq40SUvd33KOqGkl_0024BpVT_bA_003D_003D;
+
+		public _0023_003Dq577d8s_fUh4gIvMHN9BKHA_003D_003D _0023_003Dq02P_0024ASsxl9j2Oyb_00245lEs1g_003D_003D;
+	}
+
+	public enum _0023_003Dq5SOC1_FtAK14OllrFr3XwvwMm9AfvoPVf_0024EXullZrhc_003D
+	{
+
+	}
+
+	public enum _0023_003Dq6qdynFO2OPv6tKTTk_4ZwHdXE8j0s_GOYZn8iiM_00243OU_003D
+	{
+
+	}
+
+	public enum _0023_003Dq7RGO3gAuVo_OK3HUOK3N0UTFAWB1rGj6QtrTH_0024Grk2g_003D : byte
+	{
+
+	}
+
+	public struct _0023_003Dq7zUPx_DK1blw_OOaRzjjGjk8gy1BPV5RY551z5ZgSsE_003D
+	{
+		public IntPtr _0023_003Dqv2eRWo9_0024ffBfztUr9SBzTQ_003D_003D;
+
+		public IntPtr _0023_003DqdJKnqrSIs9_0024mgBl85LyMsg_003D_003D;
+	}
+
+	public struct _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D
+	{
+		public uint _0023_003DqlNKsbqJb3jNf_jQakZ2Dtw_003D_003D;
+
+		public int _0023_003DqhhchwK8_t7i_FkHjZxB8Pg_003D_003D;
+
+		public int _0023_003DquLCgFxNpTMhmr6XCK2w_0024dA_003D_003D;
+
+		public int _0023_003Dq1dkKqULT_MAunHl4z93Ylg_003D_003D;
+
+		public IntPtr _0023_003DqxcF5Z03HNVrRju0nu7eJKA_003D_003D;
+	}
+
+	public enum _0023_003Dq8NReNvP3U0VsNJJ89ez30rp5RR2JICT5EAy8M8OMIA8_003D
+	{
+
+	}
+
+	public enum _0023_003Dq8YLsBLFNos2MFZ79y3IE3_0024YVOU_PUDotapgkT9mGRSQ_003D : uint
+	{
+
+	}
+
+	public struct _0023_003Dq8zaWuPSdN6IormtIcwM46pNjwuKdrmNTH3eo2HC7uTM_003D
+	{
+		public ushort _0023_003DqWBMsBxxeq9dslLNqLf2Sng_003D_003D;
+
+		public _0023_003DqErFVVlLPmGbjTlziHhMC41f3iCfjgfDutzMw82EYV08_003D _0023_003Dq_bEyAcvCd8NTbnOKqyZMqw_003D_003D;
+
+		public uint _0023_003Dq1waDvFXx17Z_0024FaQrODmDLQ_003D_003D;
+
+		public ushort _0023_003Dq11jXqcRUURWYAboYYVUZWA_003D_003D;
+
+		public ushort _0023_003Dq0_0024WXepH9C_0024i05A97ysx_Xg_003D_003D;
+
+		public ushort _0023_003DqwS58sJ0AwfQTku9Zxv_vNw_003D_003D;
+
+		public ushort _0023_003DqhTcCqa44IqSHp6sRIHwqeA_003D_003D;
+
+		public short _0023_003DqiKx0nRBHY_jFVO2LVIPEAg_003D_003D;
+
+		public short _0023_003DqU2nvBukbJQAhOqbL_YHSMw_003D_003D;
+
+		public ushort _0023_003DqRh63piW7EXfto_phGcp7aw_003D_003D;
+
+		public ushort _0023_003DqTi_0024QmZG65sf3VSqDCPWqPg_003D_003D;
+
+		public ushort _0023_003DqHxxD7u8Aqm15RNIpoygJtg_003D_003D;
+
+		public ushort _0023_003Dq4YyLHDRjGXdPdkYYGZNhSw_003D_003D;
+
+		public ushort _0023_003DqKNr9Z5NjlF_cEPMR9rP3zw_003D_003D;
+	}
+
+	public struct _0023_003Dq9m4_0024hrSNlVUUpV6XDbTRSlptujSHsjFU0p70OzLUx4ttZ6AqPtOU76LgVN55o8pY
+	{
+		public int _0023_003Dqxc9t1gmrqkjTrcpmN6Zffg_003D_003D;
+
+		public int _0023_003DqYqepcjaIh2Cb1x8aXBh3cw_003D_003D;
+	}
+
+	public struct _0023_003DqalftVto_0024AEp4hEuq9AtWX2DCCHGdY5g5k_ENZKHHKDo_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqDDaxyXk_0024TrDtpD34T4f8Hw_003D_003D;
+
+		public uint _0023_003Dq6aaVkOv3_luE9tv1VB5OuQ_003D_003D;
+
+		public uint _0023_003Dq170vIAhyAWRUZZ90qRz7hw_003D_003D;
+
+		public uint _0023_003Dqcjgo_0024R6FVeqtJmo3xboTGA_003D_003D;
+
+		public byte _0023_003DqsFdROw2LnJgu9y_00247SYzOIw_003D_003D;
+
+		public byte _0023_003DqMkUcWzz1jFVk0XhKCxN9FA_003D_003D;
+
+		public byte _0023_003Dq0d4w072WfkxpRDo_EqjFjg_003D_003D;
+
+		private byte _0023_003DqCTeah43VEs388m_e87HCag_003D_003D;
+
+		public int _0023_003Dqlo_C5NqWE61m_0024Hx2m8LWfQ_003D_003D;
+
+		public int _0023_003DqEuHIPm_hm07satsgdUl6zg_003D_003D;
+	}
+
+	public struct _0023_003Dqaqu3durXVTbyRojg0B2lTjeuJew3dm06AB2NESq1gGg_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003Dqb2PLZK0HWsS8Hhn5o1jiQA_003D_003D;
+
+		public uint _0023_003Dqiy_0024zT3S_pQu3bb3bKD8RjQ_003D_003D;
+
+		public int _0023_003Dqr3xEX_SSWi6FAV1WH_0024xvbg_003D_003D;
+	}
+
+	public enum _0023_003DqB0yad4lC5rAkyK_Vf_e0vg_003D_003D
+	{
+
+	}
+
+	public enum _0023_003DqB5q_0024sUMsvLy9yqlQBjSgmx5PMOQSCwD3BNscrvUc2es_003D : uint
+	{
+
+	}
+
+	public enum _0023_003Dqb67HXnvsvomYNP0BgHM1Xw_003D_003D
+	{
+
+	}
+
+	public struct _0023_003DqBmeHeIVfM8QrJnSCxerQ6w_003D_003D
+	{
+		public uint _0023_003Dq6I_0024jHw5nWNTpPZiU79ex2w_003D_003D;
+
+		public uint _0023_003DqAQU50XIBtzfPzmqmSW1Qag_003D_003D;
+
+		public uint _0023_003DqxhL8ire4NhuPlDm2f8mkmg_003D_003D;
+
+		public int _0023_003Dq4qJKJ_IDxYIWvVAYKeinbA_003D_003D;
+
+		public IntPtr _0023_003DqWZ4Tz86zQAk9xH6DJ29JpQ_003D_003D;
+
+		public IntPtr _0023_003DqWXHTNI_002411pS_0024BObO_B4ehw_003D_003D;
+	}
+
+	public enum _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D
+	{
+
+	}
+
+	public struct _0023_003DqcR0rfuBakQdM2jY8bPDhhA_003D_003D
+	{
+		public int _0023_003DqpJmjC0eQDdM4SdbY3qv_0024fQ_003D_003D;
+
+		public IntPtr _0023_003Dq_00248ZsWM_XnNaiOq7aaUCa6A_003D_003D;
+
+		public int _0023_003DqegrgT7_0024xkeXjTzVGzphJeQ_003D_003D;
+
+		public int _0023_003Dq4qmJ2QXSNz4GFAAzK7im_0024w_003D_003D;
+	}
+
+	public enum _0023_003DqD2L73KGyS89u_0024Qvvsh6aZEmUj72BLqsLt9_pHJXYcgI_003D
+	{
+
+	}
+
+	public enum _0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D
+	{
+
+	}
+
+	public enum _0023_003DqDomoVarfywCcbsgEhY44xRiARWOTKNd0xEIDZVuDy0c_003D : uint
+	{
+
+	}
+
+	public enum _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D
+	{
+
+	}
+
+	public enum _0023_003DqDVQS1AeGg0qMJYnt32yRDA_003D_003D : ushort
+	{
+
+	}
+
+	public enum _0023_003DqEiDXLSK9pHx3StnpiFObNBVqEQ_00244Q6uSkRKaDUmIXPw_003D
+	{
+
+	}
+
+	private struct _0023_003DqEmHQsUKKwLakd17hCbZKlO1a8ZZg3haricnup_0024J04Ck_003D
+	{
+		public _0023_003DqB5q_0024sUMsvLy9yqlQBjSgmx5PMOQSCwD3BNscrvUc2es_003D _0023_003DqOL11nICxDYrw_00249Q3B9AGiw_003D_003D;
+
+		public IntPtr _0023_003DqVQMSA8ik_LnPCMQwXN0zZQ_003D_003D;
+
+		public IntPtr _0023_003DqfCxpCz_0024SQwbLS3vn_h65Dg_003D_003D;
+
+		public IntPtr _0023_003DqIgqmz_L9rmzbQZN4PQsUAw_003D_003D;
+
+		public int _0023_003Dqfj7_0024dUDcLgd6kFCxhD6PMg_003D_003D;
+
+		public IntPtr _0023_003DqlVPzuJzdhI27Dry663MwEw_003D_003D;
+
+		public IntPtr _0023_003DqvMKrvJ0zpSL6nc_eXm6WdA_003D_003D;
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	public struct _0023_003DqeMleXSunfOJK2utyn1D_o1jV6XCwb4SYtqdqop5Waxs_003D
+	{
+		[FieldOffset(0)]
+		public _0023_003DqY7XG1EszTOt_00240kkzk8JgOJwY91Qxn2WJzJ_0024P8EU_002462A_003D _0023_003DqRLCXru64AUVqu7s6n7AO_Q_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq_XJacP6FI5wmtxN7_0024caW9wEka0hsViOWVuYs9lHiyLg_003D _0023_003DqdS2c9YloOxAVHCBt_2DpJg_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq3AaKUtC_0024KYWwHPGm_0024NKU96IsCDZZs7xcEQIxNB5gyqs_003D _0023_003DqLR9wLO8gZgpsYzh_cxC4SQ_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqxzVjfhPGLhRofKNNIjpHVmy3lFw2L0V1gv7XktBQzoE_003D _0023_003DqjHDLwA_h0PwZ93k3l1hU8g_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqH22OHX57vwertlvo2oGCQFNoVgVIy1DFiHyFwaWA3ko_003D _0023_003Dqt89tgsQVsMEkMaeKyWYGAw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dqu1JpiYLt9h_00242ZG5Dio02QlPIX9TNNjt6NXy9jYmhpBI_003D _0023_003DqvPsfdUBABp_FKC8okQ5cfA_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqhgtLCfrwM4bejjBK7xexHisW92nC8RjskcfQE12ciPU_003D _0023_003Dq1mU7hl8_0024TxuHG7hdQaC1qg_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq7zUPx_DK1blw_OOaRzjjGjk8gy1BPV5RY551z5ZgSsE_003D _0023_003DqozT6txiWWZviHKhffbFjjQ_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqPK2NaDGZ_0024Egk2JF4CjYLBYJwcDo_W9kxMyXQC8teqq0_003D _0023_003DqNyTsJ08MRSWqaNeZzjQqKQ_003D_003D;
+	}
+
+	public struct _0023_003DqEniZi4eweqxO_ssFkPjtCbYIQQWZVIvIveGdrA6z2_0024U_003D
+	{
+		[StructLayout(LayoutKind.Sequential, Size = 32)]
+		[UnsafeValueType]
+		public struct _0023_003DqZR3qLIfy4rSmxnKE9DvHEf7KSd9sIA2xmA6Qh9f63MY_003D
+		{
+			public byte _0023_003DqGR90YGIhpQwXdOARGZsP2Im4q1HntVDVSNEvlwoFW3g_003D;
+		}
+
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqGETInd46jO7hA80ivWr7UQ_003D_003D;
+
+		public uint _0023_003Dq67gEIfYwwt_00243ai75wDpfUw_003D_003D;
+
+		public uint _0023_003Dq8vp5m2eIXWpxReTDFXmFTA_003D_003D;
+
+		public unsafe fixed byte _0023_003Dqq3N_PFeLBIZqTtJDEgoFcQ_003D_003D[32];
+
+		public int _0023_003DqwOwo_0024c1BAivFpSJ4wcBv2A_003D_003D;
+
+		public int _0023_003DqpFml8jZK0NhrOvylBfqwnw_003D_003D;
+	}
+
+	public struct _0023_003DqErFVVlLPmGbjTlziHhMC41f3iCfjgfDutzMw82EYV08_003D
+	{
+		[StructLayout(LayoutKind.Sequential, Size = 12)]
+		[UnsafeValueType]
+		public struct _0023_003DqdMdhH5ZKSMGlGRMDs9jWpIeBK1z0YW4q8QKEj0QI_VQ_003D
+		{
+			public int _0023_003DqGtrCn5UdVLh38re4_9dzlUv_0024dgRh3fD735_kh6GTeT4_003D;
+		}
+
+		public byte _0023_003Dq_hiILhDZtcUeNged5n3qbg_003D_003D;
+
+		public unsafe fixed int _0023_003DqAxSdMxgMwCGq27FkOUebCw_003D_003D[3];
+	}
+
+	private struct _0023_003DqfO5vAINxL5lx_phRT8RQPq3N4OAcitvb35W99l2G8hY1px7KrpOTvnddLXy52ELg
+	{
+		public _0023_003Dq44yQpyX6Jgzr7As_0024rWYuj3_002450XqT6eV9zouW1u0FfaY_003D _0023_003DqIntK4wC35pBHPMbBq45TUw_003D_003D;
+
+		public int _0023_003DqAqU5i0tX_0024m4h1zbSALKUEw_003D_003D;
+
+		public IntPtr _0023_003Dq0i3d7CXfoi1KkMjRuWArYA_003D_003D;
+	}
+
+	public delegate _0023_003DqJBVAcJnhYCgePcSawXYc2SJ3fzE6NxSy9ZUzPhmIK5g_003D _0023_003DqFWAEYxmqZ2qAmi2CUJp77A_003D_003D(IntPtr _0023_003Dq3DMcq8ZMQFm2p_XdtdxYMw_003D_003D, IntPtr _0023_003DqEfaVvktr653wSM7N_00241N_1w_003D_003D, IntPtr _0023_003DqKRnotBOW6BgGqrgzwEWMAQ_003D_003D);
+
+	public struct _0023_003DqFwpn93HXxQi2OjmHEO7ROj2C_0024_0024CFcizNVutzSmYoeFQ_003D
+	{
+		public ushort _0023_003DqSwGQvhqNGDxRf00f1xnXNQ_003D_003D;
+
+		public uint _0023_003DqorSN2vhPBzqYor3TGSyuZg_003D_003D;
+
+		public ushort _0023_003DqKIuExcMecwgmTsHJ23VclHllTBBd1BJmQAtxeryAm_0024M_003D;
+
+		public ushort _0023_003DqJmUkzep_0024RpdqWn2PSe7Ht3ryyk0DcP1_0024utEEExqAqnQ_003D;
+	}
+
+	public enum _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D : uint
+	{
+
+	}
+
+	public struct _0023_003DqGeGALbNlSRoCOKOl0cXdzkYtiM9xGYZeouLkLVf1YbA_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003Dq8q1LtFITOkK6obNlf46jww_003D_003D;
+
+		public uint _0023_003Dq9hB0PDvRjJatV4Xvonjr5A_003D_003D;
+
+		public int _0023_003DqgWyo7jt7hFzWaj9KnuVfKA_003D_003D;
+	}
+
+	public struct _0023_003DqGiiTeYtc1Iv_2FYmUqARtdIW4nxWHOjFBjND2jVv5h0_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqLGN1D2bQ7xcRTIdq0_eJhQ_003D_003D;
+
+		public uint _0023_003DqZ5UMT7f9aw4ujzm6YzfV7Q_003D_003D;
+
+		public uint _0023_003DqVr_0024kD9DD8e0KiY94TvcW6A_003D_003D;
+
+		public uint _0023_003DqXcYgkf_PfxadURwyrQVtuQ_003D_003D;
+
+		public byte _0023_003Dqo0t_VZ3Ppf4fXocNcDv55Q_003D_003D;
+
+		private byte _0023_003Dqr7DBXbJfCe2O6Uo1NkuHoQ_003D_003D;
+
+		private byte _0023_003DqVOFg8_0024RkcFQ2HPRPhjRqBw_003D_003D;
+
+		private byte _0023_003Dqofnua_4_0024BLxfu_xBuPOCDw_003D_003D;
+
+		public int _0023_003DqR2y9iSMzhYRXZsHdWUiZiQ_003D_003D;
+
+		public int _0023_003Dq0uUgXQ78Ybm5r_0024E9l_sLOw_003D_003D;
+
+		public int _0023_003DqG_9NJrrK5fIHzCJ5mU3KwQ_003D_003D;
+
+		public int _0023_003DqPL_jmS_Q6viX35HXWnF4_w_003D_003D;
+	}
+
+	public struct _0023_003Dqgz6GNTg_00242khY4xmCvOxF3MZZOAwaXZY_cSOTcpbX_0024F4_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqinF_s_F7MznbReJJoBEkaQ_003D_003D;
+
+		public uint _0023_003DqsHs4knX_GoASQps8Wx7KPw_003D_003D;
+
+		public int _0023_003DqeiK7IyQjh0eGrMSkzhAm_Q_003D_003D;
+
+		public byte _0023_003DqRaHsdcWX_0024mDLjFAKFleh1g_003D_003D;
+
+		public byte _0023_003Dq6SKLaetdJrKmShoOsV7UUA_003D_003D;
+
+		private byte _0023_003Dq43GhYbj7xGPGtUTO87EJog_003D_003D;
+
+		private byte _0023_003DqyDaJJ3BXAsvMwn3u8cFw8Q_003D_003D;
+	}
+
+	public struct _0023_003DqH22OHX57vwertlvo2oGCQFNoVgVIy1DFiHyFwaWA3ko_003D
+	{
+		public IntPtr _0023_003Dqk7BAvEt303_0024YGTV8D36P9A_003D_003D;
+	}
+
+	public struct _0023_003DqHcNMEkZ_HhtQxbr90mwEgTPXD4kNu72Tq0HKoBuM26U_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqR6r26G_00243Li9EZ5sybEoOgQ_003D_003D;
+
+		public uint _0023_003Dq7I8t_OZ0Tm760iyiINT52w_003D_003D;
+
+		public int _0023_003DqBVFpNup4Zc9Tj5tmlg4Zug_003D_003D;
+
+		public byte _0023_003DqLFtHgzHorzyXhmaG_iRL7w_003D_003D;
+
+		private byte _0023_003Dq4zjc161Z1YUTZCUH4FvpAA_003D_003D;
+
+		private byte _0023_003DqZ_0024es017CzM_00247MQq7HJKmjA_003D_003D;
+
+		private byte _0023_003DqoTsWCA87Zf_iLZFmQ7SzFg_003D_003D;
+
+		public short _0023_003Dqd85GX_0024ZlW49rJRzpsKdRVw_003D_003D;
+
+		public ushort _0023_003DqZMcxhGXLtnMsc9A4J0Mf3Q_003D_003D;
+	}
+
+	public struct _0023_003DqhgtLCfrwM4bejjBK7xexHisW92nC8RjskcfQE12ciPU_003D
+	{
+		public IntPtr _0023_003DqiUS6M7_9cDVla4GwG69PYA_003D_003D;
+
+		public IntPtr _0023_003DqpkOY5pPo15cAr8dnq20s9w_003D_003D;
+
+		public IntPtr _0023_003DqSxolEoZl5Id7HLI7tNBuIg_003D_003D;
+	}
+
+	public struct _0023_003DqhjKPOMCsb2Jqcz4NsP76aWZ6ZeTHL5j9lwrzOjqwmGU_003D
+	{
+		public _0023_003Dq44yQpyX6Jgzr7As_0024rWYuj3_002450XqT6eV9zouW1u0FfaY_003D _0023_003Dq2gDqGjN8Gvhl74ICio6_jA_003D_003D;
+
+		public int _0023_003Dq_Q6dB5HwisZ7LsQdi1lEnA_003D_003D;
+
+		public string _0023_003DqKE6MMTO5GhzaIUAPB2hulg_003D_003D;
+	}
+
+	public enum _0023_003DqHpWZDgvX0mkHK2Odrz6txg_003D_003D
+	{
+
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	public struct _0023_003DqI8a8Z0dKRufuC2zWCdLZ830MVjtmwIEI0A2LNMbGJQw_003D
+	{
+		[FieldOffset(0)]
+		public ushort _0023_003Dqxjs6lt_1avIcqKdTrlfQEg_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq3gacCyEqzXSAXUE8e422bnS2dLkcOufZBrSNGjMnggA_003D _0023_003DqbzETvz5jGTDNcMCMDhZ2aw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq8zaWuPSdN6IormtIcwM46pNjwuKdrmNTH3eo2HC7uTM_003D _0023_003DqIoxVrCG_0024mOdPzDe2Gpho_A_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq_0024ySAPqi8moYv7KbheORgABXsHTgIUqVDP_PquqVLBxk_003D _0023_003Dqjx33URXJPmM6ZZap4xneog_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqYG_0024yzl6dndLaxAF5L4cS6Q_003D_003D _0023_003DqgjO9OCO3owJBLzaFchqjNA_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqFwpn93HXxQi2OjmHEO7ROj2C_0024_0024CFcizNVutzSmYoeFQ_003D _0023_003DqzsrAtBdWHZEVXgTaRILHXA_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqzMZDEWbFMONEH1D9OFSvkvZUfA5rvwaNbgJY0AjyDVs_003D _0023_003DqKUaGGePusp1390Xyl7GV5A_003D_003D;
+	}
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	public delegate int _0023_003Dqi8DKdq8G9rwl_1mQH_0024iKg3EQaarC1tEpPFn3M7N9Tbc_003D(IntPtr _0023_003Dq__0024UM9wfJBxV5RoMtNKLDtA_003D_003D, IntPtr _0023_003DqgkBSlfiZEDdaJCYlX_0024DgoQ_003D_003D);
+
+	public delegate uint _0023_003Dqibpoe1YQP1LB7MJ2VI_0024XWLW31fE2dF4KCvh8Nk1McYw_003D(uint _0023_003Dq85UcEh4Xir4UCv_0024Q7xAefQ_003D_003D, IntPtr _0023_003DqsMBaForCcfrBMYfqyYPPiA_003D_003D);
+
+	public enum _0023_003DqIXu2SZfZKrfNikBkGWHxNgZ7EZjqambZHFRYRtj4_XE_003D : uint
+	{
+
+	}
+
+	public enum _0023_003DqJBVAcJnhYCgePcSawXYc2SJ3fzE6NxSy9ZUzPhmIK5g_003D
+	{
+
+	}
+
+	public struct _0023_003DqJk0mccDxZWbOvO4DCHTy526PljNzNOVjBc21QvQ6ZkA_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003Dqub_uUOCBNN464wEdkIdD0w_003D_003D;
+
+		public uint _0023_003DqVhMbrxB8Bo_0024v7_KuaCFrgw_003D_003D;
+
+		public int _0023_003Dqb2cv_lOk7fkS7H0K1_0024lhlA_003D_003D;
+
+		public byte _0023_003DqHrfyGJORBMqsqGR8nXUwgQ_003D_003D;
+
+		private byte _0023_003Dq_0024H7_syvDdALRlfLoOwgM_0024A_003D_003D;
+
+		private byte _0023_003DqbIfNSDnSjAzpkbqe37oD2A_003D_003D;
+
+		private byte _0023_003Dqiygics5IP1QfIHEjvQFMuQ_003D_003D;
+
+		public short _0023_003Dq9ylZgj3s_NTMXBCgzdeeqA_003D_003D;
+
+		public short _0023_003Dq3VnFHJ0DCOClWBRkZNNeJQ_003D_003D;
+	}
+
+	public enum _0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D
+	{
+
+	}
+
+	public struct _0023_003DqlJJi0UIK51lRgLpFuESWcw_003D_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqMTBx0TXubqDq6y5cSAEQIA_003D_003D;
+
+		public uint _0023_003Dq1kFs9rfmHm3L6TAz9_0024z3hQ_003D_003D;
+	}
+
+	public enum _0023_003DqlyylbWLVtUwiKjBLGl7xVQ_003D_003D
+	{
+
+	}
+
+	public struct _0023_003DqmcptlHAVw_0024t8LQF7s_0024Sbmw_003D_003D
+	{
+		public SDL_version _0023_003DqhpxYIgmyeRu71jRy0Ri_0024vw_003D_003D;
+
+		public _0023_003Dqb67HXnvsvomYNP0BgHM1Xw_003D_003D _0023_003Dqt_a4Ctso4nM80j1bajeF7g_003D_003D;
+
+		public _0023_003DqeMleXSunfOJK2utyn1D_o1jV6XCwb4SYtqdqop5Waxs_003D _0023_003DqV6s1dFpSOn_0024C_p6lTPei5A_003D_003D;
+	}
+
+	public enum _0023_003DqmS0KVclzL3a_aknHP2p1l3pCHMSsyzzIjNv0e8X4Aro_003D
+	{
+
+	}
+
+	public struct _0023_003DqmxOMWYppKr51Kwzb4LEC6o_hN5BymgG7h4EdM2KYq2U_003D
+	{
+		public uint _0023_003DqdBxF7_00245tTD8Bdjj9tH6WCw_003D_003D;
+
+		public uint _0023_003DqTSZm90BVsqTJPU9R2SSsJw_003D_003D;
+
+		public long _0023_003DqCDY7ZudLhxf79XN5HEsYpw_003D_003D;
+
+		public long _0023_003DqQh_002454eXngMOUx8mEGvWVOg_003D_003D;
+
+		public float _0023_003Dq_0024lxQyP2ljM2tdqEXyX2TMA_003D_003D;
+
+		public float _0023_003DqKbYJ4We_0024dW5KY_d2qW7Fqw_003D_003D;
+
+		public float _0023_003DqJO0RgMeGvIbO5GYliCUDaA_003D_003D;
+
+		public float _0023_003DqIMVwYFiE8ZoN8zaMzoscdw_003D_003D;
+
+		public float _0023_003Dq1NnVOByvoKt7nbWD_c1FAg_003D_003D;
+	}
+
+	public struct _0023_003Dqn0Sh9hwP_0024hfLFGnQ1Cn_d9pkFeRuCGEcegPXzdeolBE_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqVlMl9qVMKq574BZVE6cf5w_003D_003D;
+
+		public uint _0023_003Dq1kFs9rfmHm3L6TAz9_0024z3hQ_003D_003D;
+
+		public int _0023_003DqGGT_0024cIi6LD3vmKuDsWfasA_003D_003D;
+
+		public byte _0023_003DqgkvTKnGw_0024o2QixFtyQRXVw_003D_003D;
+
+		public byte _0023_003Dq2q_fxRrOkuxTZQioDFVgVg_003D_003D;
+
+		private byte _0023_003DqW1vZLxx7LiAhfw9n9CkCwg_003D_003D;
+
+		private byte _0023_003DqpejFFhZV8vI09lD69WMnqw_003D_003D;
+	}
+
+	public enum _0023_003DqnlJN_00240K5J1XJbeeWrYTu2KQN5_ecrnDasMCNuIcBf1I_003D
+	{
+
+	}
+
+	public struct _0023_003DqNS0yZfs7GqoD87QprTaEV1ardz_0024hyd1Et89MgCfCBqc_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqP_0024VZUt3JgN2DEmpzyRySXg_003D_003D;
+
+		public uint _0023_003DqToy4temudD3HG2TnFJnQcw_003D_003D;
+
+		public int _0023_003DqfLHFEiExZZBBTDl5e38yNg_003D_003D;
+
+		public byte _0023_003Dq012yN81ZLY4P310uRcCfKw_003D_003D;
+
+		private byte _0023_003Dq_0024a3kY_0024iK1rsCMFdlW475DQ_003D_003D;
+
+		private byte _0023_003DqwUeku5jPtjWZBb7o4KeiCQ_003D_003D;
+
+		private byte _0023_003Dq_nCWzhiLT5WV3CnxqKrjtg_003D_003D;
+
+		public short _0023_003Dq_C7iY2HDE9E9Pf8zkFtHdA_003D_003D;
+
+		private ushort _0023_003Dql1nak_n1c57yicNxrbBECA_003D_003D;
+	}
+
+	public struct _0023_003Dqo8kJEWvUVgwLRCalTR0rZDTKFcXfprqf8Lw4c2S56RE_003D
+	{
+		public uint _0023_003DqCdF6Yi7ju5hU_QZI1f9Kjg_003D_003D;
+
+		public IntPtr _0023_003DqGffRnt_Xb2VXJmN9B5tPbw_003D_003D;
+
+		public byte _0023_003DqGaddR5y9P0pq2XezcT8KQw_003D_003D;
+
+		public byte _0023_003DqFV2fTWr92deVdBRKRsheWw_003D_003D;
+
+		public uint _0023_003DqntpwEvVwtYYSgzpBl79mBA_003D_003D;
+
+		public uint _0023_003DqT704K4YBRYuxBjdP_0024OC_oQ_003D_003D;
+
+		public uint _0023_003Dq1DdXoP0qeIUI3EOp7jlCDg_003D_003D;
+
+		public uint _0023_003Dq6kXDtM2zyPMBg2yafSJ9cg_003D_003D;
+
+		public byte _0023_003DqRgiVKOKcgLDuUzriH1dAjQ_003D_003D;
+
+		public byte _0023_003DqLxBQbRkSqKgQqCNaCh0HWQ_003D_003D;
+
+		public byte _0023_003DqEP8qvarGkng_0024z4AxFijUXw_003D_003D;
+
+		public byte _0023_003Dq5c1LyU0Fh4QEGvY6vKvbIg_003D_003D;
+
+		public byte _0023_003DqtJYXKSFTXObftAWa_0024xF3mQ_003D_003D;
+
+		public byte _0023_003DqwsbOi7Kp10sXZbJbhHAFBA_003D_003D;
+
+		public byte _0023_003DqjRPDnBJ_0024pA814CVMoTQMdw_003D_003D;
+
+		public byte _0023_003DqNbczUjLZp4sQBgssRO_0024Ngw_003D_003D;
+
+		public int _0023_003DqHZF_l6TkP0q6Rk4PG0pWBg_003D_003D;
+
+		public IntPtr _0023_003DqYKPZEdve3FiT_17q3rFmbQ_003D_003D;
+	}
+
+	public enum _0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D
+	{
+
+	}
+
+	public struct _0023_003DqPK2NaDGZ_0024Egk2JF4CjYLBYJwcDo_W9kxMyXQC8teqq0_003D
+	{
+		public IntPtr _0023_003Dqjetwz_0024SbDQObQThoSuO64Q_003D_003D;
+
+		public IntPtr _0023_003DqkQPd1qjLDHAg9dmib0sh5Q_003D_003D;
+	}
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	public delegate void _0023_003DqR87c3dbYbBmay4BjKJTF0fsH6J97tV_00243jEg4mhcLM1A_003D(IntPtr _0023_003DqW2QSmMPNy0EylZempJIyeQ_003D_003D, int _0023_003Dqe3QwFdZFvw1FZO4Wfqq0rQ_003D_003D, _0023_003Dq5SOC1_FtAK14OllrFr3XwvwMm9AfvoPVf_0024EXullZrhc_003D _0023_003DqMz015Vx8SH_0024EFl_KKi2jHQ_003D_003D, IntPtr _0023_003DqcCsP9BBnxwssJOLoUSqv5g_003D_003D);
+
+	public struct _0023_003Dqsx8_d8gM44ZRhqwj37idRhndeI_00248qsiwrGGz8hAnKFE_003D
+	{
+		public uint _0023_003DqIT4iL_0024k5LqzhUx5dTAEBqw_003D_003D;
+
+		public uint _0023_003DqLjThpbOm0oDbNdoSwqWi2w_003D_003D;
+
+		public long _0023_003DqhgnqeybS3ZM6fU5q4f3niA_003D_003D;
+
+		public long _0023_003Dqs6s1vLxYQvgC7J797DqitQ_003D_003D;
+
+		public uint _0023_003DqPsRXBVP52uagxsiBvd1eJA_003D_003D;
+
+		public float _0023_003DqnvCnYkwFvIEHCl3cpRlBpw_003D_003D;
+
+		public float _0023_003DqjdPBY_0024foy4fzAI0RYSX8fA_003D_003D;
+
+		public float _0023_003DqxQofArD_zeFlJb3Jep_haQ_003D_003D;
+	}
+
+	public enum _0023_003DqsxHFZK_aE6DM5WJeaQYOGrGFGvQbfBJDCObu7hYcSAo_003D
+	{
+
+	}
+
+	public struct _0023_003DqtOrpYtL4u9lPta8BkmQvtrXBUuSLPHoIMlEaytkRxCs_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003Dq8q1LtFITOkK6obNlf46jww_003D_003D;
+
+		public uint _0023_003DqnmEK3z5baLqvIT3LbzBjPQ_003D_003D;
+
+		public uint _0023_003DqYmrS5nysAetyXMEaJHu2kw_003D_003D;
+
+		public _0023_003Dq7RGO3gAuVo_OK3HUOK3N0UTFAWB1rGj6QtrTH_0024Grk2g_003D _0023_003DqLUZL2k733oR3ddO3w_C1kA_003D_003D;
+
+		private byte _0023_003Dq9Ya9ieovVEpJNpH98TuVdA_003D_003D;
+
+		private byte _0023_003DqhuHWoHs0fyXmjd_0024RHWlBhA_003D_003D;
+
+		private byte _0023_003DqcDmKBeMSYK7Bw3iwvVxdoA_003D_003D;
+
+		public int _0023_003DqbRsRKfNUPEZ9lQxxJW6x9A_003D_003D;
+
+		public int _0023_003DqzN_00240y8OdcTRFau5ekEuCtg_003D_003D;
+	}
+
+	public enum _0023_003DqTRXNnyc4cFraKu_0024DOinzfQ_003D_003D
+	{
+
+	}
+
+	public struct _0023_003Dqu1JpiYLt9h_00242ZG5Dio02QlPIX9TNNjt6NXy9jYmhpBI_003D
+	{
+		public IntPtr _0023_003DqdNN7rfUyN_0024ib64CnXAIz6A_003D_003D;
+
+		public uint _0023_003Dqw8mTmVPRmMNcQgWniZrtgQ_003D_003D;
+
+		public uint _0023_003Dqy8foFVWdDT7rSrCDWMm6wg_003D_003D;
+
+		public uint _0023_003DqQ7O0K4kpbslt4MeZJtTYdm6UsZqXn_0jgj7uNxMl_tg_003D;
+	}
+
+	public enum _0023_003DqUx5CuhUf6R5yb0_pTrHp2dKOgDpA_0024foveD1zHuIkYNY_003D
+	{
+
+	}
+
+	public enum _0023_003DqV5Zdz4DoMPoezT7sDI06WZWjN3ZEtJobBZmJjCSKU24_003D
+	{
+
+	}
+
+	public enum _0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D
+	{
+
+	}
+
+	public struct _0023_003DqWdj6vRZJbiMNTzup_0024IfMx8bLF5uY6z80MJKPr4EDS8Y_003D
+	{
+		public _0023_003DqB5q_0024sUMsvLy9yqlQBjSgmx5PMOQSCwD3BNscrvUc2es_003D _0023_003DqbOxfneryMupoc5B0ALS_YA_003D_003D;
+
+		public IntPtr _0023_003DqJm_XlG8ruxcxmoqOJa1ISw_003D_003D;
+
+		public string _0023_003DqPp6OXnyUaaz10f8_x1TsNA_003D_003D;
+
+		public string _0023_003DqvwYsrQajE2hifmzFv7RarA_003D_003D;
+
+		public int _0023_003DqNZPqTThVtdTv4Tet00tP2g_003D_003D;
+
+		public _0023_003DqhjKPOMCsb2Jqcz4NsP76aWZ6ZeTHL5j9lwrzOjqwmGU_003D[] _0023_003Dqd_0024PVAa9Y1jCUVvliOgPMnA_003D_003D;
+
+		public SDL_MessageBoxColorScheme? _0023_003DqvMKrvJ0zpSL6nc_eXm6WdA_003D_003D;
+	}
+
+	public enum _0023_003DqwEb_hVeWElyw36z3jO1WmQ_003D_003D
+	{
+
+	}
+
+	public struct _0023_003Dqx8HkHHbjkxf9HSlmmgsSDETr7gDJCm_83VrwysCaCWk_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqOzdoYi3WjnxaTRnlhHQsEQ_003D_003D;
+
+		public uint _0023_003DqenYGROYUqXKiaFG9Waj3kw_003D_003D;
+
+		public uint _0023_003Dq8ui8_0024_0024ZypI_00243ZkxMLQUFFg_003D_003D;
+
+		public uint _0023_003DqAfjSe_0024kB9_0024vbAbYPOjaljQ_003D_003D;
+
+		public int _0023_003Dqs4D4sH7LnGYPNVD9__ro9A_003D_003D;
+
+		public int _0023_003Dq0DeK71P5k_00245mKX1iWShSwA_003D_003D;
+
+		public uint _0023_003DqppOKC2th1f6BevZsAjr5lw_003D_003D;
+	}
+
+	public struct _0023_003DqXDK_00240pdcroOpr4fVPB3oDZB400pRXsqUksuyHKcRv00_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqrxHR29BAlJYMR62K1p6Enw_003D_003D;
+
+		public uint _0023_003DqUNoRHZfnrKbICQSpTpf0mA_003D_003D;
+	}
+
+	public struct _0023_003DqxzVjfhPGLhRofKNNIjpHVmy3lFw2L0V1gv7XktBQzoE_003D
+	{
+		public IntPtr _0023_003Dq2jmVlj6yS9yEHTz0awtOOg_003D_003D;
+
+		public IntPtr _0023_003DqboTc58SuqaHHWNqRiHI_0024sA_003D_003D;
+
+		public IntPtr _0023_003DqqlcLKZelNm3O_00241l8sjZ20g_003D_003D;
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	public struct _0023_003Dqy3KhhUqMsADaH05QdFXkiQ_003D_003D
+	{
+		[FieldOffset(0)]
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003Dqtsp7jepe6vuoJ1dFU4eVGw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqtOrpYtL4u9lPta8BkmQvtrXBUuSLPHoIMlEaytkRxCs_003D _0023_003DqiXuWnZl_0024Uy5zz_0024Sx2fdcSA_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq5kvoBljmz2OFx_otPoJQKqP4XSTTmwrRVG_0024O8Z4t0GM_003D _0023_003Dqon_00241GlWtlWkj_Hde5dIh6w_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqEniZi4eweqxO_ssFkPjtCbYIQQWZVIvIveGdrA6z2_0024U_003D _0023_003DqyA_tlWW8qOSs6zsHgVj2xA_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqyR_00247w_AO1sCaVXzTrFuWFbfCWtvih0OlNIqG061vs7M_003D _0023_003DqFb_0024UXNAXcHUS7jbE9G2CEA_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqGiiTeYtc1Iv_2FYmUqARtdIW4nxWHOjFBjND2jVv5h0_003D _0023_003Dq2_qRsO568CGqwAuWWG_0024MIg_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqalftVto_0024AEp4hEuq9AtWX2DCCHGdY5g5k_ENZKHHKDo_003D _0023_003DqPzZjggrMCUhvMKtB_0024EbtPw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dqx8HkHHbjkxf9HSlmmgsSDETr7gDJCm_83VrwysCaCWk_003D _0023_003DqwAAJzAD9RJaNr0vFjGfRZg_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqHcNMEkZ_HhtQxbr90mwEgTPXD4kNu72Tq0HKoBuM26U_003D _0023_003DqPzG3f2K69NvVTQe_0024ghzSqQ_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqJk0mccDxZWbOvO4DCHTy526PljNzNOVjBc21QvQ6ZkA_003D _0023_003DqYu3jOiR18THzaaqnE5WWKw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dqgz6GNTg_00242khY4xmCvOxF3MZZOAwaXZY_cSOTcpbX_0024F4_003D _0023_003DqznPfTKWl67svNp430PR_0024XQ_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqZnCQJhD32IAq_f3NaBJpYO1E_0024tKhJprABE8fIf1rMTU_003D _0023_003DqTarTCVO8vwRmaV2IKUuHRg_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqGeGALbNlSRoCOKOl0cXdzkYtiM9xGYZeouLkLVf1YbA_003D _0023_003Dql_0024W91x30Qfayt25LReOa1Q_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqNS0yZfs7GqoD87QprTaEV1ardz_0024hyd1Et89MgCfCBqc_003D _0023_003DqwORM_0024TxZ_Ii_EiGdCnXFCw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dqn0Sh9hwP_0024hfLFGnQ1Cn_d9pkFeRuCGEcegPXzdeolBE_003D _0023_003DqQDAehTie3uH0MknYgOk3Yw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dqaqu3durXVTbyRojg0B2lTjeuJew3dm06AB2NESq1gGg_003D _0023_003DqBUd_TLJp8wnQSIQ_0024KsWJ3Q_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqlJJi0UIK51lRgLpFuESWcw_003D_003D _0023_003DqtsjHVtpLJ256ZTJ85kTOTA_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqBmeHeIVfM8QrJnSCxerQ6w_003D_003D _0023_003DqEktfh6fLPJgQvDhdo7vPNg_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq2Fx9y0QtTtWnTHtRdzK_00245g_003D_003D _0023_003DqePAX_0024fbow4JhxHHtFmgw1A_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqmxOMWYppKr51Kwzb4LEC6o_hN5BymgG7h4EdM2KYq2U_003D _0023_003DqGSijOYVbSGA0BGznnJdjkQ_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003DqZyMZrwTeuhj3HylguaZg_as_0024y2SABXxN6iBSHPEE_H8_003D _0023_003Dq90nq0uPFRbB6q_lUtifJYQ_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dqsx8_d8gM44ZRhqwj37idRhndeI_00248qsiwrGGz8hAnKFE_003D _0023_003Dq298_0024c7j_ESgdanq_0024IgLWhw_003D_003D;
+
+		[FieldOffset(0)]
+		public _0023_003Dq0Dfrij1ijOLgMO8lEsJrLg_003D_003D _0023_003DqHFbFhAK9yWF3jA4MDMH47A_003D_003D;
+	}
+
+	public struct _0023_003DqY7XG1EszTOt_00240kkzk8JgOJwY91Qxn2WJzJ_0024P8EU_002462A_003D
+	{
+		public IntPtr _0023_003DqzxoahwzAKDjVjo9IGuuNDA_003D_003D;
+
+		public IntPtr _0023_003DqnMy8zSp0zkz0kV2ZWs_0024Ceg_003D_003D;
+	}
+
+	public struct _0023_003DqYG_0024yzl6dndLaxAF5L4cS6Q_003D_003D
+	{
+		public ushort _0023_003DqG1oFFWqFq2pjdJjNUE0zlw_003D_003D;
+
+		public _0023_003DqErFVVlLPmGbjTlziHhMC41f3iCfjgfDutzMw82EYV08_003D _0023_003Dq7c3OT5IwOuL9Y9P3AKSaEw_003D_003D;
+
+		public uint _0023_003Dq0GvHHmNI_6F5zZWgVtp6RQ_003D_003D;
+
+		public ushort _0023_003DqVE1v1ZLw0HiaxguKxY7_3w_003D_003D;
+
+		public ushort _0023_003DqccETkQ6pGgDADHQ9t7j5bA_003D_003D;
+
+		public ushort _0023_003DqHme2PNlwr2bOS9q6DycOBw_003D_003D;
+
+		public short _0023_003DqzPhK2g8YIBXf7W0v0C1Hew_003D_003D;
+
+		public short _0023_003DqN2N5o_O1K9QXJPOzlb8dsw_003D_003D;
+
+		public ushort _0023_003Dq37xRVCUV_0024_jLfv2X6kC6nA_003D_003D;
+
+		public ushort _0023_003Dqylkp8EZXsrl6SROVIrZuOQ_003D_003D;
+
+		public ushort _0023_003Dqzt6R3F0b0KrlNc06XoEO0Q_003D_003D;
+
+		public ushort _0023_003Dq61rZ4GOQhG1mPaGk7aObHw_003D_003D;
+	}
+
+	public struct _0023_003DqYiimkgW2RjZ3YZvqQYip9Q_003D_003D
+	{
+		public long _0023_003DqccnIJ7aDMkoZD4ccCzA0EA_003D_003D;
+
+		public float _0023_003Dq0J3dmS9M_J6fBxmeVd_0024ZAA_003D_003D;
+
+		public float _0023_003Dql0ROSsk_K101mALQ2kNzNw_003D_003D;
+
+		public float _0023_003Dqc_cBgowE6INgTLmTDSYv3w_003D_003D;
+	}
+
+	public struct _0023_003DqyR_00247w_AO1sCaVXzTrFuWFbfCWtvih0OlNIqG061vs7M_003D
+	{
+		[StructLayout(LayoutKind.Sequential, Size = 32)]
+		[UnsafeValueType]
+		public struct _0023_003DqLnKGiGmkRIVjy1G3VgKAUlpEd5FZ_0024ZGCXxKZgQIQYpM_003D
+		{
+			public byte _0023_003Dqw4LKQMPiYcOFA1H9jZ2gqn_00242bDo6LL1bRaXhksR8UlQ_003D;
+		}
+
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqPHJbXUczrtlgz0sTw0ccVw_003D_003D;
+
+		public uint _0023_003Dq1Ha5QWeQWscnhobQc7rQxw_003D_003D;
+
+		public uint _0023_003DqvnMVngEUrK0WbAkllTFZ5Q_003D_003D;
+
+		public unsafe fixed byte _0023_003DqFJDlq4USjO7aMEEsLOiYlA_003D_003D[32];
+	}
+
+	public struct _0023_003DqzMZDEWbFMONEH1D9OFSvkvZUfA5rvwaNbgJY0AjyDVs_003D
+	{
+		public ushort _0023_003DqR6r26G_00243Li9EZ5sybEoOgQ_003D_003D;
+
+		public _0023_003DqErFVVlLPmGbjTlziHhMC41f3iCfjgfDutzMw82EYV08_003D _0023_003Dqdy7aQ_0024CLSC6OGde6kNqp_0024w_003D_003D;
+
+		public uint _0023_003DqvnKmfgwfitSnmXQE_0024jHs3A_003D_003D;
+
+		public ushort _0023_003Dq8vIGXwKKv7yHGkEu_0024MV_0024Cg_003D_003D;
+
+		public ushort _0023_003Dql6Q92Y3eAMpvYUIhKd_MbA_003D_003D;
+
+		public ushort _0023_003DqoywHSHduKRFMCgzI2cUDYA_003D_003D;
+
+		public byte _0023_003DqPenMRPnd83vh27qUiZ6QJQ_003D_003D;
+
+		public ushort _0023_003DqGvj5nX00FBXspo6gjfTCtw_003D_003D;
+
+		public ushort _0023_003DqNxvghM1Zsa8WvoZ3mkNfbA_003D_003D;
+
+		public IntPtr _0023_003DqRb6LC7A_0024cTDVg3EwGO_0024zUg_003D_003D;
+
+		public ushort _0023_003DqcUOxsMJ3J1KdMMks0djHUg_003D_003D;
+
+		public ushort _0023_003DqJ1xOvIu_0024tm2Zj3phBHbReA_003D_003D;
+
+		public ushort _0023_003DqtiOAkPPQPccs5mwfXx_o9Q_003D_003D;
+
+		public ushort _0023_003Dqnnprt4JU8uBKU75a8yIXXA_003D_003D;
+	}
+
+	public struct _0023_003DqZnCQJhD32IAq_f3NaBJpYO1E_0024tKhJprABE8fIf1rMTU_003D
+	{
+		public _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D _0023_003DqCOnjgs9W4V3qbTqQNSvulg_003D_003D;
+
+		public uint _0023_003DqFLaGB1lFEmfI8W52MwjwWw_003D_003D;
+
+		public int _0023_003DqcX6_JyZY8cojmInpJQDAqQ_003D_003D;
+
+		public byte _0023_003Dqcf20JIjCcyjpP7wACqUIvQ_003D_003D;
+
+		public byte _0023_003DqYyzvVERWPInKH11BmDGOHA_003D_003D;
+
+		private byte _0023_003DqGxAucn3dboHOzkoUA2MozQ_003D_003D;
+
+		private byte _0023_003DqFaV88PiSWl_0024EwwWNTgNv1w_003D_003D;
+	}
+
+	public enum _0023_003DqZQH_k7L9dNKER4YLxGKF5N9wBEisd4Fu18e0uvevmWs_003D
+	{
+
+	}
+
+	public struct _0023_003DqZyMZrwTeuhj3HylguaZg_as_0024y2SABXxN6iBSHPEE_H8_003D
+	{
+		public uint _0023_003Dq2QzXKMa9iCdMn009GKL7qA_003D_003D;
+
+		public uint _0023_003DqKrbpi_0024CFqZufbwxQ0MJoQQ_003D_003D;
+
+		public long _0023_003DqwAHWgy7eT1kajGuqj02EDA_003D_003D;
+
+		public float _0023_003DqwDSrQDfEX4Y_0024avGfP_0024SjFw_003D_003D;
+
+		public float _0023_003DqfwWGOTGaXyvEhSlAh65_0024ZQ_003D_003D;
+
+		public float _0023_003DqqAld3y_DDwCFAWxy6_0024T7Wg_003D_003D;
+
+		public float _0023_003DqHV_0024IigsX_exwX1krtCYwIw_003D_003D;
+
+		public ushort _0023_003DqQFaYowZpoYu8pVUKbn_XgA_003D_003D;
+
+		public ushort _0023_003DqAYR3ZRmxIcpLGXhefypljQ_003D_003D;
+	}
+
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+	public delegate void SDL_AudioCallback(IntPtr userdata, IntPtr stream, int len);
+
+	public struct SDL_AudioSpec
+	{
+		public int freq;
+
+		public ushort format;
+
+		public byte channels;
+
+		public byte silence;
+
+		public ushort samples;
+
+		public uint size;
+
+		public SDL_AudioCallback callback;
+
+		public IntPtr userdata;
+	}
+
+	public struct SDL_MessageBoxColor
+	{
+		public byte r;
+
+		public byte g;
+
+		public byte b;
+	}
+
+	public struct SDL_MessageBoxColorScheme
+	{
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 5, ArraySubType = UnmanagedType.Struct)]
+		public SDL_MessageBoxColor[] colors;
+	}
+
+	public struct SDL_Rect
+	{
+		public int x;
+
+		public int y;
+
+		public int w;
+
+		public int h;
+	}
+
+	public struct SDL_Surface
+	{
+		public uint flags;
+
+		public IntPtr format;
+
+		public int w;
+
+		public int h;
+
+		public int pitch;
+
+		public IntPtr pixels;
+
+		public IntPtr userdata;
+
+		public int locked;
+
+		public IntPtr lock_data;
+
+		public SDL_Rect clip_rect;
+
+		public IntPtr map;
+
+		public int refcount;
+	}
+
+	public struct SDL_version
+	{
+		public byte major;
+
+		public byte minor;
+
+		public byte patch;
+	}
+
+	private const string nativeLibName = "SDL2.dll";
+
+	public const uint SDL_INIT_TIMER = 1u;
+
+	public const uint SDL_INIT_AUDIO = 16u;
+
+	public const uint SDL_INIT_VIDEO = 32u;
+
+	public const uint SDL_INIT_JOYSTICK = 512u;
+
+	public const uint SDL_INIT_HAPTIC = 4096u;
+
+	public const uint SDL_INIT_GAMECONTROLLER = 8192u;
+
+	public const uint SDL_INIT_NOPARACHUTE = 1048576u;
+
+	public const uint SDL_INIT_EVERYTHING = 12849u;
+
+	public const string SDL_HINT_FRAMEBUFFER_ACCELERATION = "SDL_FRAMEBUFFER_ACCELERATION";
+
+	public const string SDL_HINT_RENDER_DRIVER = "SDL_RENDER_DRIVER";
+
+	public const string SDL_HINT_RENDER_OPENGL_SHADERS = "SDL_RENDER_OPENGL_SHADERS";
+
+	public const string SDL_HINT_RENDER_DIRECT3D_THREADSAFE = "SDL_RENDER_DIRECT3D_THREADSAFE";
+
+	public const string SDL_HINT_RENDER_VSYNC = "SDL_RENDER_VSYNC";
+
+	public const string SDL_HINT_VIDEO_X11_XVIDMODE = "SDL_VIDEO_X11_XVIDMODE";
+
+	public const string SDL_HINT_VIDEO_X11_XINERAMA = "SDL_VIDEO_X11_XINERAMA";
+
+	public const string SDL_HINT_VIDEO_X11_XRANDR = "SDL_VIDEO_X11_XRANDR";
+
+	public const string SDL_HINT_GRAB_KEYBOARD = "SDL_GRAB_KEYBOARD";
+
+	public const string SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS = "SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS";
+
+	public const string SDL_HINT_IDLE_TIMER_DISABLED = "SDL_IOS_IDLE_TIMER_DISABLED";
+
+	public const string SDL_HINT_ORIENTATIONS = "SDL_IOS_ORIENTATIONS";
+
+	public const string SDL_HINT_XINPUT_ENABLED = "SDL_XINPUT_ENABLED";
+
+	public const string SDL_HINT_GAMECONTROLLERCONFIG = "SDL_GAMECONTROLLERCONFIG";
+
+	public const string SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS = "SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS";
+
+	public const string SDL_HINT_ALLOW_TOPMOST = "SDL_ALLOW_TOPMOST";
+
+	public const string SDL_HINT_TIMER_RESOLUTION = "SDL_TIMER_RESOLUTION";
+
+	public const string SDL_HINT_RENDER_SCALE_QUALITY = "SDL_RENDER_SCALE_QUALITY";
+
+	public const string SDL_HINT_VIDEO_HIGHDPI_DISABLED = "SDL_VIDEO_HIGHDPI_DISABLED";
+
+	public const string SDL_HINT_CTRL_CLICK_EMULATE_RIGHT_CLICK = "SDL_CTRL_CLICK_EMULATE_RIGHT_CLICK";
+
+	public const string SDL_HINT_VIDEO_WIN_D3DCOMPILER = "SDL_VIDEO_WIN_D3DCOMPILER";
+
+	public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP = "SDL_MOUSE_RELATIVE_MODE_WARP";
+
+	public const string SDL_HINT_VIDEO_WINDOW_SHARE_PIXEL_FORMAT = "SDL_VIDEO_WINDOW_SHARE_PIXEL_FORMAT";
+
+	public const string SDL_HINT_VIDEO_ALLOW_SCREENSAVER = "SDL_VIDEO_ALLOW_SCREENSAVER";
+
+	public const string SDL_HINT_ACCELEROMETER_AS_JOYSTICK = "SDL_ACCELEROMETER_AS_JOYSTICK";
+
+	public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES = "SDL_VIDEO_MAC_FULLSCREEN_SPACES";
+
+	public const string SDL_HINT_NO_SIGNAL_HANDLERS = "SDL_NO_SIGNAL_HANDLERS";
+
+	public const string SDL_HINT_IME_INTERNAL_EDITING = "SDL_IME_INTERNAL_EDITING";
+
+	public const string SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH = "SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
+
+	public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT = "SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+
+	public const string SDL_HINT_THREAD_STACK_SIZE = "SDL_THREAD_STACK_SIZE";
+
+	public const string SDL_HINT_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN = "SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN";
+
+	public const string SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP = "SDL_WINDOWS_ENABLE_MESSAGELOOP";
+
+	public const string SDL_HINT_WINDOWS_NO_CLOSE_ON_ALT_F4 = "SDL_WINDOWS_NO_CLOSE_ON_ALT_F4";
+
+	public const string SDL_HINT_XINPUT_USE_OLD_JOYSTICK_MAPPING = "SDL_XINPUT_USE_OLD_JOYSTICK_MAPPING";
+
+	public const string SDL_HINT_MAC_BACKGROUND_APP = "SDL_MAC_BACKGROUND_APP";
+
+	public const string SDL_HINT_VIDEO_X11_NET_WM_PING = "SDL_VIDEO_X11_NET_WM_PING";
+
+	public const string SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION = "SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION";
+
+	public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION = "SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
+
+	public const int SDL_LOG_CATEGORY_APPLICATION = 0;
+
+	public const int SDL_LOG_CATEGORY_ERROR = 1;
+
+	public const int SDL_LOG_CATEGORY_ASSERT = 2;
+
+	public const int SDL_LOG_CATEGORY_SYSTEM = 3;
+
+	public const int SDL_LOG_CATEGORY_AUDIO = 4;
+
+	public const int SDL_LOG_CATEGORY_VIDEO = 5;
+
+	public const int SDL_LOG_CATEGORY_RENDER = 6;
+
+	public const int SDL_LOG_CATEGORY_INPUT = 7;
+
+	public const int SDL_LOG_CATEGORY_TEST = 8;
+
+	public const int SDL_LOG_CATEGORY_RESERVED1 = 9;
+
+	public const int SDL_LOG_CATEGORY_RESERVED2 = 10;
+
+	public const int SDL_LOG_CATEGORY_RESERVED3 = 11;
+
+	public const int SDL_LOG_CATEGORY_RESERVED4 = 12;
+
+	public const int SDL_LOG_CATEGORY_RESERVED5 = 13;
+
+	public const int SDL_LOG_CATEGORY_RESERVED6 = 14;
+
+	public const int SDL_LOG_CATEGORY_RESERVED7 = 15;
+
+	public const int SDL_LOG_CATEGORY_RESERVED8 = 16;
+
+	public const int SDL_LOG_CATEGORY_RESERVED9 = 17;
+
+	public const int SDL_LOG_CATEGORY_RESERVED10 = 18;
+
+	public const int SDL_LOG_CATEGORY_CUSTOM = 19;
+
+	public const int SDL_MAJOR_VERSION = 2;
+
+	public const int SDL_MINOR_VERSION = 0;
+
+	public const int SDL_PATCHLEVEL = 4;
+
+	public static readonly int SDL_COMPILEDVERSION = SDL_VERSIONNUM(2, 0, 4);
+
+	public const int SDL_WINDOWPOS_UNDEFINED_MASK = 536805376;
+
+	public const int SDL_WINDOWPOS_CENTERED_MASK = 805240832;
+
+	public const int SDL_WINDOWPOS_UNDEFINED = 536805376;
+
+	public const int SDL_WINDOWPOS_CENTERED = 805240832;
+
+	public static readonly uint SDL_PIXELFORMAT_UNKNOWN = 0u;
+
+	public static readonly uint SDL_PIXELFORMAT_INDEX1LSB = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)1, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)0, 1, 0);
+
+	public static readonly uint SDL_PIXELFORMAT_INDEX1MSB = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)1, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)2, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)0, 1, 0);
+
+	public static readonly uint SDL_PIXELFORMAT_INDEX4LSB = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)2, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)0, 4, 0);
+
+	public static readonly uint SDL_PIXELFORMAT_INDEX4MSB = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)2, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)2, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)0, 4, 0);
+
+	public static readonly uint SDL_PIXELFORMAT_INDEX8 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)3, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)0, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)0, 8, 1);
+
+	public static readonly uint SDL_PIXELFORMAT_RGB332 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)4, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)1, 8, 1);
+
+	public static readonly uint SDL_PIXELFORMAT_RGB444 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)2, 12, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_RGB555 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)3, 15, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_BGR555 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)1, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)3, 15, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_ARGB4444 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)3, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)2, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_RGBA4444 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)4, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)2, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_ABGR4444 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)7, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)2, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_BGRA4444 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)8, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)2, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_ARGB1555 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)3, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)3, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_RGBA5551 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)4, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)4, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_ABGR1555 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)7, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)3, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_BGRA5551 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)8, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)4, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_RGB565 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)5, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_BGR565 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)5, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)5, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)5, 16, 2);
+
+	public static readonly uint SDL_PIXELFORMAT_RGB24 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)7, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)0, 24, 3);
+
+	public static readonly uint SDL_PIXELFORMAT_BGR24 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)7, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)4, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)0, 24, 3);
+
+	public static readonly uint SDL_PIXELFORMAT_RGB888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)1, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 24, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_RGBX8888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)2, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 24, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_BGR888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)5, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 24, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_BGRX8888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)6, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 24, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_ARGB8888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)3, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 32, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_RGBA8888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)4, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 32, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_ABGR8888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)7, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 32, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_BGRA8888 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)8, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)6, 32, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_ARGB2101010 = SDL_DEFINE_PIXELFORMAT((_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)6, (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)3, (_0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D)7, 32, 4);
+
+	public static readonly uint SDL_PIXELFORMAT_YV12 = SDL_DEFINE_PIXELFOURCC(89, 86, 49, 50);
+
+	public static readonly uint SDL_PIXELFORMAT_IYUV = SDL_DEFINE_PIXELFOURCC(73, 89, 85, 86);
+
+	public static readonly uint SDL_PIXELFORMAT_YUY2 = SDL_DEFINE_PIXELFOURCC(89, 85, 89, 50);
+
+	public static readonly uint SDL_PIXELFORMAT_UYVY = SDL_DEFINE_PIXELFOURCC(85, 89, 86, 89);
+
+	public static readonly uint SDL_PIXELFORMAT_YVYU = SDL_DEFINE_PIXELFOURCC(89, 86, 89, 85);
+
+	public const uint SDL_SWSURFACE = 0u;
+
+	public const uint SDL_PREALLOC = 1u;
+
+	public const uint SDL_RLEACCEL = 2u;
+
+	public const uint SDL_DONTFREE = 4u;
+
+	public const byte SDL_PRESSED = 1;
+
+	public const byte SDL_RELEASED = 0;
+
+	public const int SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
+
+	public const int SDL_TEXTINPUTEVENT_TEXT_SIZE = 32;
+
+	public const int SDL_QUERY = -1;
+
+	public const int SDL_IGNORE = 0;
+
+	public const int SDL_DISABLE = 0;
+
+	public const int SDL_ENABLE = 1;
+
+	public const int SDLK_SCANCODE_MASK = 1073741824;
+
+	public const uint SDL_BUTTON_LEFT = 1u;
+
+	public const uint SDL_BUTTON_MIDDLE = 2u;
+
+	public const uint SDL_BUTTON_RIGHT = 3u;
+
+	public const uint SDL_BUTTON_X1 = 4u;
+
+	public const uint SDL_BUTTON_X2 = 5u;
+
+	public static readonly uint SDL_BUTTON_LMASK = SDL_BUTTON(1u);
+
+	public static readonly uint SDL_BUTTON_MMASK = SDL_BUTTON(2u);
+
+	public static readonly uint SDL_BUTTON_RMASK = SDL_BUTTON(3u);
+
+	public static readonly uint SDL_BUTTON_X1MASK = SDL_BUTTON(4u);
+
+	public static readonly uint SDL_BUTTON_X2MASK = SDL_BUTTON(5u);
+
+	public const uint SDL_TOUCH_MOUSEID = uint.MaxValue;
+
+	public const byte SDL_HAT_CENTERED = 0;
+
+	public const byte SDL_HAT_UP = 1;
+
+	public const byte SDL_HAT_RIGHT = 2;
+
+	public const byte SDL_HAT_DOWN = 4;
+
+	public const byte SDL_HAT_LEFT = 8;
+
+	public const byte SDL_HAT_RIGHTUP = 3;
+
+	public const byte SDL_HAT_RIGHTDOWN = 6;
+
+	public const byte SDL_HAT_LEFTUP = 9;
+
+	public const byte SDL_HAT_LEFTDOWN = 12;
+
+	public const ushort SDL_HAPTIC_CONSTANT = 1;
+
+	public const ushort SDL_HAPTIC_SINE = 2;
+
+	public const ushort SDL_HAPTIC_LEFTRIGHT = 4;
+
+	public const ushort SDL_HAPTIC_TRIANGLE = 8;
+
+	public const ushort SDL_HAPTIC_SAWTOOTHUP = 16;
+
+	public const ushort SDL_HAPTIC_SAWTOOTHDOWN = 32;
+
+	public const ushort SDL_HAPTIC_SPRING = 128;
+
+	public const ushort SDL_HAPTIC_DAMPER = 256;
+
+	public const ushort SDL_HAPTIC_INERTIA = 512;
+
+	public const ushort SDL_HAPTIC_FRICTION = 1024;
+
+	public const ushort SDL_HAPTIC_CUSTOM = 2048;
+
+	public const ushort SDL_HAPTIC_GAIN = 4096;
+
+	public const ushort SDL_HAPTIC_AUTOCENTER = 8192;
+
+	public const ushort SDL_HAPTIC_STATUS = 16384;
+
+	public const ushort SDL_HAPTIC_PAUSE = 32768;
+
+	public const byte SDL_HAPTIC_POLAR = 0;
+
+	public const byte SDL_HAPTIC_CARTESIAN = 1;
+
+	public const byte SDL_HAPTIC_SPHERICAL = 2;
+
+	public const uint SDL_HAPTIC_INFINITY = 4292967295u;
+
+	public const ushort SDL_AUDIO_MASK_BITSIZE = 255;
+
+	public const ushort SDL_AUDIO_MASK_DATATYPE = 256;
+
+	public const ushort SDL_AUDIO_MASK_ENDIAN = 4096;
+
+	public const ushort SDL_AUDIO_MASK_SIGNED = 32768;
+
+	public const ushort AUDIO_U8 = 8;
+
+	public const ushort AUDIO_S8 = 32776;
+
+	public const ushort AUDIO_U16LSB = 16;
+
+	public const ushort AUDIO_S16LSB = 32784;
+
+	public const ushort AUDIO_U16MSB = 4112;
+
+	public const ushort AUDIO_S16MSB = 36880;
+
+	public const ushort AUDIO_U16 = 16;
+
+	public const ushort AUDIO_S16 = 32784;
+
+	public const ushort AUDIO_S32LSB = 32800;
+
+	public const ushort AUDIO_S32MSB = 36896;
+
+	public const ushort AUDIO_S32 = 32800;
+
+	public const ushort AUDIO_F32LSB = 33056;
+
+	public const ushort AUDIO_F32MSB = 37152;
+
+	public const ushort AUDIO_F32 = 33056;
+
+	public static readonly ushort AUDIO_U16SYS = (ushort)(BitConverter.IsLittleEndian ? 16 : 4112);
+
+	public static readonly ushort AUDIO_S16SYS = (ushort)(BitConverter.IsLittleEndian ? 32784 : 36880);
+
+	public static readonly ushort AUDIO_S32SYS = (ushort)(BitConverter.IsLittleEndian ? 32800 : 36896);
+
+	public static readonly ushort AUDIO_F32SYS = (ushort)(BitConverter.IsLittleEndian ? 33056 : 37152);
+
+	public const uint SDL_AUDIO_ALLOW_FREQUENCY_CHANGE = 1u;
+
+	public const uint SDL_AUDIO_ALLOW_FORMAT_CHANGE = 1u;
+
+	public const uint SDL_AUDIO_ALLOW_CHANNELS_CHANGE = 1u;
+
+	public const uint SDL_AUDIO_ALLOW_ANY_CHANGE = 1u;
+
+	public const int SDL_MIX_MAXVOLUME = 128;
+
+	public static uint SDL_FOURCC(byte A, byte B, byte C, byte D)
+	{
+		return (uint)(A | (B << 8) | (C << 16) | (D << 24));
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	internal static extern IntPtr SDL_malloc(IntPtr size);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	internal static extern void SDL_free(IntPtr memblock);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_RWFromFile")]
+	internal static extern IntPtr INTERNAL_SDL_RWFromFile([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string file, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string mode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_RWFromMem(byte[] mem, int size);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetMainReady();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_Init(uint flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_InitSubSystem(uint flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_Quit();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_QuitSubSystem(uint flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_WasInit(uint flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetPlatform();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_ClearHints();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetHint([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string name);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_SetHint([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string name, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string value);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_SetHintWithPriority([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string name, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string value, _0023_003DqnlJN_00240K5J1XJbeeWrYTu2KQN5_ecrnDasMCNuIcBf1I_003D priority);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_ClearError();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetError();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003Dq5SOC1_FtAK14OllrFr3XwvwMm9AfvoPVf_0024EXullZrhc_003D SDL_LogGetPriority(int category);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_LogSetPriority(int category, _0023_003Dq5SOC1_FtAK14OllrFr3XwvwMm9AfvoPVf_0024EXullZrhc_003D priority);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_LogSetAllPriority(_0023_003Dq5SOC1_FtAK14OllrFr3XwvwMm9AfvoPVf_0024EXullZrhc_003D priority);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_LogResetPriorities();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_LogGetOutputFunction(out _0023_003DqR87c3dbYbBmay4BjKJTF0fsH6J97tV_00243jEg4mhcLM1A_003D callback, out IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_LogSetOutputFunction(_0023_003DqR87c3dbYbBmay4BjKJTF0fsH6J97tV_00243jEg4mhcLM1A_003D callback, IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_ShowMessageBox")]
+	private static extern int INTERNAL_SDL_ShowMessageBox([In] ref _0023_003DqEmHQsUKKwLakd17hCbZKlO1a8ZZg3haricnup_0024J04Ck_003D messageboxdata, out int buttonid);
+
+	public unsafe static int SDL_ShowMessageBox([In] ref _0023_003DqWdj6vRZJbiMNTzup_0024IfMx8bLF5uY6z80MJKPr4EDS8Y_003D messageboxdata, out int buttonid)
+	{
+		ICustomMarshaler instance = LPUtf8StrMarshaler.GetInstance(null);
+		_0023_003DqEmHQsUKKwLakd17hCbZKlO1a8ZZg3haricnup_0024J04Ck_003D messageboxdata2 = new _0023_003DqEmHQsUKKwLakd17hCbZKlO1a8ZZg3haricnup_0024J04Ck_003D
+		{
+			_0023_003DqOL11nICxDYrw_00249Q3B9AGiw_003D_003D = messageboxdata._0023_003DqbOxfneryMupoc5B0ALS_YA_003D_003D,
+			_0023_003DqVQMSA8ik_LnPCMQwXN0zZQ_003D_003D = messageboxdata._0023_003DqJm_XlG8ruxcxmoqOJa1ISw_003D_003D,
+			_0023_003DqfCxpCz_0024SQwbLS3vn_h65Dg_003D_003D = instance.MarshalManagedToNative(messageboxdata._0023_003DqPp6OXnyUaaz10f8_x1TsNA_003D_003D),
+			_0023_003DqIgqmz_L9rmzbQZN4PQsUAw_003D_003D = instance.MarshalManagedToNative(messageboxdata._0023_003DqvwYsrQajE2hifmzFv7RarA_003D_003D),
+			_0023_003Dqfj7_0024dUDcLgd6kFCxhD6PMg_003D_003D = messageboxdata._0023_003DqNZPqTThVtdTv4Tet00tP2g_003D_003D
+		};
+		_0023_003DqfO5vAINxL5lx_phRT8RQPq3N4OAcitvb35W99l2G8hY1px7KrpOTvnddLXy52ELg[] array = new _0023_003DqfO5vAINxL5lx_phRT8RQPq3N4OAcitvb35W99l2G8hY1px7KrpOTvnddLXy52ELg[messageboxdata._0023_003DqNZPqTThVtdTv4Tet00tP2g_003D_003D];
+		for (int i = 0; i < messageboxdata._0023_003DqNZPqTThVtdTv4Tet00tP2g_003D_003D; i++)
+		{
+			array[i] = new _0023_003DqfO5vAINxL5lx_phRT8RQPq3N4OAcitvb35W99l2G8hY1px7KrpOTvnddLXy52ELg
+			{
+				_0023_003DqIntK4wC35pBHPMbBq45TUw_003D_003D = messageboxdata._0023_003Dqd_0024PVAa9Y1jCUVvliOgPMnA_003D_003D[i]._0023_003Dq2gDqGjN8Gvhl74ICio6_jA_003D_003D,
+				_0023_003DqAqU5i0tX_0024m4h1zbSALKUEw_003D_003D = messageboxdata._0023_003Dqd_0024PVAa9Y1jCUVvliOgPMnA_003D_003D[i]._0023_003Dq_Q6dB5HwisZ7LsQdi1lEnA_003D_003D,
+				_0023_003Dq0i3d7CXfoi1KkMjRuWArYA_003D_003D = instance.MarshalManagedToNative(messageboxdata._0023_003Dqd_0024PVAa9Y1jCUVvliOgPMnA_003D_003D[i]._0023_003DqKE6MMTO5GhzaIUAPB2hulg_003D_003D)
+			};
+		}
+		if (messageboxdata._0023_003DqvMKrvJ0zpSL6nc_eXm6WdA_003D_003D.HasValue)
+		{
+			messageboxdata2._0023_003DqvMKrvJ0zpSL6nc_eXm6WdA_003D_003D = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SDL_MessageBoxColorScheme)));
+			Marshal.StructureToPtr(messageboxdata._0023_003DqvMKrvJ0zpSL6nc_eXm6WdA_003D_003D.Value, messageboxdata2._0023_003DqvMKrvJ0zpSL6nc_eXm6WdA_003D_003D, fDeleteOld: false);
+		}
+		int result;
+		fixed (_0023_003DqfO5vAINxL5lx_phRT8RQPq3N4OAcitvb35W99l2G8hY1px7KrpOTvnddLXy52ELg* ptr = &array[0])
+		{
+			messageboxdata2._0023_003DqlVPzuJzdhI27Dry663MwEw_003D_003D = (IntPtr)ptr;
+			result = INTERNAL_SDL_ShowMessageBox(ref messageboxdata2, out buttonid);
+		}
+		Marshal.FreeHGlobal(messageboxdata2._0023_003DqvMKrvJ0zpSL6nc_eXm6WdA_003D_003D);
+		for (int j = 0; j < messageboxdata._0023_003DqNZPqTThVtdTv4Tet00tP2g_003D_003D; j++)
+		{
+			instance.CleanUpNativeData(array[j]._0023_003Dq0i3d7CXfoi1KkMjRuWArYA_003D_003D);
+		}
+		instance.CleanUpNativeData(messageboxdata2._0023_003DqIgqmz_L9rmzbQZN4PQsUAw_003D_003D);
+		instance.CleanUpNativeData(messageboxdata2._0023_003DqfCxpCz_0024SQwbLS3vn_h65Dg_003D_003D);
+		return result;
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_ShowSimpleMessageBox(_0023_003DqB5q_0024sUMsvLy9yqlQBjSgmx5PMOQSCwD3BNscrvUc2es_003D flags, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string title, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string message, IntPtr window);
+
+	public static void SDL_VERSION(out SDL_version x)
+	{
+		x.major = 2;
+		x.minor = 0;
+		x.patch = 4;
+	}
+
+	public static int SDL_VERSIONNUM(int X, int Y, int Z)
+	{
+		return X * 1000 + Y * 100 + Z;
+	}
+
+	public static bool SDL_VERSION_ATLEAST(int X, int Y, int Z)
+	{
+		return SDL_COMPILEDVERSION >= SDL_VERSIONNUM(X, Y, Z);
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetVersion(out SDL_version ver);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetRevision();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetRevisionNumber();
+
+	public static int SDL_WINDOWPOS_UNDEFINED_DISPLAY(int X)
+	{
+		return 0x1FFF0000 | X;
+	}
+
+	public static bool SDL_WINDOWPOS_ISUNDEFINED(int X)
+	{
+		return (X & 0xFFFF0000u) == 536805376;
+	}
+
+	public static int SDL_WINDOWPOS_CENTERED_DISPLAY(int X)
+	{
+		return 0x2FFF0000 | X;
+	}
+
+	public static bool SDL_WINDOWPOS_ISCENTERED(int X)
+	{
+		return (X & 0xFFFF0000u) == 805240832;
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateWindow([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string title, int x, int y, int w, int h, _0023_003DqDomoVarfywCcbsgEhY44xRiARWOTKNd0xEIDZVuDy0c_003D flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_CreateWindowAndRenderer(int width, int height, _0023_003DqDomoVarfywCcbsgEhY44xRiARWOTKNd0xEIDZVuDy0c_003D window_flags, out IntPtr window, out IntPtr renderer);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateWindowFrom(IntPtr data);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_DestroyWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_DisableScreenSaver();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_EnableScreenSaver();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetClosestDisplayMode(int displayIndex, ref _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D mode, out _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D closest);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetCurrentDisplayMode(int displayIndex, out _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D mode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetCurrentVideoDriver();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetDesktopDisplayMode(int displayIndex, out _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D mode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetDisplayName(int index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetDisplayBounds(int displayIndex, out SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetDisplayDPI(int displayIndex, out float ddpi, out float hdpi, out float vdpi);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetDisplayMode(int displayIndex, int modeIndex, out _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D mode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumDisplayModes(int displayIndex);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumVideoDisplays();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumVideoDrivers();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetVideoDriver(int index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern float SDL_GetWindowBrightness(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetWindowData(IntPtr window, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string name);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetWindowDisplayIndex(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetWindowDisplayMode(IntPtr window, out _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D mode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetWindowFlags(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetWindowFromID(uint id);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetWindowGammaRamp(IntPtr window, [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] red, [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] green, [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] blue);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_GetWindowGrab(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetWindowID(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetWindowPixelFormat(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetWindowMaximumSize(IntPtr window, out int max_w, out int max_h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetWindowMinimumSize(IntPtr window, out int min_w, out int min_h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetWindowPosition(IntPtr window, out int x, out int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetWindowSize(IntPtr window, out int w, out int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetWindowSurface(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetWindowTitle(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GL_BindTexture(IntPtr texture, out float texw, out float texh);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GL_CreateContext(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GL_DeleteContext(IntPtr context);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GL_GetProcAddress([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string proc);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_GL_ExtensionSupported([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string extension);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GL_ResetAttributes();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GL_GetAttribute(_0023_003DqwEb_hVeWElyw36z3jO1WmQ_003D_003D attr, out int value);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GL_GetSwapInterval();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GL_MakeCurrent(IntPtr window, IntPtr context);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GL_GetCurrentWindow();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GL_GetCurrentContext();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GL_GetDrawableSize(IntPtr window, out int w, out int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GL_SetAttribute(_0023_003DqwEb_hVeWElyw36z3jO1WmQ_003D_003D attr, int value);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GL_SetSwapInterval(int interval);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GL_SwapWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GL_UnbindTexture(IntPtr texture);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_HideWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_IsScreenSaverEnabled();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_MaximizeWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_MinimizeWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_RaiseWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_RestoreWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetWindowBrightness(IntPtr window, float brightness);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_SetWindowData(IntPtr window, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string name, IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetWindowDisplayMode(IntPtr window, ref _0023_003Dq8M3GM3ekgSVJ_0024KAwx623q_0024mQpUiqzmT7l86pjfjVmNM_003D mode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetWindowFullscreen(IntPtr window, uint flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetWindowGammaRamp(IntPtr window, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] red, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] green, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] blue);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowGrab(IntPtr window, _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D grabbed);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowIcon(IntPtr window, IntPtr icon);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowMaximumSize(IntPtr window, int max_w, int max_h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowMinimumSize(IntPtr window, int min_w, int min_h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowPosition(IntPtr window, int x, int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowSize(IntPtr window, int w, int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowBordered(IntPtr window, _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D bordered);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetWindowTitle(IntPtr window, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string title);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_ShowWindow(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_UpdateWindowSurface(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_UpdateWindowSurfaceRects(IntPtr window, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] SDL_Rect[] rects, int numrects);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_VideoInit([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string driver_name);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_VideoQuit();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetWindowHitTest(IntPtr window, _0023_003DqFWAEYxmqZ2qAmi2CUJp77A_003D_003D callback, IntPtr callback_data);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetGrabbedWindow();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateRenderer(IntPtr window, int index, _0023_003Dq8YLsBLFNos2MFZ79y3IE3_0024YVOU_PUDotapgkT9mGRSQ_003D flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateSoftwareRenderer(IntPtr surface);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateTexture(IntPtr renderer, uint format, int access, int w, int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateTextureFromSurface(IntPtr renderer, IntPtr surface);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_DestroyRenderer(IntPtr renderer);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_DestroyTexture(IntPtr texture);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumRenderDrivers();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetRenderDrawBlendMode(IntPtr renderer, out _0023_003DqHpWZDgvX0mkHK2Odrz6txg_003D_003D blendMode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetRenderDrawColor(IntPtr renderer, out byte r, out byte g, out byte b, out byte a);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetRenderDriverInfo(int index, out _0023_003Dq_00246IiyynVXTFuPsycXh4pARu0YQZXMIiNvz0iqozAok0_003D info);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetRenderer(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetRendererInfo(IntPtr renderer, out _0023_003Dq_00246IiyynVXTFuPsycXh4pARu0YQZXMIiNvz0iqozAok0_003D info);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetRendererOutputSize(IntPtr renderer, out int w, out int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetTextureAlphaMod(IntPtr texture, out byte alpha);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetTextureBlendMode(IntPtr texture, out _0023_003DqHpWZDgvX0mkHK2Odrz6txg_003D_003D blendMode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetTextureColorMod(IntPtr texture, out byte r, out byte g, out byte b);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_LockTexture(IntPtr texture, ref SDL_Rect rect, out IntPtr pixels, out int pitch);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_LockTexture(IntPtr texture, IntPtr rect, out IntPtr pixels, out int pitch);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_QueryTexture(IntPtr texture, out uint format, out int access, out int w, out int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderClear(IntPtr renderer);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopy(IntPtr renderer, IntPtr texture, ref SDL_Rect srcrect, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopy(IntPtr renderer, IntPtr texture, IntPtr srcrect, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopy(IntPtr renderer, IntPtr texture, ref SDL_Rect srcrect, IntPtr dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopy(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, ref SDL_Rect srcrect, ref SDL_Rect dstrect, double angle, ref _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, IntPtr srcrect, ref SDL_Rect dstrect, double angle, ref _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, ref SDL_Rect srcrect, IntPtr dstrect, double angle, ref _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, ref SDL_Rect srcrect, ref SDL_Rect dstrect, double angle, IntPtr center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect, double angle, ref _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, IntPtr srcrect, ref SDL_Rect dstrect, double angle, IntPtr center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, ref SDL_Rect srcrect, IntPtr dstrect, double angle, IntPtr center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderCopyEx(IntPtr renderer, IntPtr texture, IntPtr srcrect, IntPtr dstrect, double angle, IntPtr center, _0023_003DqDSizewNPJWI4Shpzpnxc5VvaJvebFvsROJIgReTkONw_003D flip);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderDrawLine(IntPtr renderer, int x1, int y1, int x2, int y2);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderDrawLines(IntPtr renderer, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D[] points, int count);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderDrawPoint(IntPtr renderer, int x, int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderDrawPoints(IntPtr renderer, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D[] points, int count);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderDrawRect(IntPtr renderer, ref SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderDrawRect(IntPtr renderer, IntPtr rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderDrawRects(IntPtr renderer, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] SDL_Rect[] rects, int count);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderFillRect(IntPtr renderer, ref SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderFillRect(IntPtr renderer, IntPtr rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderFillRects(IntPtr renderer, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] SDL_Rect[] rects, int count);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_RenderGetClipRect(IntPtr renderer, out SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_RenderGetLogicalSize(IntPtr renderer, out int w, out int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_RenderGetScale(IntPtr renderer, out float scaleX, out float scaleY);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderGetViewport(IntPtr renderer, out SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_RenderPresent(IntPtr renderer);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderReadPixels(IntPtr renderer, ref SDL_Rect rect, uint format, IntPtr pixels, int pitch);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderSetClipRect(IntPtr renderer, ref SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderSetClipRect(IntPtr renderer, IntPtr rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderSetLogicalSize(IntPtr renderer, int w, int h);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderSetScale(IntPtr renderer, float scaleX, float scaleY);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_RenderSetViewport(IntPtr renderer, ref SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetRenderDrawBlendMode(IntPtr renderer, _0023_003DqHpWZDgvX0mkHK2Odrz6txg_003D_003D blendMode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetRenderDrawColor(IntPtr renderer, byte r, byte g, byte b, byte a);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetRenderTarget(IntPtr renderer, IntPtr texture);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetTextureAlphaMod(IntPtr texture, byte alpha);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetTextureBlendMode(IntPtr texture, _0023_003DqHpWZDgvX0mkHK2Odrz6txg_003D_003D blendMode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetTextureColorMod(IntPtr texture, byte r, byte g, byte b);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_UnlockTexture(IntPtr texture);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_UpdateTexture(IntPtr texture, ref SDL_Rect rect, IntPtr pixels, int pitch);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_RenderTargetSupported(IntPtr renderer);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_RenderIsClipEnabled(IntPtr renderer);
+
+	public static uint SDL_DEFINE_PIXELFOURCC(byte A, byte B, byte C, byte D)
+	{
+		return SDL_FOURCC(A, B, C, D);
+	}
+
+	public static uint SDL_DEFINE_PIXELFORMAT(_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D type, _0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D order, _0023_003DqdbXjI9zITVhRQB_GgR47IiYAWPmHjSNFD4PaQ3aNDFs_003D layout, byte bits, byte bytes)
+	{
+		return (uint)(0x10000000 | ((byte)type << 24) | ((byte)order << 20) | ((byte)layout << 16) | (bits << 8) | bytes);
+	}
+
+	public static byte SDL_PIXELFLAG(uint X)
+	{
+		return (byte)((X >> 28) & 0xF);
+	}
+
+	public static byte SDL_PIXELTYPE(uint X)
+	{
+		return (byte)((X >> 24) & 0xF);
+	}
+
+	public static byte SDL_PIXELORDER(uint X)
+	{
+		return (byte)((X >> 20) & 0xF);
+	}
+
+	public static byte SDL_PIXELLAYOUT(uint X)
+	{
+		return (byte)((X >> 16) & 0xF);
+	}
+
+	public static byte SDL_BITSPERPIXEL(uint X)
+	{
+		return (byte)((X >> 8) & 0xFF);
+	}
+
+	public static byte SDL_BYTESPERPIXEL(uint X)
+	{
+		if (SDL_ISPIXELFORMAT_FOURCC(X))
+		{
+			if (X == SDL_PIXELFORMAT_YUY2 || X == SDL_PIXELFORMAT_UYVY || X == SDL_PIXELFORMAT_YVYU)
+			{
+				return 2;
+			}
+			return 1;
+		}
+		return (byte)(X & 0xFF);
+	}
+
+	public static bool SDL_ISPIXELFORMAT_INDEXED(uint format)
+	{
+		if (SDL_ISPIXELFORMAT_FOURCC(format))
+		{
+			return false;
+		}
+		_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D _0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D = (_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)SDL_PIXELTYPE(format);
+		if (_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D != (_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)1 && _0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D != (_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)2)
+		{
+			return _0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D == (_0023_003DqvQTJ_dmvQ6YLGG5WaSR0qqDRhN_0024A7wmrKs1Mb2eF8E0_003D)3;
+		}
+		return true;
+	}
+
+	public static bool SDL_ISPIXELFORMAT_ALPHA(uint format)
+	{
+		if (SDL_ISPIXELFORMAT_FOURCC(format))
+		{
+			return false;
+		}
+		_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D _0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D = (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)SDL_PIXELORDER(format);
+		if (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D != (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)3 && _0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D != (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)4 && _0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D != (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)7)
+		{
+			return _0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D == (_0023_003DqP6yIJTZWQhRmzEAPegdyGPNAKKiZXWIXMdKBl2AGqEI_003D)8;
+		}
+		return true;
+	}
+
+	public static bool SDL_ISPIXELFORMAT_FOURCC(uint format)
+	{
+		if (format == 0)
+		{
+			return SDL_PIXELFLAG(format) != 1;
+		}
+		return false;
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_AllocFormat(uint pixel_format);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_AllocPalette(int ncolors);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_CalculateGammaRamp(float gamma, [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] ramp);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FreeFormat(IntPtr format);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FreePalette(IntPtr palette);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetPixelFormatName(uint format);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetRGB(uint pixel, IntPtr format, out byte r, out byte g, out byte b);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetRGBA(uint pixel, IntPtr format, out byte r, out byte g, out byte b, out byte a);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_MapRGB(IntPtr format, byte r, byte g, byte b);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_MapRGBA(IntPtr format, byte r, byte g, byte b, byte a);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_MasksToPixelFormatEnum(int bpp, uint Rmask, uint Gmask, uint Bmask, uint Amask);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_PixelFormatEnumToMasks(uint format, out int bpp, out uint Rmask, out uint Gmask, out uint Bmask, out uint Amask);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetPaletteColors(IntPtr palette, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] _0023_003Dq3L9fTz49AiVmMyDuImiyGg_003D_003D[] colors, int firstcolor, int ncolors);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetPixelFormatPalette(IntPtr format, IntPtr palette);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_PointInRect(ref _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D p, ref SDL_Rect r);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_EnclosePoints([In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] _0023_003Dq_4ni8qfFSje2ioleWFboLQ_003D_003D[] points, int count, ref SDL_Rect clip, out SDL_Rect result);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_HasIntersection(ref SDL_Rect A, ref SDL_Rect B);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_IntersectRect(ref SDL_Rect A, ref SDL_Rect B, out SDL_Rect result);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_IntersectRectAndLine(ref SDL_Rect rect, ref int X1, ref int Y1, ref int X2, ref int Y2);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_RectEmpty(ref SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_RectEquals(ref SDL_Rect A, ref SDL_Rect B);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_UnionRect(ref SDL_Rect A, ref SDL_Rect B, out SDL_Rect result);
+
+	public static bool SDL_MUSTLOCK(IntPtr surface)
+	{
+		return (((SDL_Surface)Marshal.PtrToStructure(surface, typeof(SDL_Surface))).flags & 2) != 0;
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlit")]
+	public static extern int SDL_BlitSurface(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlit")]
+	public static extern int SDL_BlitSurface(IntPtr src, IntPtr srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlit")]
+	public static extern int SDL_BlitSurface(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, IntPtr dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlit")]
+	public static extern int SDL_BlitSurface(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlitScaled")]
+	public static extern int SDL_BlitScaled(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlitScaled")]
+	public static extern int SDL_BlitScaled(IntPtr src, IntPtr srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlitScaled")]
+	public static extern int SDL_BlitScaled(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, IntPtr dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_UpperBlitScaled")]
+	public static extern int SDL_BlitScaled(IntPtr src, IntPtr srcrect, IntPtr dst, IntPtr dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_ConvertPixels(int width, int height, uint src_format, IntPtr src, int src_pitch, uint dst_format, IntPtr dst, int dst_pitch);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_ConvertSurface(IntPtr src, IntPtr fmt, uint flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_ConvertSurfaceFormat(IntPtr src, uint pixel_format, uint flags);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateRGBSurface(uint flags, int width, int height, int depth, uint Rmask, uint Gmask, uint Bmask, uint Amask);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateRGBSurfaceFrom(IntPtr pixels, int width, int height, int depth, int pitch, uint Rmask, uint Gmask, uint Bmask, uint Amask);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_FillRect(IntPtr dst, ref SDL_Rect rect, uint color);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_FillRect(IntPtr dst, IntPtr rect, uint color);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_FillRects(IntPtr dst, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] SDL_Rect[] rects, int count, uint color);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FreeSurface(IntPtr surface);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GetClipRect(IntPtr surface, out SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetColorKey(IntPtr surface, out uint key);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetSurfaceAlphaMod(IntPtr surface, out byte alpha);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetSurfaceBlendMode(IntPtr surface, out _0023_003DqHpWZDgvX0mkHK2Odrz6txg_003D_003D blendMode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetSurfaceColorMod(IntPtr surface, out byte r, out byte g, out byte b);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_LoadBMP_RW")]
+	private static extern IntPtr INTERNAL_SDL_LoadBMP_RW(IntPtr src, int freesrc);
+
+	public static IntPtr SDL_LoadBMP(string file)
+	{
+		return INTERNAL_SDL_LoadBMP_RW(INTERNAL_SDL_RWFromFile(file, _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850831456)), 1);
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_LockSurface(IntPtr surface);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_LowerBlit(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_LowerBlitScaled(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_SaveBMP_RW")]
+	private static extern int INTERNAL_SDL_SaveBMP_RW(IntPtr surface, IntPtr src, int freesrc);
+
+	public static int SDL_SaveBMP(IntPtr surface, string file)
+	{
+		IntPtr src = INTERNAL_SDL_RWFromFile(file, _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850831383));
+		return INTERNAL_SDL_SaveBMP_RW(surface, src, 1);
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_SetClipRect(IntPtr surface, ref SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetColorKey(IntPtr surface, int flag, uint key);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetSurfaceAlphaMod(IntPtr surface, byte alpha);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetSurfaceBlendMode(IntPtr surface, _0023_003DqHpWZDgvX0mkHK2Odrz6txg_003D_003D blendMode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetSurfaceColorMod(IntPtr surface, byte r, byte g, byte b);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetSurfacePalette(IntPtr surface, IntPtr palette);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetSurfaceRLE(IntPtr surface, int flag);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SoftStretch(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_UnlockSurface(IntPtr surface);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_UpperBlit(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_UpperBlitScaled(IntPtr src, ref SDL_Rect srcrect, IntPtr dst, ref SDL_Rect dstrect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_HasClipboardText();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetClipboardText();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetClipboardText([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string text);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_PumpEvents();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_PeepEvents([Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeConst = 0)] _0023_003Dqy3KhhUqMsADaH05QdFXkiQ_003D_003D[] events, int numevents, _0023_003DqV5Zdz4DoMPoezT7sDI06WZWjN3ZEtJobBZmJjCSKU24_003D action, _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D minType, _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D maxType);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_HasEvent(_0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D type);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_HasEvents(_0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D minType, _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D maxType);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FlushEvent(_0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D type);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FlushEvents(_0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D min, _0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D max);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_PollEvent(out _0023_003Dqy3KhhUqMsADaH05QdFXkiQ_003D_003D _event);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_WaitEvent(out _0023_003Dqy3KhhUqMsADaH05QdFXkiQ_003D_003D _event);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_WaitEventTimeout(out _0023_003Dqy3KhhUqMsADaH05QdFXkiQ_003D_003D _event, int timeout);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_PushEvent(ref _0023_003Dqy3KhhUqMsADaH05QdFXkiQ_003D_003D _event);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetEventFilter(_0023_003Dqi8DKdq8G9rwl_1mQH_0024iKg3EQaarC1tEpPFn3M7N9Tbc_003D filter, IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_GetEventFilter(out _0023_003Dqi8DKdq8G9rwl_1mQH_0024iKg3EQaarC1tEpPFn3M7N9Tbc_003D filter, out IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_AddEventWatch(_0023_003Dqi8DKdq8G9rwl_1mQH_0024iKg3EQaarC1tEpPFn3M7N9Tbc_003D filter, IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_DelEventWatch(_0023_003Dqi8DKdq8G9rwl_1mQH_0024iKg3EQaarC1tEpPFn3M7N9Tbc_003D filter, IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FilterEvents(_0023_003Dqi8DKdq8G9rwl_1mQH_0024iKg3EQaarC1tEpPFn3M7N9Tbc_003D filter, IntPtr userdata);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern byte SDL_EventState(_0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D type, int state);
+
+	public static byte SDL_GetEventState(_0023_003DqgEDtEC43IWVRGjG0ZOsnlg_003D_003D type)
+	{
+		return SDL_EventState(type, -1);
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_RegisterEvents(int numevents);
+
+	public static _0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D SDL_SCANCODE_TO_KEYCODE(_0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D X)
+	{
+		return (_0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D)(X | (_0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D)1073741824);
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetKeyboardFocus();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetKeyboardState(out int numkeys);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqDVQS1AeGg0qMJYnt32yRDA_003D_003D SDL_GetModState();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetModState(_0023_003DqDVQS1AeGg0qMJYnt32yRDA_003D_003D modstate);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D SDL_GetKeyFromScancode(_0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D scancode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D SDL_GetScancodeFromKey(_0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D key);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetScancodeName(_0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D scancode);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqJQwVpmfdr9ojGB4Bk_ISvQ_003D_003D SDL_GetScancodeFromName([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string name);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetKeyName(_0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D key);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003Dq5h2cmRon4D1gfjMyUVzMnA_003D_003D SDL_GetKeyFromName([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string name);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_StartTextInput();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_IsTextInputActive();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_StopTextInput();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetTextInputRect(ref SDL_Rect rect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_HasScreenKeyboardSupport();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_IsScreenKeyboardShown(IntPtr window);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetMouseFocus();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetMouseState(out int x, out int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetMouseState(IntPtr x, out int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetMouseState(out int x, IntPtr y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetMouseState(IntPtr x, IntPtr y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetGlobalMouseState(out int x, out int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetGlobalMouseState(IntPtr x, out int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetGlobalMouseState(out int x, IntPtr y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetGlobalMouseState(IntPtr x, IntPtr y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetRelativeMouseState(out int x, out int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_WarpMouseInWindow(IntPtr window, int x, int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_WarpMouseGlobal(int x, int y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_SetRelativeMouseMode(_0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D enabled);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_CaptureMouse(_0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D enabled);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_GetRelativeMouseMode();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateCursor(IntPtr data, IntPtr mask, int w, int h, int hot_x, int hot_y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateColorCursor(IntPtr surface, int hot_x, int hot_y);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_CreateSystemCursor(_0023_003Dq3DgPOJKX6vzxfk6VFJBCxyOd2nYzOWfTzxEC2DJuH7s_003D id);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_SetCursor(IntPtr cursor);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetCursor();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FreeCursor(IntPtr cursor);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_ShowCursor(int toggle);
+
+	public static uint SDL_BUTTON(uint X)
+	{
+		return (uint)(1 << (int)(X - 1));
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumTouchDevices();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern long SDL_GetTouchDevice(int index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumTouchFingers(long touchID);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GetTouchFinger(long touchID, int index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_JoystickClose(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickEventState(int state);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern short SDL_JoystickGetAxis(IntPtr joystick, int axis);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickGetBall(IntPtr joystick, int ball, out int dx, out int dy);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern byte SDL_JoystickGetButton(IntPtr joystick, int button);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern byte SDL_JoystickGetHat(IntPtr joystick, int hat);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_JoystickName(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_JoystickNameForIndex(int device_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickNumAxes(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickNumBalls(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickNumButtons(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickNumHats(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_JoystickOpen(int device_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickOpened(int device_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_JoystickUpdate();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_NumJoysticks();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern Guid SDL_JoystickGetDeviceGUID(int device_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern Guid SDL_JoystickGetGUID(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_JoystickGetGUIDString(Guid guid, byte[] pszGUID, int cbGUID);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern Guid SDL_JoystickGetGUIDFromString([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string pchGUID);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_JoystickGetAttached(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickInstanceID(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqEiDXLSK9pHx3StnpiFObNBVqEQ_00244Q6uSkRKaDUmIXPw_003D SDL_JoystickCurrentPowerLevel(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_JoystickFromInstanceID(int joyid);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GameControllerAddMapping([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string mappingString);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_GameControllerAddMappingsFromRW")]
+	private static extern int INTERNAL_SDL_GameControllerAddMappingsFromRW(IntPtr rw, int freerw);
+
+	public static int SDL_GameControllerAddMappingsFromFile(string file)
+	{
+		return INTERNAL_SDL_GameControllerAddMappingsFromRW(INTERNAL_SDL_RWFromFile(file, _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850831456)), 1);
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GameControllerMappingForGUID(Guid guid);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GameControllerMapping(IntPtr gamecontroller);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_IsGameController(int joystick_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GameControllerNameForIndex(int joystick_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GameControllerOpen(int joystick_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GameControllerName(IntPtr gamecontroller);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_GameControllerGetAttached(IntPtr gamecontroller);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GameControllerGetJoystick(IntPtr gamecontroller);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GameControllerEventState(int state);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GameControllerUpdate();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqmS0KVclzL3a_aknHP2p1l3pCHMSsyzzIjNv0e8X4Aro_003D SDL_GameControllerGetAxisFromString([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string pchString);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GameControllerGetStringForAxis(_0023_003DqmS0KVclzL3a_aknHP2p1l3pCHMSsyzzIjNv0e8X4Aro_003D axis);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003Dq_gpoccYTlObRS0HlG1zh2Bdfdwadystox25Tp6wa3wo_003D SDL_GameControllerGetBindForAxis(IntPtr gamecontroller, _0023_003DqmS0KVclzL3a_aknHP2p1l3pCHMSsyzzIjNv0e8X4Aro_003D axis);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern short SDL_GameControllerGetAxis(IntPtr gamecontroller, _0023_003DqmS0KVclzL3a_aknHP2p1l3pCHMSsyzzIjNv0e8X4Aro_003D axis);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003Dq6qdynFO2OPv6tKTTk_4ZwHdXE8j0s_GOYZn8iiM_00243OU_003D SDL_GameControllerGetButtonFromString([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string pchString);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GameControllerGetStringForButton(_0023_003Dq6qdynFO2OPv6tKTTk_4ZwHdXE8j0s_GOYZn8iiM_00243OU_003D button);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003Dq_gpoccYTlObRS0HlG1zh2Bdfdwadystox25Tp6wa3wo_003D SDL_GameControllerGetBindForButton(IntPtr gamecontroller, _0023_003Dq6qdynFO2OPv6tKTTk_4ZwHdXE8j0s_GOYZn8iiM_00243OU_003D button);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern byte SDL_GameControllerGetButton(IntPtr gamecontroller, _0023_003Dq6qdynFO2OPv6tKTTk_4ZwHdXE8j0s_GOYZn8iiM_00243OU_003D button);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_GameControllerClose(IntPtr gamecontroller);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_GameControllerFromInstanceID(int joyid);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_HapticClose(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_HapticDestroyEffect(IntPtr haptic, int effect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticEffectSupported(IntPtr haptic, ref _0023_003DqI8a8Z0dKRufuC2zWCdLZ830MVjtmwIEI0A2LNMbGJQw_003D effect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticGetEffectStatus(IntPtr haptic, int effect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticIndex(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_HapticName(int device_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticNewEffect(IntPtr haptic, ref _0023_003DqI8a8Z0dKRufuC2zWCdLZ830MVjtmwIEI0A2LNMbGJQw_003D effect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticNumAxes(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticNumEffects(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticNumEffectsPlaying(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_HapticOpen(int device_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticOpened(int device_index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_HapticOpenFromJoystick(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern IntPtr SDL_HapticOpenFromMouse();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticPause(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_HapticQuery(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticRumbleInit(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticRumblePlay(IntPtr haptic, float strength, uint length);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticRumbleStop(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticRumbleSupported(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticRunEffect(IntPtr haptic, int effect, uint iterations);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticSetAutocenter(IntPtr haptic, int autocenter);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticSetGain(IntPtr haptic, int gain);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticStopAll(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticStopEffect(IntPtr haptic, int effect);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticUnpause(IntPtr haptic);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_HapticUpdateEffect(IntPtr haptic, int effect, ref _0023_003DqI8a8Z0dKRufuC2zWCdLZ830MVjtmwIEI0A2LNMbGJQw_003D data);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_JoystickIsHaptic(IntPtr joystick);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_MouseIsHaptic();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_NumHaptics();
+
+	public static ushort SDL_AUDIO_BITSIZE(ushort x)
+	{
+		return (ushort)(x & 0xFF);
+	}
+
+	public static bool SDL_AUDIO_ISFLOAT(ushort x)
+	{
+		return (x & 0x100) != 0;
+	}
+
+	public static bool SDL_AUDIO_ISBIGENDIAN(ushort x)
+	{
+		return (x & 0x1000) != 0;
+	}
+
+	public static bool SDL_AUDIO_ISSIGNED(ushort x)
+	{
+		return (x & 0x8000) != 0;
+	}
+
+	public static bool SDL_AUDIO_ISINT(ushort x)
+	{
+		return (x & 0x100) == 0;
+	}
+
+	public static bool SDL_AUDIO_ISLITTLEENDIAN(ushort x)
+	{
+		return (x & 0x1000) == 0;
+	}
+
+	public static bool SDL_AUDIO_ISUNSIGNED(ushort x)
+	{
+		return (x & 0x8000) == 0;
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_AudioDeviceConnected(uint dev);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_AudioInit([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string driver_name);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_AudioQuit();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_CloseAudio();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_CloseAudioDevice(uint dev);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_FreeWAV(IntPtr audio_buf);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetAudioDeviceName(int index, int iscapture);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqUx5CuhUf6R5yb0_pTrHp2dKOgDpA_0024foveD1zHuIkYNY_003D SDL_GetAudioDeviceStatus(uint dev);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetAudioDriver(int index);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqUx5CuhUf6R5yb0_pTrHp2dKOgDpA_0024foveD1zHuIkYNY_003D SDL_GetAudioStatus();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler", MarshalCookie = "LeaveAllocated")]
+	public static extern string SDL_GetCurrentAudioDriver();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumAudioDevices(int iscapture);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetNumAudioDrivers();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_LoadWAV_RW")]
+	private static extern IntPtr INTERNAL_SDL_LoadWAV_RW(IntPtr src, int freesrc, ref SDL_AudioSpec spec, out IntPtr audio_buf, out uint audio_len);
+
+	public static SDL_AudioSpec SDL_LoadWAV(string file, ref SDL_AudioSpec spec, out IntPtr audio_buf, out uint audio_len)
+	{
+		return (SDL_AudioSpec)Marshal.PtrToStructure(INTERNAL_SDL_LoadWAV_RW(INTERNAL_SDL_RWFromFile(file, _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850831456)), 1, ref spec, out audio_buf, out audio_len), typeof(SDL_AudioSpec));
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_LockAudio();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_LockAudioDevice(uint dev);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_MixAudio([Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeConst = 0)] byte[] dst, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeConst = 0)] byte[] src, uint len, int volume);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_MixAudioFormat([Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeConst = 0)] byte[] dst, [In][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeConst = 0)] byte[] src, ushort format, uint len, int volume);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_OpenAudio(ref SDL_AudioSpec desired, out SDL_AudioSpec obtained);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_OpenAudioDevice([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string device, int iscapture, ref SDL_AudioSpec desired, out SDL_AudioSpec obtained, int allowed_changes);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_PauseAudio(int pause_on);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_PauseAudioDevice(uint dev, int pause_on);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_UnlockAudio();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_UnlockAudioDevice(uint dev);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_QueueAudio(uint dev, IntPtr data, uint len);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetQueuedAudioSize(uint dev);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_ClearQueuedAudio(uint dev);
+
+	public static bool SDL_TICKS_PASSED(uint A, uint B)
+	{
+		return (int)(B - A) <= 0;
+	}
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern void SDL_Delay(uint ms);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern uint SDL_GetTicks();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern ulong SDL_GetPerformanceCounter();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern ulong SDL_GetPerformanceFrequency();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_AddTimer(uint interval, _0023_003Dqibpoe1YQP1LB7MJ2VI_0024XWLW31fE2dF4KCvh8Nk1McYw_003D callback, IntPtr param);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_RemoveTimer(int id);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqcmOOYJD8dhU0LQPPHW96PQ_003D_003D SDL_GetWindowWMInfo(IntPtr window, ref _0023_003DqmcptlHAVw_0024t8LQF7s_0024Sbmw_003D_003D info);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")]
+	public static extern string SDL_GetBasePath();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	[return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")]
+	public static extern string SDL_GetPrefPath([In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string org, [In][MarshalAs(UnmanagedType.CustomMarshaler, MarshalType = "SDL2.LPUtf8StrMarshaler")] string app);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern _0023_003DqlyylbWLVtUwiKjBLGl7xVQ_003D_003D SDL_GetPowerInfo(out int secs, out int pct);
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetCPUCount();
+
+	[DllImport("SDL2.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int SDL_GetSystemRAM();
+}

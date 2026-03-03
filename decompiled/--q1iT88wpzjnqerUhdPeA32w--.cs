@@ -1,0 +1,12 @@
+public struct _0023_003Dq1iT88wpzjnqerUhdPeA32w_003D_003D
+{
+	public readonly int _0023_003DqLoHsqo0ckDhgvABBq_0024eHog_003D_003D;
+
+	public readonly int _0023_003Dq_vZiZl98k1Hanso_0024bym9Qw_003D_003D;
+
+	public _0023_003Dq1iT88wpzjnqerUhdPeA32w_003D_003D(int _0023_003Dq1fTmGJNBkfRRatW5AB0ssA_003D_003D, int _0023_003DqXhyhX9OrP1Q3XlXkXc4t8A_003D_003D)
+	{
+		_0023_003DqLoHsqo0ckDhgvABBq_0024eHog_003D_003D = _0023_003Dq1fTmGJNBkfRRatW5AB0ssA_003D_003D;
+		_0023_003Dq_vZiZl98k1Hanso_0024bym9Qw_003D_003D = _0023_003DqXhyhX9OrP1Q3XlXkXc4t8A_003D_003D;
+	}
+}

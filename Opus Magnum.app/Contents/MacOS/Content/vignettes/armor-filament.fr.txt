@@ -1,0 +1,16 @@
+Concordia: Capitaine, pourquoi porter cette vieille armure ?
+Captain Gelt (Armor): N'est-ce pas évident ? Je dois sacrifier ma vie au combat.
+Captain Gelt (Armor): Il faut bien que j'assume la situation, d'une façon ou d'une autre...
+Concordia: Mais c'est vraiment une antiquité ! Nous devrions vous trouver quelque chose de plus moderne dans l'armurerie.
+Captain Gelt (Armor): Non, non. Si je dois paraître en public, je veux ressembler à un de ces héros d'antan.
+Concordia: La première roquette et c'est la mort assurée !
+Anataeus: Si vous tenez vraiment à porter cette armure, laissez-moi au moins la renforcer avec du filament d'armure.
+
+-----------
+
+Captain Gelt (Armor): Tout n'est peut-être pas perdu. Je vais peut-être réussir à inverser le cours de cette bataille à moi tout seul.
+Anataeus: J'imagine que tout est possible.
+Captain Gelt (Armor): Quelles circonstances incroyables... Une offensive comme celle-ci n'est pas arrivée depuis des générations. Des siècles !
+Anataeus: Et pourtant, nous y voici.
+Captain Gelt (Armor): Je me suis juré de défendre la Maison Van Tassen au prix de ma vie... Je ne pensais pas que ça arriverait si tôt...
+Concordia: Quoi qu'il arrive, capitaine, nous nous souviendrons toujours de vous.

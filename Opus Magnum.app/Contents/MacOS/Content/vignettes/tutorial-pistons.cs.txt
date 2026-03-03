@@ -1,0 +1,12 @@
+Henley: Pístový manipulátor je speciální typ manipulátoru, který se může natahovat a stahovat.
+Anataeus (Student): A nejspíš existují i instrukce, které píst ovládají, že?
+Henley: Správně. Předvedu ti to.
+
+-----------
+
+Anataeus (Student): Vidím. Pístový manipulátor dosáhne tam, kam normální nedosáhne. 
+Henley: Proto je tak užitečný! Je trochu dražší, než obyčejný manipulátor.
+Anataeus (Student): A já mohu použít resetovací instrukci, aby se manipulátor odkudkoliv vrátil do svého výchozího stavu. To je šikovné.
+Henley: Hlavně si pamamtuj, že resetovací instrukce zabere stejné množství času, jako kdybys to dělal samostatnými instrukcemi.
+Anataeus (Student): Dobře. Ano. To je samozřejmé.
+Henley: Je.

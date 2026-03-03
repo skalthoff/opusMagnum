@@ -1,0 +1,14 @@
+public sealed class _0023_003DqiVG5hVV_0024YSJks4QytfJDwUNKf7j_0024uuyTMQ6Agz5JWBU_003D
+{
+	public string _0023_003DqxKaQNGrpVZH26Vue4Mp9Mg_003D_003D;
+
+	public LocString _0023_003DqKEn4kYbLxThQnnVYeg_0lw_003D_003D;
+
+	public LocString _0023_003Dq9E9Q8094IBGsmaDC6Lg9uQ_003D_003D;
+
+	public string _0023_003DqtN2twXxtXPC9O9ykc_0024Xj9Q_003D_003D;
+
+	public Maybe<_0023_003DqkSodVkNJRQnSJWtiOMu4kg_003D_003D> _0023_003Dq6TDFy6OdrWe_eq4oQlMZOrocy6do7xhGDDIZV0W4chs_003D;
+
+	public Vector2 _0023_003Dq2QvtZfU4NJ_0024ZnQ5MjAGV4Q_003D_003D;
+}

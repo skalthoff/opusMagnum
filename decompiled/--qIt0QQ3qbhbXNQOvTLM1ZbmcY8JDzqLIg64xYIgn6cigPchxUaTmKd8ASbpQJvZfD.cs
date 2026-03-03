@@ -1,0 +1,44 @@
+using System;
+
+public sealed class _0023_003DqIt0QQ3qbhbXNQOvTLM1ZbmcY8JDzqLIg64xYIgn6cigPchxUaTmKd8ASbpQJvZfD : _0023_003DqXhSbdylNCfjvgmRm2IVwL0TTag6K5xOns1KYXb4Pc6s_003D
+{
+	public _0023_003DqUrFLfe1soiqS_JkrIb27mm9tbO4KNlnSBS8czOHlu8e8jC2tyJsLQZnnE_TI3pVj _0023_003Dq8f0xAfXpK2PyJQIXVZ8sEg_003D_003D;
+
+	public int _0023_003DqI6bQa1nAcIRdBMk95iqjvg_003D_003D;
+
+	public unsafe override void _0023_003DqtfljzuyBUDneaF3KnQEFbw_003D_003D(short* _0023_003DqxD_0024Th_0024UsV_W664UGPNrzMw_003D_003D, int _0023_003DqZpFxPctvNlxKq8FOutlqqw_003D_003D, float _0023_003DqCSK53tZKyoB4SY_8fIWRSA_003D_003D, bool _0023_003Dq0I_7TKE8vtC8itFOzVcbkw_003D_003D)
+	{
+		for (int i = 0; i < _0023_003DqZpFxPctvNlxKq8FOutlqqw_003D_003D; i++)
+		{
+			int num = _0023_003DqxD_0024Th_0024UsV_W664UGPNrzMw_003D_003D[i];
+			int num2 = _0023_003Dq8f0xAfXpK2PyJQIXVZ8sEg_003D_003D._0023_003DqJ3hnNDAsCcEdGrseCrjgPA_003D_003D[_0023_003DqI6bQa1nAcIRdBMk95iqjvg_003D_003D];
+			_0023_003DqI6bQa1nAcIRdBMk95iqjvg_003D_003D++;
+			if (_0023_003DqI6bQa1nAcIRdBMk95iqjvg_003D_003D >= _0023_003Dq8f0xAfXpK2PyJQIXVZ8sEg_003D_003D._0023_003DqJ3hnNDAsCcEdGrseCrjgPA_003D_003D.Length)
+			{
+				if (!_0023_003Dq0I_7TKE8vtC8itFOzVcbkw_003D_003D)
+				{
+					break;
+				}
+				_0023_003DqI6bQa1nAcIRdBMk95iqjvg_003D_003D = 0;
+			}
+			int num3 = (int)(128f * _0023_003DqCSK53tZKyoB4SY_8fIWRSA_003D_003D);
+			num2 = num2 * num3 / 128;
+			_0023_003DqxD_0024Th_0024UsV_W664UGPNrzMw_003D_003D[i] = (short)_0023_003Dqi69E34_0024bVVZEaemMAhvEnA_003D_003D._0023_003DqURBbaL72HtfW40SuvLCq7A_003D_003D(num + num2, -32768, 32767);
+		}
+	}
+
+	public override bool _0023_003DqTHXCuf2h_0024zPiKjnBWJ21Ng_003D_003D()
+	{
+		return _0023_003DqI6bQa1nAcIRdBMk95iqjvg_003D_003D >= _0023_003Dq8f0xAfXpK2PyJQIXVZ8sEg_003D_003D._0023_003DqJ3hnNDAsCcEdGrseCrjgPA_003D_003D.Length;
+	}
+
+	public override void _0023_003DqAlRtXfGk5_002418qnCwaJs9GA_003D_003D(double _0023_003DqWSPLUEfmSBJOq8349_MHxw_003D_003D)
+	{
+		_0023_003DqI6bQa1nAcIRdBMk95iqjvg_003D_003D = (int)Math.Round(_0023_003DqWSPLUEfmSBJOq8349_MHxw_003D_003D * (double)_0023_003DqJUoC8iykEVbcFQGo0hmyzg_003D_003D._0023_003DqY8hyS5gp8nKda6Ae_0024aG_YQ_003D_003D);
+	}
+
+	public override void _0023_003Dqaw_0024ZRoWNpX43_00246TH8oDwiQ_003D_003D()
+	{
+		_0023_003Dq8f0xAfXpK2PyJQIXVZ8sEg_003D_003D = null;
+	}
+}

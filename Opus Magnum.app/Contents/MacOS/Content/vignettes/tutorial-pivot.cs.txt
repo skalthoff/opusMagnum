@@ -1,0 +1,10 @@
+Henley: Někdy budeš potřebovat, aby se manipulátor s tím, co drží, otočil -
+Anataeus (Student): Mysliš tím, že se samotný manipulátor otočí kolem své osy.
+Henley: Správně. V takovém případě použiješ instrukce otáčení.
+
+-----------
+
+Anataeus (Student): Všechno je to jasné a jednoduché.
+Henley: To je dobře, že ti to připadá tak snadné.
+Anataeus (Student): Proč? Jak dlouho trvalo _tobě_ se to všechno naučit?
+Henley: No... Tak půjdeme dál.

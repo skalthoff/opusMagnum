@@ -1,0 +1,23 @@
+Portraits: Anataeus, Concordia
+
+Concordia: İşte o zaman binadaki her şeyi yeniden doldurmamız gerektiğine karar verdim. Armand'ın yüzündeki ifadeyi görmeliydin!
+Anataeus: Mm...
+Concordia: Anataeus, dinliyor musun?
+Anataeus: Hım?
+Concordia: Bu, sorumu yanıtladı.
+Anataeus: Ne?
+Concordia: Canın sıkkın.
+Anataeus: Canım sıkkın falan _değil_. Ben sadece... bir şekilde kederliyim.
+Concordia: Ve Van Tassen Sarayı'nın büyük simyacısını bu kadar huysuzca kederli yapan ne?
+Anataeus: Hiçbir şey. Yani, neden burada olduğumu düşünüyorum.
+Concordia: Buradasın çünkü simyacımızsın.
+Anataeus: Yani daha büyük anlamda diyorum...
+Action: Enter, Captain Gelt
+Captain Gelt: Simyacı burada, değil mi?
+Anataeus: Kaptan Gelt, sizin için ne yapabilirim?
+Captain Gelt: Ana salona gelmeniz gerekli. Bu bir hayat-memat meselesi.
+Concordia: Ne oldu?
+Captain Gelt: Başka bir Saray'dan gelen saldırgan bir hareket bizi şaşırttı… derhal cevap vermeliyiz.
+Anataeus: Simyam emrinizde.
+Concordia: Sonunda neredeyse heyecanlı görünüyorsun.
+Anataeus: Öyleyim! Sonunda, önemli bir şey oluyor!

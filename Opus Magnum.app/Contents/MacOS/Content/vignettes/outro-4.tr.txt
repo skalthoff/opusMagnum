@@ -1,0 +1,24 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): Nils? Sen misin?
+Action: Enter, Nils
+Nils: Simya entrikalarını böldüğüm için üzgünüm, ama Colvan Sarayı'nın sınır bölgelerinde devriyeleri artırdığını bildirmek için geri geldim.
+Nils: Birkaç kaçak olduğunu fark etmiş olabilirler...
+Concordia (Shabby): Farketmeleri oldukça uzun sürdü.
+Anataeus (Shabby): Uyarı için teşekkürler. Yapacak birkaç işim daha var, ama işim biter bitmez buradan çıkmalıyız.
+Nils: Tereddüt etmeyin, açıkça birini arıyorlar.
+Anataeus (Shabby): Clara, bu Nils. Biraz tatsız bir karakter olduğunu söyleyebilirsin-
+Clara: Hayır, biliyorum.
+Anataeus (Shabby): Nasıl yani? Nils'i tanıyor musun?
+Clara: Onu tanıyor muyum? Bana çalışıyor.
+Nils: Sadece yarı zamanlı olarak.
+Concordia (Shabby): Ha! Bizi nasıl bu kadar kolay bulduğunu hep merak ettim.
+Clara: Neredeyse daha önce fark etmediğiniz için alınacağım.
+Concordia (Shabby): Söylemeliyim ki, makineleriniz bizimkinin çok ötesinde.
+Anataeus (Shabby): Ve şehirdeki tek güvenilir hırsızı kendimin bulduğumu sanıyordum...
+Nils: Bayan Soria, burada görülmeden önce eve dönmenizi tavsiye ederim.
+Clara: Muhtemelen en iyisi bu, katılıyorum.
+Anataeus (Shabby): Hala ruj meselesi var.
+Clara: Bunu yaptıktan sonra, Nils balo gecesinde bana getirebilir.
+Anataeus (Shabby): Çok iyi. Bir şey daha var, Clara... kaos olacak.
+Clara: Biliyorum. Ve bundan korkmuyorum.

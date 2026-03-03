@@ -1,0 +1,20 @@
+﻿Portraits: Anataeus, Concordia
+
+Concordia: Wie ist es gelaufen?
+Anataeus: Ein Albtraum.
+Anataeus: Armand hat kein Ende gefunden mit seinen alten Geschichten über Ehre und Rechtschaffenheit.
+Anataeus: Lady Van Tassen sieht aus, als wäre sie einbalsamiert.
+Anataeus: Frederick hat sich sein Hemd mit Essen bekleckert.
+Concordia: Was für ein unerschrockener Mann du doch bist, dich einem formellen Abendessen gestellt zu haben.
+Anataeus: Es klingt einfacher, als es ist. Ich kann diese langweiligen Formalitäten nicht ausstehen.
+Anataeus: Armand konnte sich nicht an meinen Namen erinnern. Captain Gelt musste ihn ihm mehrmals vorsagen.
+Concordia: Nun ja, du bist ja auch erst kürzlich eingestellt worden.
+Anataeus: Du hast recht, ich erwarte wohl etwas zu viel. Es ist wirklich wahnsinnig kompliziert und aufwendig, sich einen einzigen Namen zu merken, den Namen des neuen Alchemisten.
+Anataeus: Des Alchemisten, der an der Universität für Alchemistisches Engineering als Jahrgangsbester abgeschlossen hat ...
+Concordia: Anataeus ...
+Anataeus: Siehst du? _Du_ kannst dich problemlos an meinen Namen erinnern.
+Concordia: Glaubst du, Armand würde _meinen_ Namen wissen? Obwohl ich mein ganzes Leben hier verbracht habe?
+Anataeus: Vielleicht kannst du nächstes Mal für mich einspringen! Vielleicht würde er nicht einmal mitbekommen, dass wir unterschiedliche Personen sind.
+Concordia: „Hnnngh, Alchemist ... Prokuristin ... Welcher von beiden bist du gleich noch? Hmm, ja, hnnngh ...“
+Anataeus: Du wirst uns noch in Schwierigkeiten bringen.
+Concordia: Ach, ich mache das schon seit Jahren.

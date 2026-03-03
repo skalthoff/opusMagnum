@@ -1,0 +1,20 @@
+﻿Anataeus: Finalmente, esta configuración de componentes se está acercando a algo útil.
+
+-----------
+
+Concordia: Trabajas de una manera muy particular.
+Anataeus: Es importante que uno se sienta cómodo en su espacio de trabajo.
+Concordia: ¿Cómodo? Eso es interesante. Siempre pensé que a los alquimistas les gustaba trabajar en cuevas oscuras, iluminadas por antorchas...
+Anataeus: Todo lo contrario. ¿Qué podría haberte dado esa idea?
+Concordia: ... o en lo alto de una torre solitaria en un lugar aislado...
+Anataeus: Espera. ¿Estás pensando en _hechiceros_?
+Concordia: ¡Oh, sí, eso es lo que estaba pensando! Alquimistas, hechiceros, son bastante similares, ¿no crees?
+Anataeus: Por favor, dime que estás bromeando. La alquimia es una ciencia. ¡Los hechiceros ni siquiera son reales! ¿Cómo podrías compararlos?
+Concordia: ¡No me digas que nunca has disfrutado pensar que lo que haces es como un tipo de magia!
+Anataeus: No, en absoluto. La alquimia es una disciplina rigurosa, basada en la evidencia desarrollada durante siglos de experimentación cuidadosa y teorización...
+Concordia: Aparentemente es una disciplina muy aburrida también.
+Anataeus: Solo estoy tratando de explicarlo. La alquimia es categóricamente lo opuesto a la mágica.
+Concordia: Entiendo, si, entiendo. Ahora, ¿por qué no haces un hechizo para relajarte un poco?
+Anataeus: Estás jugando conmigo ahora.
+Concordia: Seguramente puedes conjurar algo.
+Anataeus: Por favor, detente.

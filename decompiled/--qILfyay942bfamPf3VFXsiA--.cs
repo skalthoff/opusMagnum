@@ -1,0 +1,12 @@
+public sealed class _0023_003DqILfyay942bfamPf3VFXsiA_003D_003D
+{
+	public Vector2 _0023_003DqUN_arohr2oVqwOdO88jK6Q_003D_003D;
+
+	public float _0023_003DqZzBUIIB8Jsg24mO5y0VW_w_003D_003D;
+
+	public float _0023_003Dq6y_t5Tc7mOadI3acm7zhYQ_003D_003D;
+
+	public float _0023_003DqBvAW_0024YxbdvmgRxe6OeHsY2HbjcH6yRMwNqLf8ck2kWQ_003D;
+
+	public float _0023_003Dq1Zs2uuuDCpU2cSF8zE_nmw_003D_003D;
+}

@@ -1,0 +1,17 @@
+﻿Anataeus: Kennst du dich mit Schiffen aus, Concordia?
+Concordia: Unsere Handelsflotte bringt etwa einmal pro Monat Waren aus Übersee. Warum fragst du?
+Anataeus: Captain Gelt hat mir erzählt, dass sie irgendeine Substanz verwendet haben, mit der sie die Schiffsrümpfe vor dem Verrotten geschützt haben.
+Concordia: Davon weiß ich nichts. Warst du schon einmal auf einem Schiff?
+Anataeus: Nein, du?
+Concordia: Noch nie. Das klingt grauenhaft! Erst wirbelt einen das Meer hin und her, und dann wird man von Seeungeheuern gefressen.
+Anataeus: Ich denke nicht, dass _alle_ Seereisen so verlaufen.
+Concordia: Genügend von ihnen schon.
+
+-----------
+
+Anataeus: Mit dieser Versiegelung sollte die Flotte schon bald wieder in der Lage sein, in See zu stechen und die Waren zu transportieren, die sie ... halt so transportiert.
+Concordia: Die Schiffe haben alles Mögliche geladen. Stoffe, Tonwaren, Erze, seltene Gewürze ... und seltsame Steine.
+Concordia: Manchmal sogar Tiere.
+Anataeus: Klingt einträglich.
+Concordia: Da bin ich mir nicht so sicher. Die Verträge wurden vor Hunderten von Jahren aufgesetzt.
+Concordia: Ich bezweifle, dass selbst Armand all ihre Einzelheiten kennt.

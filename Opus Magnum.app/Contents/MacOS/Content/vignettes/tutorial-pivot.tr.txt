@@ -1,0 +1,10 @@
+Henley: Bazı durumlarda, bir kolun tuttuğu şeyi döndürmesini istersin -
+Anataeus (Student): Yani, kolun kendisini döndürmek yerine.
+Henley: Aynen. Bu durumlarda, pivot talimatlarını kullanacaksın.
+
+-----------
+
+Anataeus (Student): Hepsi çok kolay anlaşılır ve basit.
+Henley: Bunun senin için bu kadar kolay olması ne güzel.
+Anataeus (Student): Neden ki? Tüm bunları öğrenmek _senin_ ne kadar vaktini almıştı?
+Henley: Hadi devam edelim.

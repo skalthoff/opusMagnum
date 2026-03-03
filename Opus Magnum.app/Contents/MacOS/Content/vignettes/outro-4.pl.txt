@@ -1,0 +1,24 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): Nils? Is that you?
+Action: Enter, Nils
+Nils: Sorry to interrupt your alchemical intrigues, but I came back to let you know House Colvan is stepping up patrols through the border zones.
+Nils: They may have realized there were some escapees...
+Concordia (Shabby): Took them long enough.
+Anataeus (Shabby): Thank you for the warning. I have a few more things to do, but we should be out of here just as soon as I’m finished.
+Nils: Don’t hesitate, they’re clearly looking for someone.
+Anataeus (Shabby): Clara, this is Nils. You could say he’s a bit of an unsavory character—
+Clara: No, I know.
+Anataeus (Shabby): Wait... you know Nils?
+Clara: Know him? I employ him.
+Nils: Only on a part-time basis.
+Concordia (Shabby): Ha! I always wondered how it was that you found us so easily.
+Clara: I’m almost offended you didn’t realize it sooner.
+Concordia (Shabby): Your machinations are at a level far beyond ours, I’m afraid.
+Anataeus (Shabby): And here I thought I’d found the only trustworthy thief in the city...
+Nils: Lady Soria, I advise returning home now before there is any chance of being seen here.
+Clara: That’s likely for the best, I agree.
+Anataeus (Shabby): There’s still the matter of the lipstick.
+Clara: Once you’ve made it, Nils can bring it to me on the night of the ball itself.
+Anataeus (Shabby): Very well. One more thing, Clara... there will be chaos.
+Clara: I know. And I don’t fear it.

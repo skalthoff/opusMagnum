@@ -1,0 +1,23 @@
+Portraits: Anataeus, Concordia
+
+Concordia: 那时候我就决定，我们得把屋子里的所有东西都重新盘点一遍。你真该看看当时阿曼德的表情！
+Anataeus: 嗯……
+Concordia: 安纳泰俄斯，你到底有没有在听啊？
+Anataeus: 唔？
+Concordia: 你就这个答案。
+Anataeus: 你说什么？
+Concordia: 你无精打采的样子。
+Anataeus: 我_没有_无精打采。我只是……有点沮丧而已。
+Concordia: 咱们范塔森家的大炼金术士为何事沮丧啊？
+Anataeus: 没事。我是说，我只是在想我为什么在这里。
+Concordia: 你在这里是因为你是我们的炼金术士啊。
+Anataeus: 我指的是宏观上的……
+Action: Enter, Captain Gelt
+Captain Gelt: 炼金术士是不是在这里？
+Anataeus: 格尔特上尉，你找我有什么事吗？
+Captain Gelt: 你赶紧去一趟主厅吧。有要事。
+Concordia: 发生什么了？
+Captain Gelt: 另一个家族的人对我们发动了突然袭击……我们得立刻应对。
+Anataeus: 我的炼金术随时为你效劳。
+Concordia: 你听上去很兴奋啊。
+Anataeus: 当然了！总算有大事发生了！

@@ -1,0 +1,103 @@
+Concordia: Seeing your transmutation engine in action is giving me fond memories of playing Sigmar’s Garden.
+Anataeus: Sigmar’s what?
+Concordia: You never played Sigmar’s Garden? I thought everyone knew this game. You put the marbles in a certain pattern, and—
+Anataeus: Marbles?
+Concordia: Isn’t that what these are?
+Anataeus: They’re elemental proxies! Glass spheres that represent various types of atoms.
+Concordia: Little glass spheres are commonly known as marbles.
+Anataeus: We never call them marbles.
+Concordia: To anyone who’s not a highly trained alchemist, that’s what they are. Now, why don’t you give Sigmar’s Garden a try?
+Anataeus: Fine, I suppose.
+ 
+----- After winning 1 game.
+ 
+Concordia: Fun, isn’t it?
+Anataeus: This is not at all how alchemy works! The cardinal elements, for example—
+Concordia: It’s just a little amusement, Anataeus. When we were children we used to sneak in here and play it when the alchemist was away.
+Anataeus: What? You were totally unsupervised near the transmutation engine?
+Concordia: We only used the marbles, Anataeus. Calm yourself.
+Anataeus: They’re not marbles, they’re representations of the fundamental building blocks of the universe!
+Concordia: They’re also little glass spheres. I’ll flick one at you!
+Anataeus: Ah, stop it! You can’t play with delicate equipment like this.
+Concordia: They’re far cheaper than the rest of your kit, you know. Being that they are marbles.
+Anataeus: I’d still appreciate it if you didn’t treat them so casually.
+Concordia: Well, we did it for years. You really had no idea about Sigmar’s Garden?
+Anataeus: Not at all. Why would the university bother to teach something so frivolous?
+ 
+----- After winning 10 games.
+ 
+Concordia: For something “so frivolous,” you do seem to be rather enjoying yourself.
+Anataeus: Maybe a little. There are some strategies to pick up on...
+Concordia: Yes, you can win more reliably with a bit of practice and attention.
+Anataeus: So who was Sigmar? Why am I clearing his garden?
+Concordia: You tell me.
+Anataeus: Me? Why would I know?
+Concordia: Because he was an alchemist from long ago. Wasn’t he?
+Anataeus: I’ve never heard of anyone named Sigmar.
+Concordia: You’re quite certain?
+Anataeus: It’s possible he was one of those apocryphal folk-hero alchemists. Imaginary, in other words.
+Concordia: Or it’s possible you didn’t pay attention in your history courses.
+Anataeus: Please. I was a model student.
+ 
+----- After winning 25 games.
+ 
+Concordia: Model student indeed! First you didn’t know Sigmar’s Garden, and now it turns out you’ve never heard of Sigmar either.
+Anataeus: We haven’t even established that he was real!
+Concordia: Go research it in a library, then. Surely you’ll find something interesting.
+Anataeus: I suppose I could— wait, did you just give me an order?
+Concordia: For someone who specializes in alchemy, you’re oddly resistant to learning more about its past.
+Anataeus: That kind of subject matter was frowned upon at the university... there were a few specialists in the histories and legends, but the serious students focused on modern practice.
+Anataeus: Nobody thinks there’s much reason to dwell on the past.
+Concordia: That’s a shame. When people who aren’t alchemists think about alchemy, they think of the old stories. It would be good to be familiar with them, at least.
+Anataeus: I’m afraid those old stories don’t always give a very positive view of the field...
+Concordia: It varies, certainly.
+Anataeus: For now, I think I’ll just play some more.
+Concordia: A perfectly acceptable choice.
+ 
+----- After winning 50 games.
+ 
+Anataeus: So when you played this as children, Van Tassen’s alchemists never objected to having a bunch of kids running around in the lab?
+Concordia: They never knew we were there.
+Anataeus: Surely they’d notice the elemental proxies strewn everywhere. The “marbles,” as you like to call them.
+Concordia: The Van Tassen alchemists before you barely set foot in the alchemy lab. 
+Anataeus: That’s some joke.
+Concordia: Not at all. I think they looked down on actual alchemy and saw themselves more as part of the family's inner circle. 
+Anataeus: Ridiculous.
+Concordia: They’d advance their agendas, involve themselves in alliances and intrigues, undercut rivals… 
+Anataeus: My professor pointedly advised me to avoid all that. 
+Concordia: I agree with your professor. I don’t like that conniving sort of person.
+Anataeus: She must be used to her advice going unheeded.
+Concordia: Quite likely. Believe it or not, you’re the first alchemist I’ve met who truly focuses on alchemy!
+ 
+----- After winning 75 games.
+ 
+Anataeus: So who was it who originally taught you the game?
+Concordia: My father. He was a provisioner too, in better times than these…
+Anataeus: And I suppose someone taught him as a child as well, and it was passed down in that manner… but why, though? What’s the use of preserving this knowledge?
+Concordia: It’s good for taking one’s mind off troubles, isn’t it?
+Anataeus: I suppose…
+Concordia: In fact, I specifically suggested it because I can tell you’ve been under quite a bit of strain lately.
+Anataeus: You can? I— I hadn’t realized it was showing so clearly.
+Concordia: It was rather obvious.
+Anataeus: I see…
+Concordia: In times like these, it can help to put one’s mind in service of a simple activity.
+Concordia: Otherwise it will wander to other, larger, more frightening thoughts.
+Anataeus: I suppose I do find the game rather relaxing, after a fashion.
+Concordia: I’m glad to hear it.
+ 
+----- After winning 100 games.
+ 
+Anataeus: Concordia, thank you for suggesting this game. As it turns out, I do like it.
+Concordia: You’re welcome, Anataeus. It makes me happy to see you’re enjoying it.
+Concordia: Especially after you called it frivolous at first.
+Anataeus: But it is frivolous! It’s just... good at being that.
+Concordia: It’s good to learn about things that aren’t alchemy, don’t you think?
+Anataeus: There’s no point. This little game just happens to be an exception to the rule. 
+Concordia: You spent your life up to now dedicated to becoming an alchemist.
+Concordia: But now that you are one, you should learn the rest.
+Anataeus: The rest?
+Concordia: The rest of life. The parts that aren’t about alchemy.
+Anataeus: You mean the useless parts.
+Concordia: You’ll simply have to allow me to be your instructor in those matters.
+Anataeus: Will I, now? Sounds like you aren’t giving me any choice.
+Concordia: There’s something I like about you, Anataeus. You know when you don’t have a choice.

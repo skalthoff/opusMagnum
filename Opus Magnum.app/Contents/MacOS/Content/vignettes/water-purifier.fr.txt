@@ -1,0 +1,19 @@
+Concordia (Shabby): C'est un verre d'eau de la rivière ?
+Anataeus (Shabby): Comment tu as deviné ?
+Concordia (Shabby): Cette jolie couleur grise m'a mis la puce à l'oreille. Tu n'allais quand même pas le boire ?
+Anataeus (Shabby): Nous allons avoir besoin d'eau si nous voulons rester ici...
+Concordia (Shabby): Je sais que tu n'es jamais venu dans cette partie de la ville, mais quand même. Regarde ça.
+Anataeus (Shabby): Bien. Eh bien, on va arranger ça.
+
+-----------
+
+Anataeus (Shabby): Voilà. Une petite gorgée ?
+Concordia (Shabby): Pourquoi est-ce que le grand alchimiste ne teste pas lui-même son travail ?
+Anataeus (Shabby): Parce que je suis sûr qu'il est bien fait.
+Concordia (Shabby): Quelle coïncidence ! Moi aussi, j'en suis sûre.
+Anataeus (Shabby): Quel rabat-joie ! Eh bien, voilà...
+Concordia (Shabby): Alors ?
+Anataeus (Shabby): C'est bon ! C'est de l'eau. Un peu... aigre.
+Concordia (Shabby): Aigre.
+Anataeus (Shabby): Un peu amère aussi.
+Anataeus (Shabby): On s'en contentera pour l'instant. Je vais me remettre au travail.

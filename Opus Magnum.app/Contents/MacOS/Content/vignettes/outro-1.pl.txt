@@ -1,0 +1,23 @@
+Portraits: Anataeus, Concordia
+
+Concordia: That’s when I decided we needed to re-inventory everything in the building. You should have seen the look on Armand’s face!
+Anataeus: Mm...
+Concordia: Anataeus, are you paying attention?
+Anataeus: Hm?
+Concordia: That answers that question.
+Anataeus: What?
+Concordia: You’re moping.
+Anataeus: I am _not_ moping. I am merely... moodily dejected.
+Concordia: And what has the great alchemist of House Van Tassen so moodily dejected?
+Anataeus: Nothing. I mean, I’m thinking about why I’m here.
+Concordia: You’re here because you’re our Alchemist.
+Anataeus: I mean in the larger sense...
+Action: Enter, Captain Gelt
+Captain Gelt: The alchemist is here, isn’t he?
+Anataeus: Captain Gelt, what can I do for you?
+Captain Gelt: Your presence is required in the main hall. It’s a matter of some urgency.
+Concordia: What happened?
+Captain Gelt: An aggressive move from another House has taken us by surprise… we need to respond immediately.
+Anataeus: My alchemy is at your disposal.
+Concordia: You almost sound excited.
+Anataeus: I am! Finally, something significant is happening!

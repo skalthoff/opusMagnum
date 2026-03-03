@@ -1,0 +1,8 @@
+public sealed class PsdImageResource
+{
+	public _0023_003DqS18cpfWLxkGDncthIFQlOYRB4tkwahaO5hUOSCyZyfs_003D _0023_003DqCLOmxWwsHDR8ZKHgp19lJA_003D_003D;
+
+	public string _0023_003Dqi8cAZfDACAsxj9ZFyr_00241qw_003D_003D;
+
+	public byte[] _0023_003DqGQEvfezTIyXBr1UC_w5yYQ_003D_003D;
+}

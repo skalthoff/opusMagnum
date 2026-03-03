@@ -1,0 +1,12 @@
+Henley: A piston arm is a special kind of arm that can extend and retract.
+Anataeus (Student): And presumably there are instructions that control the piston?
+Henley: That’s right. I’ll demonstrate.
+
+-----------
+
+Anataeus (Student): I see. Piston arms can reach areas you can’t with a normal arm. 
+Henley: That’s what makes them so useful! They cost a little more than regular arms, though.
+Anataeus (Student): And I can use the reset instruction to make an arm return to its initial state from wherever it is. That’s convenient.
+Henley: Just remember the reset instruction takes the same amount of time it would take to issue those individual instructions.
+Anataeus (Student): Well, yes, of course it will.
+Henley: Of course.

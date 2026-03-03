@@ -1,0 +1,10 @@
+﻿Henley: Manchmal möchte man, dass der Arm den Gegenstand, den er hält, dreht.
+Anataeus (Student): Stattdessen sich der Arm selbst dreht, meinst du.
+Henley: Korrekt. In einem solchen Fall verwendet man Drehen-Anweisungen.
+
+-----------
+
+Anataeus (Student): Eine meiner leichtesten Übungen.
+Henley: Wie schön, dass dir das leicht von der Hand geht.
+Anataeus (Student): Wieso? Wie lange hast _du_ denn gebraucht, um das zu alles zu verinnerlichen?
+Henley: Lass uns einfach weitermachen.

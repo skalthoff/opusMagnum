@@ -1,0 +1,134 @@
+using System;
+using System.IO;
+using System.Text;
+
+public sealed class _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D
+{
+	public uint _0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D;
+
+	public uint _0023_003DquWPya3LQFbDOQRqkRX_Mtg_003D_003D;
+
+	public uint _0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D;
+
+	public byte[] _0023_003DqmCE14zt4mkH_00247GS3VyOuQg_003D_003D;
+
+	public int _0023_003Dq3__zTqQhFX7wgl6k4WQj1w_003D_003D()
+	{
+		int num = (int)(_0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D * (_0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D / 8));
+		return _0023_003DqmCE14zt4mkH_00247GS3VyOuQg_003D_003D.Length / num;
+	}
+
+	public float _0023_003DqKlqMzsOqehTfvmnHX0PqQw_003D_003D()
+	{
+		return (float)_0023_003Dq3__zTqQhFX7wgl6k4WQj1w_003D_003D() / (float)_0023_003DquWPya3LQFbDOQRqkRX_Mtg_003D_003D;
+	}
+
+	public void _0023_003DqaDWh_uMWcVXmRZQ9achHnA_003D_003D(string _0023_003DqF63JUxmeg11w_h6kOfBmTQ_003D_003D)
+	{
+		Console.WriteLine(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681806), _0023_003DqF63JUxmeg11w_h6kOfBmTQ_003D_003D, (_0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D == 1) ? _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681784) : _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681733), _0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D, _0023_003DquWPya3LQFbDOQRqkRX_Mtg_003D_003D, _0023_003Dq3__zTqQhFX7wgl6k4WQj1w_003D_003D(), _0023_003DqKlqMzsOqehTfvmnHX0PqQw_003D_003D());
+	}
+
+	public static _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D _0023_003DqlKTlcUVFBJnHx8oe04iMSw_003D_003D(string _0023_003Dqbl6WyIKHeT86aX0xlM0kXA_003D_003D)
+	{
+		_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2 = new _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D();
+		FileStream fileStream = new FileStream(_0023_003Dqbl6WyIKHeT86aX0xlM0kXA_003D_003D, FileMode.Open, FileAccess.Read);
+		try
+		{
+			BinaryReader binaryReader = new BinaryReader(fileStream);
+			try
+			{
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(Encoding.ASCII.GetString(binaryReader.ReadBytes(4)) == _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681773), _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681762));
+				binaryReader.ReadUInt32();
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(Encoding.ASCII.GetString(binaryReader.ReadBytes(4)) == _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681724), _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681713));
+				while (!(Encoding.ASCII.GetString(binaryReader.ReadBytes(4)) == _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681614)))
+				{
+					uint count = binaryReader.ReadUInt32();
+					binaryReader.ReadBytes((int)count);
+				}
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(binaryReader.ReadUInt32() == 16, _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681603));
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(binaryReader.ReadUInt16() == 1, _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681562));
+				_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D = binaryReader.ReadUInt16();
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D >= 1 && _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D <= 2, _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681496));
+				_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DquWPya3LQFbDOQRqkRX_Mtg_003D_003D = binaryReader.ReadUInt32();
+				uint num = binaryReader.ReadUInt32();
+				ushort num2 = binaryReader.ReadUInt16();
+				_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D = binaryReader.ReadUInt16();
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(num == _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DquWPya3LQFbDOQRqkRX_Mtg_003D_003D * _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D * (_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D / 8), _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681431));
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(num2 == _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqEZt0kNWba3sH8IKO060a6w_003D_003D * (_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D / 8), _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681459));
+				if (_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DquWPya3LQFbDOQRqkRX_Mtg_003D_003D != _0023_003DqJUoC8iykEVbcFQGo0hmyzg_003D_003D._0023_003DqY8hyS5gp8nKda6Ae_0024aG_YQ_003D_003D)
+				{
+					throw new _0023_003DqRaaOoTBvHvWK2vyz8S665Q_003D_003D(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681353) + _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DquWPya3LQFbDOQRqkRX_Mtg_003D_003D);
+				}
+				if (_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D != 16)
+				{
+					throw new _0023_003DqRaaOoTBvHvWK2vyz8S665Q_003D_003D(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681379) + _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqwWo8WvE0MF3kVu1RNTlBpA_003D_003D);
+				}
+				_0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(Encoding.ASCII.GetString(binaryReader.ReadBytes(4)) == _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681282), _0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681335));
+				uint count2 = binaryReader.ReadUInt32();
+				_0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2._0023_003DqmCE14zt4mkH_00247GS3VyOuQg_003D_003D = binaryReader.ReadBytes((int)count2);
+				return _0023_003Dq0TKXDSRV9g2Wg2wC5J2c2w_003D_003D2;
+			}
+			finally
+			{
+				((IDisposable)binaryReader).Dispose();
+			}
+		}
+		finally
+		{
+			((IDisposable)fileStream).Dispose();
+		}
+	}
+
+	public static void _0023_003DqrmTBL1oBdijtdHjiCSYd7w_003D_003D(string _0023_003DqOe2tCVvU85U6xk0UtZJE0Q_003D_003D, int _0023_003Dqno2Zv4jzkyKbfF6rJsa_aQ_003D_003D, short[] _0023_003Dqw35JqvjOrf0skPBdjDycNQ_003D_003D)
+	{
+		if (_0023_003Dqw35JqvjOrf0skPBdjDycNQ_003D_003D.Length % 2 != 0)
+		{
+			throw new _0023_003DqRaaOoTBvHvWK2vyz8S665Q_003D_003D(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681229));
+		}
+		BinaryWriter binaryWriter = new BinaryWriter(new FileStream(_0023_003DqOe2tCVvU85U6xk0UtZJE0Q_003D_003D, FileMode.Create, FileAccess.Write), Encoding.ASCII);
+		try
+		{
+			int num = _0023_003Dqw35JqvjOrf0skPBdjDycNQ_003D_003D.Length * 2;
+			int value = 36 + num;
+			binaryWriter.Write(_0023_003Dqe8qbxKZjyS24kmVQYWt4Bw_003D_003D(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681773)));
+			binaryWriter.Write(value);
+			binaryWriter.Write(_0023_003Dqe8qbxKZjyS24kmVQYWt4Bw_003D_003D(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681724)));
+			short value2 = 1;
+			short num2 = 2;
+			short num3 = 16;
+			int value3 = _0023_003Dqno2Zv4jzkyKbfF6rJsa_aQ_003D_003D * num2 * num3;
+			short value4 = (short)(num2 * num3 / 8);
+			binaryWriter.Write(_0023_003Dqe8qbxKZjyS24kmVQYWt4Bw_003D_003D(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681614)));
+			binaryWriter.Write(16);
+			binaryWriter.Write(value2);
+			binaryWriter.Write(num2);
+			binaryWriter.Write(_0023_003Dqno2Zv4jzkyKbfF6rJsa_aQ_003D_003D);
+			binaryWriter.Write(value3);
+			binaryWriter.Write(value4);
+			binaryWriter.Write(num3);
+			binaryWriter.Write(_0023_003Dqe8qbxKZjyS24kmVQYWt4Bw_003D_003D(_0023_003DqfxeyHpgZ3aIFijHrnwYTUUpdAUCJEeTk_0024AUwNN6p03w_003D._0023_003Dq8aGVhgnrQDJe5M_sanyXyg_003D_003D(850681282)));
+			binaryWriter.Write(num);
+			foreach (short value5 in _0023_003Dqw35JqvjOrf0skPBdjDycNQ_003D_003D)
+			{
+				binaryWriter.Write(value5);
+			}
+		}
+		finally
+		{
+			((IDisposable)binaryWriter).Dispose();
+		}
+	}
+
+	private static byte[] _0023_003Dqe8qbxKZjyS24kmVQYWt4Bw_003D_003D(string _0023_003DqXgkb_qXn2b2wnkSVqW52EQ_003D_003D)
+	{
+		return Encoding.ASCII.GetBytes(_0023_003DqXgkb_qXn2b2wnkSVqW52EQ_003D_003D);
+	}
+
+	private static void _0023_003DqldSv1COtObXCPVZDeHhWKA_003D_003D(bool _0023_003DqlvI2_0024Z0S5_VtmCcNGXkkTA_003D_003D, string _0023_003DqkJh9XNJAkpimg7FgBjOwKQ_003D_003D)
+	{
+		if (!_0023_003DqlvI2_0024Z0S5_VtmCcNGXkkTA_003D_003D)
+		{
+			throw new _0023_003DqRaaOoTBvHvWK2vyz8S665Q_003D_003D(_0023_003DqkJh9XNJAkpimg7FgBjOwKQ_003D_003D);
+		}
+	}
+}

@@ -1,0 +1,15 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): You’re sure you won’t get in trouble? Hanging out in the bad part of town with a rogue alchemist?
+Clara: My parents don’t know. I spend a lot of time in the Observatory and they always assume I’m there.
+Clara: Not as if they would check for themselves.
+Anataeus (Shabby): It’s a shame you never got to use Van Tassen’s Observatory when you visited. I was tasked with fixing it right afterwards.
+Clara: That’s okay. I still had a nice time.
+Anataeus (Shabby): Even though you were with Frederick?
+Clara: Excuse me? I loved Frederick.
+Anataeus (Shabby): You— what?
+Clara: He was kind to me. Maybe the only one who’s ever been.
+Clara: It was really nice spending time with him.
+Concordia (Shabby): It’s true that kindness is a rare trait in a House heir.
+Clara: I wish I could have protected him. He didn’t deserve the world he was born into.
+Anataeus (Shabby): None of us do.

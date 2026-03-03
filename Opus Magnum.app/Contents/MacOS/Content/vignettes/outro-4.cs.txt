@@ -1,0 +1,24 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): Nils? Jsi to ty?
+Action: Enter, Nils
+Nils: Omlouvám se, že ruším vaše alchymistické konání, ale přišel jsem vás upozornit, že rod Colvan zesílil hlídky v příhraničních oblastech.
+Nils: Asi zjistili, že tam byli nějací uprchlíci...
+Concordia (Shabby): To jim to trvalo.
+Anataeus (Shabby): Dík za upozornění. Ještě musím dodělat pár věcí, ale jakmile je dokončím, ihned odsud vypadneme.
+Nils: Neváhej, oni jednoznačně někoho hledají.
+Anataeus (Shabby): Claro, tohle je Nils. Mohlo by se ti zdát, že je to poněkud nechutná osoba -
+Clara: Není, já ho znám.
+Anataeus (Shabby): Počkej... ty znáš Nilse?
+Clara: Znám? Pracuje pro mě.
+Nils: Jen napůl úvazku.
+Concordia (Shabby): Ha! Zajímalo by mě, jak jsi nás tak lehce našel.
+Clara: Skoro mě uráží, že vás to nenapadlo dřív.
+Concordia (Shabby): Obávám se, že tvoje intriky jsou svou úrovní vysoko nad námi.
+Anataeus (Shabby): A to jsem si myslel, že jsem našel jediného důvěryhodného zloděje ve městě...
+Nils: Paní Sorio, doporučuji vám vrátit se domů, než vás tady někdo uvidí.
+Clara: Souhlasím, asi to bude nejlepší.
+Anataeus (Shabby): Ještě je tady ta záležitost s rtěnkou.
+Clara: Jakmile ji doděláte, Nils mi ji v noci před plesem přinese.
+Anataeus (Shabby): Výborně. Ještě jedna věc, Claro... Bude tam zmatek.
+Clara: Já vím. A nebojím se toho.

@@ -1,0 +1,19 @@
+﻿Concordia (Shabby): そのコップに●入っているのは●川の水？
+Anataeus (Shabby): どうして●分かった？
+Concordia (Shabby): その素敵な●グレーの●色でね。まさか●飲もうと●思ってなんか●いなかった●でしょうね。
+Anataeus (Shabby): 暫く●ここに●とどまる●のなら、●水が●必要だ。
+Concordia (Shabby): あなたが●街の●この地域には●来たことが●ないのは●知っていたけど、●それでもね。あれを●見て。
+Anataeus (Shabby): 分かった。それなら●飲めるように●するよ。
+
+-----------
+
+Anataeus (Shabby): ほら。一口●飲んでみる？
+Concordia (Shabby): 偉大なる●錬金術師は●どうして●自分の●成果物を●口に●しないの？
+Anataeus (Shabby): 正しく●作れていると●確信しているから。
+Concordia (Shabby): 何て偶然なの！私も●正しく●作れてると●確信してるから、●譲るわ。
+Anataeus (Shabby): 君は●面白くないな。なら、●飲むよ…
+Concordia (Shabby): どう？
+Anataeus (Shabby): 大丈夫さ！水だ。少々…●酸っぱい。
+Concordia (Shabby): 酸っぱい。
+Anataeus (Shabby): そして●わずかに●苦い。
+Anataeus (Shabby): まあ、●今は●これで●我慢して●もらおう。仕事に●戻ろう。

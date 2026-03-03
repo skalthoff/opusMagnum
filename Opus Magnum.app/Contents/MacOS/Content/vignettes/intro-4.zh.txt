@@ -1,0 +1,15 @@
+Portraits: Anataeus (Shabby), Clara, Concordia (Shabby)
+
+Concordia (Shabby): 你确定你不会有事吗？在城里不安全的街道上跟一个粗野的炼金术士闲逛？
+Clara: 我的父母不知道。我经常在观测台里待很久，他们都以为我在那。
+Clara: 他们不会真的去查的。
+Anataeus (Shabby): 可惜你去范塔森家的时候用不了他们家的观测台。我后来马上就被叫去那里维修了。
+Clara: 没关系。我还是过得很开心。
+Anataeus (Shabby): 和腓特烈在一起也开心吗？
+Clara: 说什么呢？我爱腓特烈。
+Anataeus (Shabby): 你——什么？
+Clara: 他对我很好。他或许是唯一一个对我好的人了。
+Clara: 和他在一起真的很好。
+Concordia (Shabby): 对家族继承人来说，善良真的是一项罕有的品质啊。
+Clara: 我多希望我能保护他。他不应该降生到这个糟糕的世界上。
+Anataeus (Shabby): 我们谁都不应该。

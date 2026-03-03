@@ -1,0 +1,21 @@
+Portraits: Anataeus (Shabby), Nils, Concordia (Shabby)
+
+Anataeus (Shabby): Do we have a deal?
+Nils: It’s an intriguing proposal.
+Nils: But the old Van Tassen compound is far more difficult to get into now that Colvan occupies it. Their guards are far more vigilant.
+Anataeus (Shabby): Believe me, we know. Concordia and I barely escaped with our lives. 
+Nils: Just get me inside. I can take it from there.
+Concordia (Shabby): It’s a little more complicated than that.
+Concordia (Shabby): The item we need isn’t something you can carry on your person. It’s a shipment.
+Anataeus (Shabby): Specifically, a shipment of lead ore.
+Nils: I... see.
+Concordia (Shabby): I’ll supply you with a shipping order, but it needs a seal. You’ll have to find a real order and take the seal from it.
+Nils: Okay. And then I suppose I’ll impersonate a supply officer and simply take the shipment down the river to you.
+Concordia (Shabby): Exactly!
+Nils: That’s somewhat more... fanciful than I expected.
+Anataeus (Shabby): On the contrary, it’s as feasible as they come.
+Anataeus (Shabby): Practically a walk in the park for someone of your caliber, right?
+Concordia (Shabby): And don’t forget we’ll supply you with the best equipment you’ll find anywhere.
+Anataeus (Shabby): If I’m to make you this gold, I’ll need the lead… that’s how alchemy works, after all.
+Nils: Gold, yes. I do like a bit of gold.
+Anataeus (Shabby): Pull this off, and you’ll have more than just a bit. I promise you.
