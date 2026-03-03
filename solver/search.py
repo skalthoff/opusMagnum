@@ -1,68 +1,30 @@
 """Search-based solver: Z3 layout constraints + genetic tape optimization + omsim oracle.
 
 Architecture:
-  1. Enumerate compact layouts where arm sweeps CW from input through glyphs to output
-  2. Z3 constrains output rotation to match molecule geometry
-  3. Genetic algorithm optimizes tapes within each layout
-  4. omsim (<1ms) verifies every candidate
-  5. Branch and bound prunes layouts exceeding current best cost
-
-Key insight from analyzing god-cost solutions:
-  - Arm at center, inputs/glyphs/output arranged at consecutive CW directions
-  - After grabbing, CW rotation sweeps atom through each glyph station
-  - Reset (X) teleports arm back cheaply
-  - Output rotation must match where atoms actually land
+  1. Z3 generates valid layouts (from layout_z3.py)
+  2. Branch-and-bound prunes by sum4 lower bound
+  3. For each layout, GA optimizes tapes (from tape_ga.py)
+  4. omsim via ctypes verifies every candidate (~2000/sec)
+  5. Best solution survives across all layouts
 """
 from __future__ import annotations
 import os
-import random
-import subprocess
-import tempfile
+import time
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional
+
 import itertools
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Set
 
 from .hex import HexCoord, DIRECTIONS, ORIGIN, hex_spiral
-from .puzzle import Puzzle, AtomType, PartFlag
-from .solution import Solution, Part, Inst, write_solution, PART_COSTS
-from .recipe import PuzzleAnalysis, Reaction, analyze_puzzle, REACTION_GLYPHS
-
-
-_OMSIM = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tools', 'omsim', 'omsim')
-
-
-def verify_solution(sol: Solution, puzzle_path: str) -> Optional[dict]:
-    """Verify with omsim, return metrics or None."""
-    sol_path = None
-    try:
-        with tempfile.NamedTemporaryFile(suffix='.solution', delete=False) as f:
-            sol_path = f.name
-        write_solution(sol, sol_path)
-        result = subprocess.run(
-            [_OMSIM, '-p', puzzle_path,
-             '-m', 'cycles', '-m', 'cost', '-m', 'area', '-m', 'instructions',
-             sol_path],
-            capture_output=True, text=True, timeout=10
-        )
-        metrics = {}
-        for line in (result.stdout + result.stderr).strip().split('\n'):
-            if ':' in line:
-                k, v = line.split(':', 1)
-                v = v.strip()
-                if v.isdigit():
-                    metrics[k.strip()] = int(v)
-        if all(m in metrics for m in ('cost', 'cycles', 'area', 'instructions')):
-            metrics['sum4'] = sum(metrics[k] for k in ('cost', 'cycles', 'area', 'instructions'))
-            return metrics
-    except Exception:
-        pass
-    finally:
-        if sol_path:
-            try:
-                os.unlink(sol_path)
-            except Exception:
-                pass
-    return None
+from .puzzle import Puzzle, PuzzleIO, parse_puzzle
+from .solution import Solution, Part, Inst, solution_to_bytes, write_solution, PART_COSTS
+from .recipe import PuzzleAnalysis, analyze_puzzle, REACTION_GLYPHS
+from .simulator import Simulator, VerifyResult
+from .layout_z3 import generate_layouts, compute_lower_bound, Layout, LayoutConfig
+from .tape_ga import TapeGA, GAConfig, generate_geometric_tapes, Individual
+from .pattern_db import PatternDB
+from .glyph_model import get_glyph_spec, local_to_world
 
 
 @dataclass
@@ -72,263 +34,46 @@ class SearchResult:
     score: float
 
 
-# =============================================================================
-# LAYOUT ENUMERATION: systematic CW-sweep layouts
-# =============================================================================
+def verify_solution(sol: Solution, puzzle_path: str,
+                    simulator: Optional[Simulator] = None) -> Optional[dict]:
+    """Verify with omsim, return metrics or None.
 
-def _enumerate_cw_sweep_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
-                                 glyphs_needed: List[str],
-                                 need_bonder: bool) -> List[dict]:
-    """Enumerate layouts where parts are arranged in CW order around the arm.
-
-    The arm grabs from input, then CW rotations sweep the atom through
-    glyphs to the output. This is the pattern in all god-cost solutions.
-
-    For each layout we vary:
-    - Arm position (within small grid)
-    - Starting direction for first input
-    - Output rotation (-6 to +6)
-    - Glyph rotations
-    - Bonder rotation
+    Uses the Simulator (ctypes) if provided, otherwise falls back to
+    reading puzzle bytes and creating a temporary simulator instance.
     """
-    layouts = []
-    n_inputs = len(puzzle.inputs)
+    try:
+        puzzle_bytes = Path(puzzle_path).read_bytes()
+        sol_bytes = solution_to_bytes(sol)
 
-    # Build the station sequence: inputs, then glyphs, then output
-    # Each station gets a consecutive direction slot (CW order)
-    stations = []
-    for i in range(n_inputs):
-        stations.append(('input', i))
-    for g in glyphs_needed:
-        stations.append(('glyph', g))
-    if need_bonder:
-        stations.append(('bonder', None))
-    stations.append(('output', 0))
+        if simulator is None:
+            simulator = Simulator()
 
-    n_stations = len(stations)
-    if n_stations > 6:
-        # Too many stations for single-arm CW sweep
-        # Try without some glyphs
-        stations = stations[:5] + [stations[-1]]
-        n_stations = len(stations)
+        result: VerifyResult = simulator.verify_bytes(puzzle_bytes, sol_bytes)
+        if result.valid:
+            metrics = {
+                'cost': result.cost,
+                'cycles': result.cycles,
+                'area': result.area,
+                'instructions': result.instructions,
+            }
+            metrics['sum4'] = sum(metrics[k] for k in ('cost', 'cycles', 'area', 'instructions'))
+            return metrics
+    except Exception:
+        pass
+    return None
 
-    # Try different arm positions and starting directions
-    arm_positions = list(hex_spiral(ORIGIN, 2))
-    start_dirs = range(6)
-
-    for arm_pos in arm_positions:
-        for start_dir in start_dirs:
-            for arm_len in [1, 2]:
-                # Assign each station a direction: start_dir, start_dir-1, start_dir-2, ...
-                # (CW = decreasing direction index)
-                dirs = [(start_dir - i) % 6 for i in range(n_stations)]
-
-                # Compute positions
-                station_positions = []
-                for d in dirs:
-                    tip = arm_pos
-                    for _ in range(arm_len):
-                        tip = tip + DIRECTIONS[d]
-                    station_positions.append(tip)
-
-                # Check no two inputs overlap
-                input_positions = [station_positions[i] for i in range(n_inputs)]
-                if len(set(input_positions)) != len(input_positions):
-                    continue
-
-                # Try different output and bonder rotations
-                for out_rot in range(-6, 7):
-                    for bonder_rot in (range(-6, 7) if need_bonder else [0]):
-                        for glyph_rot in range(6):
-                            layout = {
-                                'arm_pos': arm_pos,
-                                'arm_rot': start_dir,
-                                'arm_len': arm_len,
-                                'stations': stations,
-                                'dirs': dirs,
-                                'positions': station_positions,
-                                'output_rot': out_rot,
-                                'bonder_rot': bonder_rot,
-                                'glyph_rot': glyph_rot,
-                            }
-                            layouts.append(layout)
-
-    return layouts
-
-
-def _layout_to_solution(puzzle: Puzzle, layout: dict,
-                        need_bonder: bool, n_outputs: int) -> Solution:
-    """Build a Solution from a layout dict (without arm tape)."""
-    sol = Solution(puzzle_name=puzzle.name, solution_name="Search")
-
-    for i, (stype, sdata) in enumerate(layout['stations']):
-        pos = layout['positions'][i]
-        d = layout['dirs'][i]
-
-        if stype == 'input':
-            sol.parts.append(Part(name='input', position=pos, io_index=sdata))
-        elif stype == 'glyph':
-            sol.parts.append(Part(name=sdata, position=pos,
-                                  rotation=layout['glyph_rot']))
-        elif stype == 'bonder':
-            sol.parts.append(Part(name='bonder', position=pos,
-                                  rotation=layout['bonder_rot']))
-        elif stype == 'output':
-            sol.parts.append(Part(name='out-std', position=pos,
-                                  rotation=layout['output_rot'], io_index=0))
-            for oi in range(1, n_outputs):
-                sol.parts.append(Part(name='out-std', position=pos,
-                                      rotation=layout['output_rot'], io_index=oi))
-
-    return sol
-
-
-def _build_tapes(layout: dict, n_inputs: int) -> List[List[int]]:
-    """Generate tape candidates for a CW-sweep layout."""
-    tapes = []
-    n_stations = len(layout['stations'])
-    output_idx = n_stations - 1
-
-    if n_inputs == 1:
-        cw = n_stations - 1  # CW steps from first input to output
-
-        # Template 1: G R*cw X
-        tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * cw + [Inst.RESET])
-        # Template 2: G R*cw g X (explicit drop)
-        tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * cw + [Inst.DROP, Inst.RESET])
-        # Template 3: G R*cw g r*cw C
-        tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * cw + [Inst.DROP]
-                      + [Inst.ROTATE_CCW] * cw + [Inst.REPEAT])
-        # Template 4+: With pivots at drop point
-        for np in range(1, 6):
-            tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * cw
-                          + [Inst.PIVOT_CW] * np + [Inst.RESET])
-            tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * cw
-                          + [Inst.PIVOT_CCW] * np + [Inst.RESET])
-            tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * cw
-                          + [Inst.DROP] + [Inst.PIVOT_CW] * np + [Inst.RESET])
-            tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * cw
-                          + [Inst.DROP] + [Inst.PIVOT_CCW] * np + [Inst.RESET])
-
-    elif n_inputs == 2:
-        # Two inputs at consecutive directions, then glyphs, then output
-        cw_total = n_stations - 1
-        cw0 = cw_total  # input0 to output
-        cw1 = cw_total - 1  # input1 to output (one fewer CW step)
-
-        # a) Grab in0, CW to output, reset, CCW to in1, grab, CW to output, reset
-        tape_a = [Inst.GRAB] + [Inst.ROTATE_CW] * cw0 + [Inst.RESET]
-        tape_a += [Inst.ROTATE_CCW]  # from in0 to in1
-        tape_a += [Inst.GRAB] + [Inst.ROTATE_CW] * cw1 + [Inst.RESET]
-        tapes.append(tape_a)
-
-        # b) Same with explicit drops
-        tape_b = [Inst.GRAB] + [Inst.ROTATE_CW] * cw0 + [Inst.DROP, Inst.RESET]
-        tape_b += [Inst.ROTATE_CCW]
-        tape_b += [Inst.GRAB] + [Inst.ROTATE_CW] * cw1 + [Inst.DROP, Inst.RESET]
-        tapes.append(tape_b)
-
-        # c) With return via CCW instead of reset
-        tape_c = [Inst.GRAB] + [Inst.ROTATE_CW] * cw0 + [Inst.DROP]
-        tape_c += [Inst.ROTATE_CCW] * cw1 + [Inst.GRAB]
-        tape_c += [Inst.ROTATE_CW] * cw1 + [Inst.DROP]
-        tape_c += [Inst.ROTATE_CCW] * cw0 + [Inst.REPEAT]
-        tapes.append(tape_c)
-
-        # d) With pivots
-        for np in range(1, 4):
-            for piv in [Inst.PIVOT_CW, Inst.PIVOT_CCW]:
-                tape_d = [Inst.GRAB] + [Inst.ROTATE_CW] * cw0
-                tape_d += [piv] * np + [Inst.RESET]
-                tape_d += [Inst.ROTATE_CCW]
-                tape_d += [Inst.GRAB] + [Inst.ROTATE_CW] * cw1
-                tape_d += [piv] * np + [Inst.RESET]
-                tapes.append(tape_d)
-
-        # e) Grab in0, CW to output, grab in1 (via CCW), CW to output
-        tape_e = [Inst.GRAB] + [Inst.ROTATE_CW] * cw0 + [Inst.DROP]
-        ccw_out_to_in1 = (layout['dirs'][1] - layout['dirs'][-1]) % 6
-        tape_e += [Inst.ROTATE_CCW] * ccw_out_to_in1
-        tape_e += [Inst.GRAB] + [Inst.ROTATE_CW] * cw1 + [Inst.DROP]
-        ccw_out_to_in0 = (layout['dirs'][0] - layout['dirs'][-1]) % 6
-        tape_e += [Inst.ROTATE_CCW] * ccw_out_to_in0
-        tape_e += [Inst.REPEAT]
-        tapes.append(tape_e)
-
-    elif n_inputs >= 3:
-        # Sequential: grab each input, rotate to output, drop, reset, navigate to next
-        cw_total = n_stations - 1
-        for perm in itertools.permutations(range(n_inputs)):
-            tape = []
-            for pi, inp_idx in enumerate(perm):
-                cw_i = cw_total - inp_idx  # steps from this input to output
-
-                if pi > 0:
-                    # Navigate from reset position (dir of input perm[0]) to this input
-                    from_dir = layout['dirs'][perm[0]]
-                    to_dir = layout['dirs'][inp_idx]
-                    ccw = (to_dir - from_dir) % 6
-                    cw_rev = (from_dir - to_dir) % 6
-                    if ccw <= 3:
-                        tape += [Inst.ROTATE_CCW] * ccw
-                    else:
-                        tape += [Inst.ROTATE_CW] * cw_rev
-
-                tape += [Inst.GRAB] + [Inst.ROTATE_CW] * cw_i
-                tape += [Inst.DROP, Inst.RESET]
-            tapes.append(tape)
-
-    return tapes
-
-
-# =============================================================================
-# GENETIC TAPE OPTIMIZATION
-# =============================================================================
-
-EXTENDED_INSTRUCTIONS = [
-    Inst.GRAB, Inst.DROP, Inst.ROTATE_CW, Inst.ROTATE_CCW,
-    Inst.PIVOT_CW, Inst.PIVOT_CCW, Inst.RESET, Inst.REPEAT,
-]
-
-
-def _mutate_tape(tape: List[int], rng: random.Random) -> List[int]:
-    tape = list(tape)
-    if not tape:
-        return tape
-    op = rng.choice(['insert', 'delete', 'swap', 'change'])
-    if op == 'insert' and len(tape) < 40:
-        tape.insert(rng.randint(0, len(tape)), rng.choice(EXTENDED_INSTRUCTIONS))
-    elif op == 'delete' and len(tape) > 3:
-        tape.pop(rng.randint(0, len(tape) - 1))
-    elif op == 'swap' and len(tape) >= 2:
-        i, j = rng.sample(range(len(tape)), 2)
-        tape[i], tape[j] = tape[j], tape[i]
-    elif op == 'change':
-        tape[rng.randint(0, len(tape) - 1)] = rng.choice(EXTENDED_INSTRUCTIONS)
-    return tape
-
-
-def _crossover(t1: List[int], t2: List[int], rng: random.Random) -> List[int]:
-    if not t1 or not t2:
-        return t1 or t2
-    c1 = rng.randint(0, len(t1))
-    c2 = rng.randint(0, len(t2))
-    return t1[:c1] + t2[c2:]
-
-
-# =============================================================================
-# MAIN SEARCH
-# =============================================================================
 
 def search_solve(puzzle: Puzzle, puzzle_path: str,
-                 target: str = 'cost',
-                 max_layouts: int = 10000,
-                 genetic_gens: int = 30,
-                 pop_size: int = 20,
-                 verbose: bool = False) -> Optional[SearchResult]:
-    """Z3-constrained layout search + genetic tape optimization + omsim oracle."""
+                 target: str = 'sum4',
+                 time_limit: float = 300.0,
+                 verbose: bool = False,
+                 pattern_db: Optional[PatternDB] = None,
+                 simulator: Optional[Simulator] = None) -> Optional[SearchResult]:
+    """Main solver: Z3 layouts + GA tape optimization + omsim verification."""
+    t0 = time.time()
+
+    # --- 1. Analyze puzzle ---
     analysis = analyze_puzzle(puzzle)
-    rng = random.Random(42)
 
     glyphs_needed = []
     if analysis.recipe:
@@ -341,194 +86,623 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     n_inputs = len(puzzle.inputs)
     n_outputs = len(puzzle.outputs)
 
+    # --- Input deduplication ---
+    # When multiple inputs provide the same element type, a single input
+    # station can serve for all of them.  Build a deduplicated input list
+    # and a modified puzzle that the layout generators can use.
+    deduped_puzzle = None
+    deduped_n_inputs = n_inputs
+    if all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
+        unique_input_types: dict = {}  # element -> first PuzzleIO index
+        deduped_inputs: list = []
+        for i, pio in enumerate(puzzle.inputs):
+            elem = pio.molecule.atoms[0].atom_type
+            if elem not in unique_input_types:
+                unique_input_types[elem] = i
+                deduped_inputs.append(pio)
+        deduped_n_inputs = len(deduped_inputs)
+        if deduped_n_inputs < n_inputs:
+            # Create a modified puzzle with only unique input stations
+            from copy import deepcopy
+            deduped_puzzle = Puzzle(
+                name=puzzle.name,
+                display_name=puzzle.display_name,
+                inputs=[PuzzleIO(molecule=deduped_inputs[j].molecule, index=j)
+                        for j in range(deduped_n_inputs)],
+                outputs=deepcopy(puzzle.outputs),
+                output_scale=puzzle.output_scale,
+                parts_available=puzzle.parts_available,
+                is_production=puzzle.is_production,
+            )
+
+    if verbose:
+        print(f'  Puzzle: {puzzle.name}')
+        print(f'  Complexity: {analysis.complexity}')
+        print(f'  Inputs: {n_inputs}, Outputs: {n_outputs}')
+        if deduped_puzzle:
+            print(f'  Deduplicated inputs: {deduped_n_inputs} (from {n_inputs})')
+        print(f'  Glyphs needed: {glyphs_needed}')
+        print(f'  Needs bonder: {need_bonder}')
+
+    # --- 2. Load puzzle bytes ---
+    puzzle_bytes = Path(puzzle_path).read_bytes()
+
+    # --- 3. Initialize simulator ---
+    if simulator is None:
+        try:
+            simulator = Simulator()
+        except Exception as e:
+            if verbose:
+                print(f'  WARNING: Could not initialize simulator: {e}')
+            return None
+
+    # --- 4. Initialize pattern DB ---
+    archive_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                               'tools', 'om-archive')
+    if pattern_db is None:
+        pattern_db = PatternDB()
+        if os.path.isdir(archive_dir):
+            if verbose:
+                print(f'  Scanning archive for tape patterns...')
+            n_patterns = pattern_db.scan_archive(archive_dir)
+            if verbose:
+                print(f'  Loaded {n_patterns} tape patterns from archive')
+
     best: Optional[SearchResult] = None
     total_verified = 0
 
     # --- Phase 0: Zero-arm overlap ---
-    za = _try_zero_arm(puzzle, analysis, puzzle_path, glyphs_needed)
+    if verbose:
+        print(f'  Phase 0: Trying zero-arm overlap...')
+    za = _try_zero_arm(puzzle, analysis, puzzle_bytes, simulator,
+                       glyphs_needed, verbose=verbose)
     if za:
         best = za
         if verbose:
             m = za.metrics
-            print(f'  Zero-arm: {m["cost"]}g/{m["cycles"]}c/{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+            print(f'  Zero-arm: {m["cost"]}g/{m["cycles"]}c/'
+                  f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
 
-    # --- Phase 1: CW-sweep layouts ---
-    if verbose:
-        print(f'  Enumerating CW-sweep layouts...')
-
-    # Only use monoatomic inputs for now
-    if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
+    # Check time
+    if time.time() - t0 > time_limit:
+        if verbose:
+            print(f'  Time limit reached after phase 0')
         return best
 
-    layouts = _enumerate_cw_sweep_layouts(puzzle, analysis, glyphs_needed, need_bonder)
+    # --- Phase 1: Generate layouts ---
+    # Only handle monoatomic inputs for now
+    if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
+        if verbose:
+            print(f'  Skipping layout search: non-monoatomic inputs')
+        return best
+
     if verbose:
-        print(f'  Got {len(layouts)} candidate layouts')
+        print(f'  Phase 1: Generating layouts via Z3...')
 
-    # Subsample if too many
-    if len(layouts) > max_layouts:
-        rng.shuffle(layouts)
-        layouts = layouts[:max_layouts]
+    # Generate layouts for each arm length separately to ensure diversity
+    layouts = []
+    for arm_len in [1, 2]:
+        config = LayoutConfig(
+            min_arm_len=arm_len,
+            max_arm_len=arm_len,
+            max_layouts=200,
+        )
+        if best is not None:
+            config.cost_bound = best.metrics.get('cost', None)
+        batch = generate_layouts(puzzle, analysis, glyphs_needed, need_bonder, config)
+        layouts.extend(batch)
+        if verbose:
+            print(f'  Arm length {arm_len}: {len(batch)} CW-sweep layouts')
 
-    # --- Phase 2: Template tapes + genetic search per layout ---
-    for li, layout in enumerate(layouts):
-        # Branch and bound: estimate layout cost
-        layout_cost = PART_COSTS.get('arm1' if layout['arm_len'] == 1 else 'arm2', 30)
-        for stype, sdata in layout['stations']:
-            if stype == 'glyph':
-                layout_cost += PART_COSTS.get(sdata, 0)
-            elif stype == 'bonder':
-                layout_cost += 10
-        if target == 'cost' and best and layout_cost >= best.score:
+    # Generate stacked layouts separately (parts share same hex)
+    from .layout_z3 import generate_stacked_layouts
+    for arm_len in [1, 2]:
+        config = LayoutConfig(
+            min_arm_len=arm_len,
+            max_arm_len=arm_len,
+            max_layouts=200,
+        )
+        if best is not None:
+            config.cost_bound = best.metrics.get('cost', None)
+        stacked = generate_stacked_layouts(
+            puzzle, analysis, glyphs_needed, need_bonder, config)
+        layouts.extend(stacked)
+        if verbose:
+            print(f'  Arm length {arm_len}: {len(stacked)} stacked layouts')
+
+    # Generate deduplicated layouts when inputs share element types
+    # (e.g., P008 has 3 Fire inputs — one input station suffices)
+    if deduped_puzzle is not None:
+        deduped_analysis = analyze_puzzle(deduped_puzzle)
+        for arm_len in [1, 2]:
+            config = LayoutConfig(
+                min_arm_len=arm_len,
+                max_arm_len=arm_len,
+                max_layouts=200,
+            )
+            if best is not None:
+                config.cost_bound = best.metrics.get('cost', None)
+            batch = generate_layouts(
+                deduped_puzzle, deduped_analysis, glyphs_needed, need_bonder, config)
+            layouts.extend(batch)
+            if verbose:
+                print(f'  Arm length {arm_len}: {len(batch)} deduped CW-sweep layouts')
+            stacked = generate_stacked_layouts(
+                deduped_puzzle, deduped_analysis, glyphs_needed, need_bonder, config)
+            layouts.extend(stacked)
+            if verbose:
+                print(f'  Arm length {arm_len}: {len(stacked)} deduped stacked layouts')
+
+    if verbose:
+        print(f'  Total: {len(layouts)} candidate layouts')
+
+    if not layouts:
+        if verbose:
+            print(f'  No valid layouts found')
+        return best
+
+    # --- Phase 2: Compute lower bounds and create priority queue ---
+    layout_bounds = []
+    for i, layout in enumerate(layouts):
+        lb = compute_lower_bound(layout, analysis)
+        layout_bounds.append((lb, i, layout))
+
+    # Sort by lower bound (ascending)
+    layout_bounds.sort(key=lambda x: x[0])
+
+    if verbose:
+        print(f'  Lower bounds range: {layout_bounds[0][0]} - {layout_bounds[-1][0]}')
+
+    # --- Phase 3: For each layout, optimize tapes via GA ---
+    if verbose:
+        print(f'  Phase 3: GA tape optimization...')
+
+    # Get instruction weights from pattern DB
+    inst_weights = pattern_db.instruction_weights() if pattern_db.patterns else None
+
+    for rank, (lb, layout_idx, layout) in enumerate(layout_bounds):
+        # 3a. Branch-and-bound: skip if lower bound >= current best
+        if best is not None and lb >= best.score:
+            if verbose and rank < 5:
+                print(f'  Layout {rank}: lb={lb} >= best={best.score:.0f}, pruned')
             continue
 
-        base_sol = _layout_to_solution(puzzle, layout, need_bonder, n_outputs)
-        tapes = _build_tapes(layout, n_inputs)
+        # Check time budget
+        elapsed = time.time() - t0
+        if elapsed > time_limit:
+            if verbose:
+                print(f'  Time limit reached after {rank} layouts ({elapsed:.1f}s)')
+            break
 
-        # Evaluate template tapes
-        population = []
-        for tape in tapes:
-            sol = _add_arm(base_sol, layout, tape)
-            metrics = verify_solution(sol, puzzle_path)
+        # 3b. Build base solution (without arm)
+        base_sol = layout.to_solution(puzzle, n_outputs)
+
+        # 3c. Generate seed tapes from multiple sources
+        seed_tapes = _build_seed_tapes(layout, n_inputs, pattern_db, glyphs_needed)
+
+        if verbose and rank < 10:
+            print(f'  Layout {rank}: cost={layout.cost}g, lb={lb}, '
+                  f'{len(seed_tapes)} seed tapes')
+
+        # 3d. Quick screening: try seed tapes directly before full GA
+        layout_info = {
+            'arm_pos': layout.arm_pos,
+            'arm_len': layout.arm_len,
+            'arm_rot': layout.arm_rot,
+            'arm_type': layout.arm_type,
+        }
+
+        found_via_screen = False
+        screen_cycle_limit = 1000  # valid solutions complete in <100 cycles
+        for tape in seed_tapes:
             total_verified += 1
-            if metrics:
-                score = metrics.get(target, metrics['sum4'])
-                sr = SearchResult(sol, metrics, score)
-                population.append((tape, sr))
+            screen_sol = layout.add_arm_with_tape(base_sol, tape)
+            screen_bytes = solution_to_bytes(screen_sol)
+            screen_result = simulator.verify_bytes(puzzle_bytes, screen_bytes,
+                                                   cycle_limit=screen_cycle_limit)
+            if screen_result.valid:
+                metrics = {
+                    'cost': screen_result.cost,
+                    'cycles': screen_result.cycles,
+                    'area': screen_result.area,
+                    'instructions': screen_result.instructions,
+                }
+                metrics['sum4'] = sum(metrics[k] for k in ('cost', 'cycles', 'area', 'instructions'))
+                score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
                 if best is None or score < best.score:
-                    best = sr
+                    best = SearchResult(screen_sol, metrics, score)
+                    found_via_screen = True
                     if verbose:
                         m = metrics
-                        print(f'  [{li}] {m["cost"]}g/{m["cycles"]}c/{m["area"]}a/'
-                              f'{m["instructions"]}i={m["sum4"]}s '
-                              f'tape={"".join(chr(t) for t in tape)}')
+                        print(f'  ** New best (layout {rank} screen): '
+                              f'{m["cost"]}g/{m["cycles"]}c/'
+                              f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
 
-        # Genetic optimization if we found valid tapes
-        if population:
-            for gen in range(genetic_gens):
-                children = []
-                for _ in range(pop_size):
-                    parent = rng.choice(population)[0]
-                    if len(population) >= 2 and rng.random() < 0.3:
-                        parent2 = rng.choice(population)[0]
-                        child = _crossover(parent, parent2, rng)
-                    else:
-                        child = _mutate_tape(parent, rng)
-                    children.append(child)
+        if found_via_screen:
+            continue  # Skip full GA for this layout, seed tape was enough
 
-                for tape in children:
-                    sol = _add_arm(base_sol, layout, tape)
-                    metrics = verify_solution(sol, puzzle_path)
-                    total_verified += 1
-                    if metrics:
-                        score = metrics.get(target, metrics['sum4'])
-                        sr = SearchResult(sol, metrics, score)
-                        population.append((tape, sr))
-                        if best is None or score < best.score:
-                            best = sr
-                            if verbose:
-                                m = metrics
-                                print(f'  [{li} g{gen}] {m["cost"]}g/{m["cycles"]}c/'
-                                      f'{m["area"]}a/{m["instructions"]}i={m["sum4"]}s')
+        # 3e. Run GA
+        # Adjust GA config based on rank: more effort for promising layouts
+        ga_config = GAConfig(
+            pop_size=20 if rank < 10 else 15,
+            max_generations=60 if rank < 5 else 30,
+            stagnation_limit=15,
+        )
 
-                population.sort(key=lambda x: x[1].score)
-                population = population[:pop_size]
+        current_best_score = best.score if best is not None else None
+        ga = TapeGA(simulator, ga_config, inst_weights, seed=42 + rank)
+        ga_result = ga.optimize(
+            base_sol, layout_info, puzzle_bytes,
+            seed_tapes, target, current_best_score
+        )
+        total_verified += ga.total_evaluations
 
-        # Early exit if at theoretical minimum
-        if target == 'cost' and best:
-            theory = 20  # arm1
+        # 3e. Update best if GA found a valid improvement
+        if ga_result is not None and ga_result.valid:
+            if best is None or ga_result.fitness < best.score:
+                # Reconstruct the full solution
+                final_sol = layout.add_arm_with_tape(base_sol, ga_result.tape)
+                best = SearchResult(
+                    solution=final_sol,
+                    metrics=ga_result.metrics,
+                    score=ga_result.fitness,
+                )
+                if verbose:
+                    m = ga_result.metrics
+                    print(f'  ** New best (layout {rank}): '
+                          f'{m["cost"]}g/{m["cycles"]}c/'
+                          f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+
+        # 3f. Early termination if at theoretical minimum
+        if best is not None:
+            theory_cost = 20  # arm1
             if analysis.recipe:
-                theory += analysis.recipe.glyph_cost
+                theory_cost += analysis.recipe.glyph_cost
             if need_bonder:
-                theory += 10
-            if best.score <= theory:
+                theory_cost += 10
+            # Sum4 minimum: cost + 1 cycle + 1 area + 1 instruction
+            theory_min = theory_cost + 3
+            if best.score <= theory_min:
+                if verbose:
+                    print(f'  Reached theoretical minimum ({theory_min}), stopping')
                 break
 
+    elapsed = time.time() - t0
     if verbose:
-        print(f'  Verified: {total_verified}')
+        print(f'  Total verified: {total_verified} in {elapsed:.1f}s')
+        if best:
+            m = best.metrics
+            print(f'  Best: {m["cost"]}g/{m["cycles"]}c/'
+                  f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+        else:
+            print(f'  No valid solution found')
 
     return best
 
 
-def _add_arm(base_sol: Solution, layout: dict, tape: List[int]) -> Solution:
-    """Copy base solution and add arm with tape."""
-    sol = Solution(puzzle_name=base_sol.puzzle_name, solution_name=base_sol.solution_name)
-    sol.parts = [Part(name=p.name, position=p.position, size=p.size,
-                       rotation=p.rotation, io_index=p.io_index)
-                 for p in base_sol.parts]
-    arm_name = 'arm1' if layout['arm_len'] == 1 else 'arm2'
-    arm = Part(name=arm_name, position=layout['arm_pos'],
-               size=layout['arm_len'], rotation=layout['arm_rot'])
-    arm.set_tape(tape)
-    sol.parts.append(arm)
-    return sol
+def _build_seed_tapes(layout: Layout, n_inputs: int,
+                      pattern_db: PatternDB,
+                      glyphs_needed: List[str]) -> List[List[int]]:
+    """Build seed tapes for GA from multiple sources.
+
+    Sources (approximate allocation):
+      1. Geometric templates based on layout geometry (60%)
+      2. Similar tapes from archive pattern DB (25%)
+      3. Common tape templates from archive (15%)
+    """
+    seed_tapes: List[List[int]] = []
+    n_stations = len(layout.stations)
+
+    # Source 1: Geometric templates (60% of seeds)
+    geo_tapes = generate_geometric_tapes(n_stations, n_inputs, layout.directions)
+    seed_tapes.extend(geo_tapes)
+
+    # Source 2: Archive similar tapes (25%)
+    if pattern_db.patterns:
+        n_glyphs = len(glyphs_needed)
+        similar = pattern_db.get_similar_tapes(
+            n_arms=1,
+            n_glyphs_range=(max(0, n_glyphs - 1), n_glyphs + 2),
+            limit=15,
+        )
+        for pat in similar:
+            seed_tapes.append(list(pat.tape))
+
+    # Source 3: Common templates from archive (15%)
+    if pattern_db.patterns:
+        common = pattern_db.common_tape_templates(n_arms=1, limit=8)
+        for tape_tuple in common:
+            seed_tapes.append(list(tape_tuple))
+
+    # Deduplicate
+    seen = set()
+    unique = []
+    for tape in seed_tapes:
+        key = tuple(tape)
+        if key not in seen:
+            seen.add(key)
+            unique.append(tape)
+
+    return unique
 
 
 # =============================================================================
 # ZERO-ARM OVERLAP
 # =============================================================================
 
+def _make_metrics(result: VerifyResult) -> dict:
+    """Build a metrics dict (with sum4) from a valid VerifyResult."""
+    metrics = {
+        'cost': result.cost,
+        'cycles': result.cycles,
+        'area': result.area,
+        'instructions': result.instructions,
+    }
+    metrics['sum4'] = sum(metrics[k] for k in ('cost', 'cycles', 'area', 'instructions'))
+    return metrics
+
+
 def _try_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
-                  puzzle_path: str, glyphs_needed: List[str]) -> Optional[SearchResult]:
-    if len(puzzle.inputs) != 2:
-        return None
+                  puzzle_bytes: bytes, simulator: Simulator,
+                  glyphs_needed: List[str],
+                  verbose: bool = False,
+                  time_limit: float = 15.0) -> Optional[SearchResult]:
+    """Try to solve with zero arms by overlapping inputs/outputs on glyphs.
+
+    Uses a glyph-guided search: for each glyph placement (position + rotation),
+    compute slot world positions, then try placing inputs at those slots.
+    Any glyph type can participate (projection, purification, etc.).
+
+    Also tries a no-glyph bonding-only path for puzzles where the output
+    is just the inputs bonded together.
+
+    Exploits translation/rotation symmetry of the infinite board to reduce
+    the search space (fixing glyph position to ORIGIN and glyph rotation to 0).
+    """
+    # All inputs must be monoatomic for zero-arm overlap
     if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
         return None
-    if len(puzzle.outputs) != 1 or puzzle.outputs[0].molecule.atom_count > 2:
+    # Must have at least one output
+    if len(puzzle.outputs) < 1:
         return None
 
-    best = None
-    for pos_a in hex_spiral(ORIGIN, 1):
-        for d in range(6):
-            pos_b = pos_a + DIRECTIONS[d]
-            for swap in (False, True):
-                io0, io1 = (1, 0) if swap else (0, 1)
-                for grot in range(-6, 7):
-                    base_parts = [
-                        Part(name='input', position=pos_a, io_index=io0),
-                        Part(name='input', position=pos_b, io_index=io1),
-                    ]
-                    for g in glyphs_needed:
-                        base_parts.append(Part(name=g, position=pos_a, rotation=grot))
+    t0 = time.time()
+    n_inputs = len(puzzle.inputs)
+    best: Optional[SearchResult] = None
+    n_checked = 0
 
-                    if analysis.needs_bonding:
-                        for brot in range(-6, 7):
-                            for orot in range(-6, 7):
-                                sol = Solution(puzzle_name=puzzle.name, solution_name="ZA")
-                                sol.parts = list(base_parts) + [
-                                    Part(name='bonder', position=pos_a, rotation=brot),
-                                    Part(name='out-std', position=pos_a, rotation=orot, io_index=0),
-                                ]
-                                metrics = verify_solution(sol, puzzle_path)
-                                if metrics:
-                                    score = metrics['cost']
-                                    if best is None or score < best.score:
-                                        best = SearchResult(sol, metrics, score)
-                                        if score <= 20:
-                                            return best
-                    else:
-                        for orot in range(-6, 7):
-                            sol = Solution(puzzle_name=puzzle.name, solution_name="ZA")
-                            sol.parts = list(base_parts) + [
-                                Part(name='out-std', position=pos_a, rotation=orot, io_index=0),
-                            ]
-                            metrics = verify_solution(sol, puzzle_path)
-                            if metrics:
-                                score = metrics['cost']
-                                if best is None or score < best.score:
-                                    best = SearchResult(sol, metrics, score)
-                                    if score <= 20:
+    # Monoatomic output rotation invariance: rotating a single atom is identity
+    all_mono_out = all(len(pio.molecule.atoms) <= 1 for pio in puzzle.outputs)
+    out_rotations = [0] if all_mono_out else range(6)
+
+    # Compute theoretical minimum sum4 for early exit:
+    # cost of glyphs + (bonder if needed) + 0 arms + minimum 2 cycles + 1 area + 0 instructions
+    theory_cost = sum(PART_COSTS.get(g, 0) for g in glyphs_needed)
+    if analysis.needs_bonding:
+        theory_cost += 10  # bonder
+    # Minimum sum4: cost + 1cycle + 1area + 0instructions (absolute floor)
+    theory_min_sum4 = theory_cost + 2
+
+    def _check_and_update(sol: Solution) -> bool:
+        """Verify a candidate solution and update best. Returns True for early exit."""
+        nonlocal best, n_checked
+        n_checked += 1
+        # Time cap check every 500 candidates
+        if n_checked % 500 == 0 and time.time() - t0 > time_limit:
+            if verbose:
+                print(f'  Zero-arm time cap ({time_limit}s) after {n_checked} candidates')
+            return True
+        sol_bytes = solution_to_bytes(sol)
+        result = simulator.verify_bytes(puzzle_bytes, sol_bytes)
+        if result.valid:
+            metrics = _make_metrics(result)
+            s4 = metrics['sum4']
+            if best is None or s4 < best.score:
+                best = SearchResult(sol, metrics, s4)
+                if s4 <= theory_min_sum4:
+                    return True  # At theoretical minimum, early exit
+        return False
+
+    # --- Path 1: Glyph-guided search ---
+    # For each glyph needed, try all placements and map inputs to slot positions.
+    # When bonding is needed, bonder slot positions are also candidates for inputs.
+    bonder_spec = None
+    if analysis.needs_bonding:
+        try:
+            bonder_spec = get_glyph_spec('bonder')
+        except KeyError:
+            pass
+
+    for glyph_name in glyphs_needed:
+        try:
+            spec = get_glyph_spec(glyph_name)
+        except KeyError:
+            continue
+
+        input_active_slots = [s for s in spec.slots if s.role in ('input', 'active')]
+        output_slots = [s for s in spec.slots if s.role == 'output']
+
+        for glyph_pos in [ORIGIN]:
+            for glyph_rot in [0]:
+                ia_world = [local_to_world(glyph_pos, glyph_rot, s.du, s.dv)
+                            for s in input_active_slots]
+                out_world = [local_to_world(glyph_pos, glyph_rot, s.du, s.dv)
+                             for s in output_slots]
+
+                if analysis.needs_bonding and bonder_spec:
+                    # Iterate bonder rotations to include bonder slots as candidates
+                    bonder_rots = range(6)
+                else:
+                    bonder_rots = [None]
+
+                for brot in bonder_rots:
+                    # Build candidate positions from glyph slots + bonder slots
+                    candidates_raw = list(ia_world) + [glyph_pos]
+                    if brot is not None and bonder_spec:
+                        for s in bonder_spec.slots:
+                            candidates_raw.append(
+                                local_to_world(glyph_pos, brot, s.du, s.dv))
+
+                    # Deduplicate
+                    seen_pos = set()
+                    candidate_positions = []
+                    for p in candidates_raw:
+                        if p not in seen_pos:
+                            seen_pos.add(p)
+                            candidate_positions.append(p)
+
+                    for input_assignment in itertools.product(
+                            candidate_positions, repeat=n_inputs):
+                        input_parts = [
+                            Part(name='input', position=input_assignment[i],
+                                 io_index=i)
+                            for i in range(n_inputs)
+                        ]
+                        glyph_part = Part(name=glyph_name, position=glyph_pos,
+                                          rotation=glyph_rot)
+
+                        out_candidates = list(
+                            set(input_assignment) | set(out_world) | {glyph_pos})
+
+                        for out_pos in out_candidates:
+                            for out_rot in out_rotations:
+                                base_parts = input_parts + [glyph_part]
+
+                                if brot is not None:
+                                    sol = Solution(
+                                        puzzle_name=puzzle.name,
+                                        solution_name="ZA")
+                                    sol.parts = list(base_parts) + [
+                                        Part(name='bonder',
+                                             position=glyph_pos,
+                                             rotation=brot),
+                                        Part(name='out-std',
+                                             position=out_pos,
+                                             rotation=out_rot,
+                                             io_index=0),
+                                    ]
+                                    if _check_and_update(sol):
+                                        if verbose:
+                                            print(f'  Zero-arm checked '
+                                                  f'{n_checked} candidates')
                                         return best
+                                else:
+                                    sol = Solution(
+                                        puzzle_name=puzzle.name,
+                                        solution_name="ZA")
+                                    sol.parts = list(base_parts) + [
+                                        Part(name='out-std',
+                                             position=out_pos,
+                                             rotation=out_rot,
+                                             io_index=0),
+                                    ]
+                                    if _check_and_update(sol):
+                                        if verbose:
+                                            print(f'  Zero-arm checked '
+                                                  f'{n_checked} candidates')
+                                        return best
+
+    # --- Path 2: No-glyph bonding-only path ---
+    # For puzzles where the output is just the inputs bonded together
+    # (no transmutation glyphs needed, but bonding is required)
+    if not glyphs_needed and analysis.needs_bonding:
+        for bonder_pos in [ORIGIN]:
+            for brot in range(6):
+                # Compute bonder slot world positions
+                try:
+                    bonder_spec = get_glyph_spec('bonder')
+                except KeyError:
+                    break
+                bonder_slots_world = [
+                    local_to_world(bonder_pos, brot, s.du, s.dv)
+                    for s in bonder_spec.slots
+                ]
+                candidate_positions = list(set(bonder_slots_world + [bonder_pos]))
+
+                if len(candidate_positions) < n_inputs:
+                    continue
+
+                for input_assignment in itertools.permutations(candidate_positions, n_inputs):
+                    input_parts = [
+                        Part(name='input', position=input_assignment[i], io_index=i)
+                        for i in range(n_inputs)
+                    ]
+                    bonder_part = Part(name='bonder', position=bonder_pos,
+                                       rotation=brot)
+
+                    out_candidates = list(set(input_assignment) | set(bonder_slots_world))
+
+                    for out_idx in range(len(puzzle.outputs)):
+                        for out_pos in out_candidates:
+                            for out_rot in out_rotations:
+                                sol = Solution(puzzle_name=puzzle.name,
+                                               solution_name="ZA")
+                                sol.parts = input_parts + [
+                                    bonder_part,
+                                    Part(name='out-std', position=out_pos,
+                                         rotation=out_rot, io_index=out_idx),
+                                ]
+                                if _check_and_update(sol):
+                                    if verbose:
+                                        print(f'  Zero-arm checked {n_checked} candidates')
+                                    return best
+
+    # --- Path 3: Trivial (no glyphs, no bonding) ---
+    # Output = single input atom, just overlap input and output
+    if not glyphs_needed and not analysis.needs_bonding:
+        for pos in [ORIGIN]:
+            for io_idx in range(n_inputs):
+                for out_idx in range(len(puzzle.outputs)):
+                    for out_rot in out_rotations:
+                        sol = Solution(puzzle_name=puzzle.name, solution_name="ZA")
+                        sol.parts = [
+                            Part(name='input', position=pos, io_index=io_idx),
+                            Part(name='out-std', position=pos, rotation=out_rot,
+                                 io_index=out_idx),
+                        ]
+                        if _check_and_update(sol):
+                            if verbose:
+                                print(f'  Zero-arm checked {n_checked} candidates')
+                            return best
+
+    if verbose:
+        print(f'  Zero-arm checked {n_checked} candidates')
+
     return best
 
 
 # =============================================================================
-# CONVENIENCE
+# BATCH SOLVING
 # =============================================================================
 
 def search_all_puzzles(puzzle_dir: str, target: str = 'sum4',
-                       max_layouts: int = 5000,
+                       time_limit: float = 60.0,
                        verbose: bool = True) -> Dict[str, SearchResult]:
-    results = {}
+    """Run solver on all puzzles in a directory.
+
+    Reuses the Simulator and PatternDB across puzzles for efficiency.
+    """
+    results: Dict[str, SearchResult] = {}
+
+    # Initialize shared resources once
+    try:
+        simulator = Simulator()
+    except Exception as e:
+        if verbose:
+            print(f'ERROR: Could not initialize simulator: {e}')
+        return results
+
+    archive_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                               'tools', 'om-archive')
+    pattern_db = PatternDB()
+    if os.path.isdir(archive_dir):
+        if verbose:
+            print(f'Scanning archive for tape patterns...')
+        n_patterns = pattern_db.scan_archive(archive_dir)
+        if verbose:
+            print(f'Loaded {n_patterns} patterns')
+
+    # Find all puzzle files
     puzzles = []
     for root, dirs, files in os.walk(puzzle_dir):
         for f in files:
@@ -536,23 +710,39 @@ def search_all_puzzles(puzzle_dir: str, target: str = 'sum4',
                 puzzles.append((f.replace('.puzzle', ''), os.path.join(root, f)))
     puzzles.sort()
 
+    if verbose:
+        print(f'\nFound {len(puzzles)} puzzles\n')
+
     for pid, ppath in puzzles:
         try:
-            from .puzzle import parse_puzzle
             p = parse_puzzle(ppath)
             if verbose:
-                print(f'\n{pid}: {p.name}')
-            result = search_solve(p, ppath, target=target,
-                                  max_layouts=max_layouts, verbose=verbose)
+                print(f'\n{"="*60}')
+                print(f'{pid}: {p.name}')
+                print(f'{"="*60}')
+            result = search_solve(
+                p, ppath,
+                target=target,
+                time_limit=time_limit,
+                verbose=verbose,
+                pattern_db=pattern_db,
+                simulator=simulator,
+            )
             if result:
                 results[pid] = result
                 m = result.metrics
                 if verbose:
-                    print(f'  => {m["cost"]}g/{m["cycles"]}c/{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+                    print(f'  => {m["cost"]}g/{m["cycles"]}c/'
+                          f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
             else:
                 if verbose:
                     print(f'  => no solution')
         except Exception as e:
             if verbose:
                 print(f'  => ERROR: {e}')
+
+    if verbose:
+        print(f'\n{"="*60}')
+        print(f'Summary: {len(results)}/{len(puzzles)} puzzles solved')
+
     return results

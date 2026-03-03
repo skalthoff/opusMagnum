@@ -259,8 +259,8 @@ def parse_solution(path: str) -> Solution:
     return sol
 
 
-def write_solution(sol: Solution, path: str):
-    """Write a .solution binary file."""
+def solution_to_bytes(sol: Solution) -> bytes:
+    """Serialize a Solution to binary format."""
     buf = bytearray()
 
     # Version
@@ -312,4 +312,9 @@ def write_solution(sol: Solution, path: str):
             for ch in part.conduit_hexes:
                 buf += struct.pack('<ii', ch.offset_q, ch.offset_r)
 
-    Path(path).write_bytes(bytes(buf))
+    return bytes(buf)
+
+
+def write_solution(sol: Solution, path: str):
+    """Write a .solution binary file."""
+    Path(path).write_bytes(solution_to_bytes(sol))

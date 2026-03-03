@@ -4,6 +4,7 @@
 Usage:
     python solve.py analyze <puzzle_file>          Analyze a puzzle
     python solve.py solve <puzzle_file> [target]   Generate a solution
+    python solve.py search <puzzle_or_id> [opts]   Search for optimal solution
     python solve.py verify <puzzle> <solution>     Verify a solution
     python solve.py records [metric]               Show best records from archive
     python solve.py best <puzzle_id> [metric]      Get best known solution
@@ -172,6 +173,60 @@ def cmd_verify(args):
         print(f"  {part.name:25s} ({part.position.q:3d},{part.position.r:3d}) rot={part.rotation}{extra}")
 
 
+def cmd_search(args):
+    """Search for an optimal solution using Z3 layouts + GA tape optimization."""
+    from solver.search import search_solve, search_all_puzzles
+
+    if args.all:
+        # Solve all campaign puzzles
+        results = search_all_puzzles(
+            PUZZLE_DIR,
+            target=args.target,
+            time_limit=args.time_limit,
+            verbose=args.verbose,
+        )
+        print(f"\nResults: {len(results)} puzzles solved")
+        for pid, sr in sorted(results.items()):
+            m = sr.metrics
+            print(f"  {pid}: {m['cost']}g/{m['cycles']}c/"
+                  f"{m['area']}a/{m['instructions']}i = {m['sum4']}s")
+        return
+
+    # Resolve puzzle path: support both file paths and puzzle IDs
+    puzzle_arg = args.puzzle
+    if os.path.isfile(puzzle_arg):
+        puzzle_path = puzzle_arg
+    else:
+        puzzle_path = find_puzzle(puzzle_arg)
+
+    puzzle = parse_puzzle(puzzle_path)
+    print(f"Searching: {puzzle.name} ({os.path.basename(puzzle_path)})")
+    print(f"Target: {args.target}, Time limit: {args.time_limit}s")
+    print()
+
+    result = search_solve(
+        puzzle, puzzle_path,
+        target=args.target,
+        time_limit=args.time_limit,
+        verbose=args.verbose,
+    )
+
+    if result:
+        m = result.metrics
+        print(f"\nSolution found!")
+        print(f"  Cost:         {m['cost']}g")
+        print(f"  Cycles:       {m['cycles']}c")
+        print(f"  Area:         {m['area']}a")
+        print(f"  Instructions: {m['instructions']}i")
+        print(f"  Sum4:         {m['sum4']}s")
+
+        if args.output:
+            write_solution(result.solution, args.output)
+            print(f"\nSolution written to {args.output}")
+    else:
+        print("\nNo valid solution found.")
+
+
 def cmd_records(args):
     """Show best records from archive."""
     from solver.archive import Archive
@@ -278,6 +333,15 @@ def main():
                          choices=['cost', 'cycles', 'area', 'instructions', 'balanced'])
     p_solve.add_argument('-o', '--output', help='Output .solution file path')
 
+    p_search = subs.add_parser('search', help='Search for optimal solution')
+    p_search.add_argument('puzzle', help='Path to .puzzle file or puzzle ID (e.g. P007)')
+    p_search.add_argument('--target', default='sum4',
+                           choices=['sum4', 'cost', 'cycles', 'area', 'instructions'])
+    p_search.add_argument('--time-limit', type=float, default=300.0)
+    p_search.add_argument('-o', '--output', help='Output .solution file path')
+    p_search.add_argument('-v', '--verbose', action='store_true')
+    p_search.add_argument('--all', action='store_true', help='Solve all campaign puzzles')
+
     p_verify = subs.add_parser('verify', help='Verify a solution')
     p_verify.add_argument('puzzle', help='Path to .puzzle file')
     p_verify.add_argument('solution', help='Path to .solution file')
@@ -298,6 +362,8 @@ def main():
         cmd_analyze(args)
     elif args.command == 'solve':
         cmd_solve(args)
+    elif args.command == 'search':
+        cmd_search(args)
     elif args.command == 'verify':
         cmd_verify(args)
     elif args.command == 'records':
