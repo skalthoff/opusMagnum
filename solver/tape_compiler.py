@@ -1006,15 +1006,31 @@ def _compile_multi_grab_sequential(
         if not valid or not tape:
             continue
 
-        # Terminal: Reset
-        tape.append(Inst.RESET)
-        tapes.append(tape)
+        # If all atoms were delivered to the bonder, append the bonder pickup
+        # phase: GRAB bonded molecule from bonder, rotate to output, DROP.
+        if need_bonder and final_target_idx == bonder_idx and output_idx is not None:
+            out_dir = layout.directions[output_idx]
+            bonder_dir = layout.directions[bonder_idx]
+            pickup_nav = _rotation_instructions(bonder_dir, out_dir)
+            tape_with_pickup = tape + [Inst.GRAB] + pickup_nav + [Inst.DROP]
 
-        # Also try with Repeat terminal
-        tape_repeat = tape[:-1]  # remove Reset
-        tape_repeat.extend(_rotation_instructions(cur_dir, arm_start))
-        tape_repeat.append(Inst.REPEAT)
-        tapes.append(tape_repeat)
+            tape_with_pickup.append(Inst.RESET)
+            tapes.append(tape_with_pickup)
+
+            tape_repeat_pickup = tape_with_pickup[:-1]
+            tape_repeat_pickup.extend(_rotation_instructions(out_dir, arm_start))
+            tape_repeat_pickup.append(Inst.REPEAT)
+            tapes.append(tape_repeat_pickup)
+        else:
+            # Terminal: Reset
+            tape.append(Inst.RESET)
+            tapes.append(tape)
+
+            # Also try with Repeat terminal
+            tape_repeat = tape[:-1]  # remove Reset
+            tape_repeat.extend(_rotation_instructions(cur_dir, arm_start))
+            tape_repeat.append(Inst.REPEAT)
+            tapes.append(tape_repeat)
 
     # Also try both orderings: assembly_order and reverse
     if len(order) > 1:
@@ -1059,6 +1075,11 @@ def _compile_multi_grab_sequential(
                     cur_dir = final_dir
 
                 if valid and tape:
+                    if need_bonder and final_target_idx == bonder_idx and output_idx is not None:
+                        out_dir = layout.directions[output_idx]
+                        bonder_dir = layout.directions[bonder_idx]
+                        pickup_nav = _rotation_instructions(bonder_dir, out_dir)
+                        tape = tape + [Inst.GRAB] + pickup_nav + [Inst.DROP]
                     tape.append(Inst.RESET)
                     tapes.append(tape)
 
@@ -1287,11 +1308,26 @@ def compile_tapes_from_graph(layout: Layout, graph) -> List[List[int]]:
     if not ordered_flows:
         return tapes
 
+    # Locate the output station direction for bonder pickup use
+    g1_output_dir = None
+    for sid in graph.stations:
+        if sid.kind == 'output':
+            g1_output_dir = _sid_dir(sid)
+            break
+
+    # Locate the bonder station direction for bonder pickup use
+    g1_bonder_dir = None
+    for sid in graph.stations:
+        if sid.kind == 'bonder':
+            g1_bonder_dir = _sid_dir(sid)
+            break
+
     # --- Strategy G1: Full assembly sequence with route-through ---
     for terminal in [Inst.RESET, Inst.REPEAT]:
         tape: List[int] = []
         cur_dir = arm_start
         valid = True
+        last_dest_sid = None
 
         for flow in ordered_flows:
             src_dir = _sid_dir(flow.source)
@@ -1316,6 +1352,7 @@ def compile_tapes_from_graph(layout: Layout, graph) -> List[List[int]]:
 
             tape.append(Inst.DROP)
             cur_dir = dest_dir
+            last_dest_sid = flow.dest
 
         if not valid or not tape:
             continue
@@ -1324,6 +1361,89 @@ def compile_tapes_from_graph(layout: Layout, graph) -> List[List[int]]:
             tape.extend(_rotation_instructions(cur_dir, arm_start))
         tape.append(terminal)
         tapes.append(tape)
+
+    # --- Strategy G1b: Standalone bonder-pickup templates ---
+    # For bonded-output puzzles: generate explicit templates covering every
+    # (input_dir, bonder_dir, output_dir) combination.  Template structure:
+    #   GRAB + rotate(inp->bond) + DROP          (deliver atom A)
+    #   rotate(bond->inp) + GRAB + rotate(inp->bond) + DROP  (deliver atom B)
+    #   GRAB + rotate(bond->out) + DROP + RESET  (pickup bonded molecule)
+    if graph.need_bonder and g1_bonder_dir is not None and g1_output_dir is not None:
+        # Collect all unique input directions from the ordered flows
+        inp_dirs: List[int] = []
+        for flow in ordered_flows:
+            d = _sid_dir(flow.source)
+            if d is not None and d not in inp_dirs:
+                inp_dirs.append(d)
+
+        bonder_dir = g1_bonder_dir
+        out_dir = g1_output_dir
+
+        for d_in in inp_dirs:
+            rot_in_to_bond = _rotation_instructions(d_in, bonder_dir)
+            rot_bond_to_in = _rotation_instructions(bonder_dir, d_in)
+            rot_bond_to_out = _rotation_instructions(bonder_dir, out_dir)
+
+            # Two-atom bonder pickup template:
+            #   deliver A: GRAB + rot(in->bond) + DROP
+            #   return to input: rot(bond->in)
+            #   deliver B: GRAB + rot(in->bond) + DROP
+            #   pickup bonded: GRAB + rot(bond->out) + DROP + RESET
+            tape_2a = (
+                [Inst.GRAB] + rot_in_to_bond + [Inst.DROP]
+                + rot_bond_to_in
+                + [Inst.GRAB] + rot_in_to_bond + [Inst.DROP]
+                + [Inst.GRAB] + rot_bond_to_out + [Inst.DROP, Inst.RESET]
+            )
+            tapes.append(tape_2a)
+
+            # One-atom deliver then pickup:
+            #   deliver A: GRAB + rot(in->bond) + DROP
+            #   pickup bonded: GRAB + rot(bond->out) + DROP + RESET
+            tape_1a = (
+                [Inst.GRAB] + rot_in_to_bond + [Inst.DROP]
+                + [Inst.GRAB] + rot_bond_to_out + [Inst.DROP, Inst.RESET]
+            )
+            tapes.append(tape_1a)
+
+            # Variants starting from arm_start position
+            nav_to_in = _rotation_instructions(arm_start, d_in)
+            if nav_to_in:
+                tape_2a_nav = (
+                    nav_to_in
+                    + [Inst.GRAB] + rot_in_to_bond + [Inst.DROP]
+                    + rot_bond_to_in
+                    + [Inst.GRAB] + rot_in_to_bond + [Inst.DROP]
+                    + [Inst.GRAB] + rot_bond_to_out + [Inst.DROP, Inst.RESET]
+                )
+                tapes.append(tape_2a_nav)
+
+                tape_1a_nav = (
+                    nav_to_in
+                    + [Inst.GRAB] + rot_in_to_bond + [Inst.DROP]
+                    + [Inst.GRAB] + rot_bond_to_out + [Inst.DROP, Inst.RESET]
+                )
+                tapes.append(tape_1a_nav)
+
+        # Also generate templates for multiple distinct inputs (e.g. two different inputs)
+        if len(inp_dirs) >= 2:
+            for d_in_a in inp_dirs:
+                for d_in_b in inp_dirs:
+                    if d_in_a == d_in_b:
+                        continue
+                    rot_a_to_bond = _rotation_instructions(d_in_a, bonder_dir)
+                    rot_bond_to_b = _rotation_instructions(bonder_dir, d_in_b)
+                    rot_b_to_bond = _rotation_instructions(d_in_b, bonder_dir)
+                    rot_bond_to_out = _rotation_instructions(bonder_dir, out_dir)
+
+                    tape_ab = (
+                        _rotation_instructions(arm_start, d_in_a)
+                        + [Inst.GRAB] + rot_a_to_bond + [Inst.DROP]
+                        + rot_bond_to_b
+                        + [Inst.GRAB] + rot_b_to_bond + [Inst.DROP]
+                        + [Inst.GRAB] + rot_bond_to_out + [Inst.DROP, Inst.RESET]
+                    )
+                    tapes.append(tape_ab)
 
     # --- Strategy G2: Individual flow tapes (one atom per cycle) ---
     for flow in ordered_flows:

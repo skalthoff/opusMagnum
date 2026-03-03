@@ -322,21 +322,6 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
 
     # Can't fit more than 6 stations in one CW sweep
     if n_stations > 6:
-        # Trim glyphs to fit; keep inputs + last output
-        max_glyphs = 6 - n_inputs - 1 - (1 if need_bonder else 0)
-        glyph_stations = [(s, d) for s, d in station_types if s == 'glyph']
-        trimmed = []
-        for i in range(n_inputs):
-            trimmed.append(('input', i))
-        for gs in glyph_stations[:max(0, max_glyphs)]:
-            trimmed.append(gs)
-        if need_bonder:
-            trimmed.append(('bonder', bonder_name))
-        trimmed.append(('output', 0))
-        station_types = trimmed
-        n_stations = len(station_types)
-
-    if n_stations > 6:
         return []
 
     layouts: List[Layout] = []
@@ -827,23 +812,46 @@ def _check_bonder_output_alignment(
     except KeyError:
         return True
 
-    # Compute bonder slot world positions
-    bonder_slot_positions: Set[Tuple[int, int]] = set()
-    for slot in bonder_spec.active_slots:
-        sp = local_to_world(bonder_pos, bonder_rot, slot.du, slot.dv)
-        bonder_slot_positions.add((sp.q, sp.r))
-
-    # For each bond, check both endpoints land on bonder slots
+    # Pre-compute bond world positions
+    bond_keys = []
     for bond in output_mol.bonds:
         from_world = local_to_world(output_pos, output_rot,
                                      bond.from_pos.q, bond.from_pos.r)
         to_world = local_to_world(output_pos, output_rot,
                                    bond.to_pos.q, bond.to_pos.r)
-        from_key = (from_world.q, from_world.r)
-        to_key = (to_world.q, to_world.r)
+        bond_keys.append(((from_world.q, from_world.r),
+                          (to_world.q, to_world.r)))
 
-        if not (from_key in bonder_slot_positions and
-                to_key in bonder_slot_positions):
+    if not bond_keys:
+        return True
+
+    # Check if ANY single bonder rotation covers ALL bonds simultaneously
+    for rot in range(6):
+        rot_slots: Set[Tuple[int, int]] = set()
+        for slot in bonder_spec.active_slots:
+            sp = local_to_world(bonder_pos, rot, slot.du, slot.dv)
+            rot_slots.add((sp.q, sp.r))
+
+        all_covered = True
+        for from_key, to_key in bond_keys:
+            if from_key not in rot_slots or to_key not in rot_slots:
+                all_covered = False
+                break
+        if all_covered:
+            return True
+
+    # Also accept if each bond is individually feasible (sequential bonding)
+    for from_key, to_key in bond_keys:
+        bond_feasible = False
+        for rot in range(6):
+            rot_slots2: Set[Tuple[int, int]] = set()
+            for slot in bonder_spec.active_slots:
+                sp = local_to_world(bonder_pos, rot, slot.du, slot.dv)
+                rot_slots2.add((sp.q, sp.r))
+            if from_key in rot_slots2 and to_key in rot_slots2:
+                bond_feasible = True
+                break
+        if not bond_feasible:
             return False
 
     return True

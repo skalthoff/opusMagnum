@@ -217,6 +217,23 @@ def _trace_flows(puzzle: Puzzle, analysis: PuzzleAnalysis,
 
         grab_counts[source_sid] = grab_counts.get(source_sid, 0) + 1
 
+    # Add bonder->output flow if bonding is needed
+    # This represents picking up the bonded molecule and delivering to output
+    if analysis.needs_bonding and bonder_sid is not None and output_sid is not None:
+        # The bonded molecule flow: grab from bonder, deliver to output
+        # Use the output molecule's first atom type as representative
+        out_type = output_mol.atoms[0].atom_type if output_mol.atoms else AtomType.SALT
+        flows.append(Flow(
+            flow_id=len(flows),
+            source=bonder_sid,
+            dest=output_sid,
+            via=[],
+            atom_type_in=out_type,
+            atom_type_out=out_type,
+            needs_ungrab=False,
+            priority=len(assembly_order),  # last in assembly order
+        ))
+
     return flows
 
 
