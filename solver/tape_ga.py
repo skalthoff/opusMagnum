@@ -33,6 +33,7 @@ class GAConfig:
         'compress': 0.10,
         'change_terminal': 0.10,
         'duplicate_segment': 0.05,
+        'trim': 0.05,
     })
     # Early abandonment thresholds
     early_abandon_gen5_ratio: float = 1.5   # abandon if >1.5x best after 5 gens
@@ -61,25 +62,44 @@ def _is_obviously_invalid(tape: List[int]) -> bool:
     - No GRAB instruction (can never pick up an atom)
     - No terminal (RESET/REPEAT) (infinite non-repeating execution)
     - All rotations with no GRAB/DROP (arm spins forever)
+    - Rotations before first GRAB (wastes cycles)
+    - GRAB with no DROP and no RESET (grab without delivery in repeating loop)
     """
     if not tape:
         return True
     has_grab = False
+    has_drop = False
     has_terminal = False
+    has_reset = False
     has_non_rotation = False
     rotation_set = {Inst.ROTATE_CW, Inst.ROTATE_CCW, Inst.PIVOT_CW, Inst.PIVOT_CCW}
+    first_grab_seen = False
+    rotations_before_grab = False
     for inst in tape:
         if inst == Inst.GRAB:
             has_grab = True
+            first_grab_seen = True
+        if inst == Inst.DROP:
+            has_drop = True
         if inst in (Inst.RESET, Inst.REPEAT):
             has_terminal = True
+        if inst == Inst.RESET:
+            has_reset = True
         if inst not in rotation_set:
             has_non_rotation = True
+        if not first_grab_seen and inst in rotation_set:
+            rotations_before_grab = True
     if not has_grab:
         return True
     if not has_terminal:
         return True
     if not has_non_rotation:
+        return True
+    # Rotations before the first grab waste cycles — reject
+    if rotations_before_grab:
+        return True
+    # GRAB with no DROP and no RESET: in a REPEAT loop the arm never delivers
+    if has_grab and not has_drop and not has_reset:
         return True
     return False
 
@@ -99,6 +119,7 @@ class TapeGA:
         self.total_prerejected = 0
         self.best_ever: Optional[Individual] = None
         self._best_cycles: Optional[int] = None  # for adaptive cycle limit scaling
+        self._eval_cache: Dict[tuple, Individual] = {}  # P4: tape fingerprint dedup cache
 
     def _default_weights(self) -> Dict[int, float]:
         return {
@@ -266,16 +287,23 @@ class TapeGA:
         """Build solution with tape, verify, and return scored Individual."""
         self.total_evaluations += 1
 
+        # P4: Tape fingerprint dedup cache — skip FFI for already-evaluated tapes
+        cache_key = tuple(tape)
+        if cache_key in self._eval_cache:
+            return self._eval_cache[cache_key]
+
         # Fast-reject obviously invalid tapes before FFI
         if _is_obviously_invalid(tape):
             self.total_prerejected += 1
             penalty = self.config.invalid_penalty_base + len(tape) * self.config.invalid_penalty_per_inst
-            return Individual(
+            result_ind = Individual(
                 tape=list(tape),
                 fitness=float(penalty),
                 metrics=None,
                 valid=False,
             )
+            self._eval_cache[cache_key] = result_ind
+            return result_ind
 
         # Use cached base bytes if available (avoids full rebuild + serialize)
         if cached_base is not None:
@@ -315,7 +343,7 @@ class TapeGA:
             else:
                 fitness = float(metrics['sum4'])
 
-            return Individual(
+            result_ind = Individual(
                 tape=list(tape),
                 fitness=fitness,
                 metrics=metrics,
@@ -323,12 +351,15 @@ class TapeGA:
             )
         else:
             penalty = self.config.invalid_penalty_base + len(tape) * self.config.invalid_penalty_per_inst
-            return Individual(
+            result_ind = Individual(
                 tape=list(tape),
                 fitness=float(penalty),
                 metrics=None,
                 valid=False,
             )
+
+        self._eval_cache[cache_key] = result_ind
+        return result_ind
 
     def _build_solution_with_tape(
         self,
@@ -498,7 +529,38 @@ class TapeGA:
         tape[insert_pos:insert_pos] = segment
         return tape
 
-    def _mutate(self, tape: List[int]) -> List[int]:
+    def _mutate_trim(self, tape: List[int]) -> List[int]:
+        """Remove provably redundant adjacent pairs.
+
+        Pairs removed (in a single left-to-right pass):
+        - GRAB immediately followed by DROP (grab-then-drop = noop)
+        - ROTATE_CW immediately followed by ROTATE_CCW (cancel out)
+        - ROTATE_CCW immediately followed by ROTATE_CW (cancel out)
+        - EXTEND immediately followed by RETRACT (cancel out)
+        - RETRACT immediately followed by EXTEND (cancel out)
+        """
+        tape = list(tape)
+        cancel_pairs = {
+            (Inst.GRAB, Inst.DROP),
+            (Inst.ROTATE_CW, Inst.ROTATE_CCW),
+            (Inst.ROTATE_CCW, Inst.ROTATE_CW),
+            (Inst.EXTEND, Inst.RETRACT),
+            (Inst.RETRACT, Inst.EXTEND),
+        }
+        changed = True
+        while changed and len(tape) >= 2:
+            changed = False
+            i = 0
+            while i < len(tape) - 1:
+                if (tape[i], tape[i + 1]) in cancel_pairs:
+                    tape.pop(i + 1)
+                    tape.pop(i)
+                    changed = True
+                else:
+                    i += 1
+        return tape
+
+    def _apply_one_mutation(self, tape: List[int]) -> List[int]:
         """Apply one random mutation operator (weighted by config)."""
         operators = {
             'change': self._mutate_change,
@@ -508,6 +570,7 @@ class TapeGA:
             'compress': self._mutate_compress,
             'change_terminal': self._mutate_change_terminal,
             'duplicate_segment': self._mutate_duplicate_segment,
+            'trim': self._mutate_trim,
         }
 
         weights = self.config.mutation_weights
@@ -527,6 +590,15 @@ class TapeGA:
 
         op = operators.get(chosen_name, self._mutate_change)
         return op(tape)
+
+    def _mutate(self, tape: List[int]) -> List[int]:
+        """Apply one mutation, then optionally a second (40%) and third (15%)."""
+        tape = self._apply_one_mutation(tape)
+        if self.rng.random() < 0.4:
+            tape = self._apply_one_mutation(tape)
+        if self.rng.random() < 0.15:
+            tape = self._apply_one_mutation(tape)
+        return tape
 
     # -----------------------------------------------------------------
     # Crossover

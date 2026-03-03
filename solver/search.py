@@ -223,7 +223,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         plan_bonder_name = plan.bonder_type
 
         # Generate layouts for each arm length separately to ensure diversity
-        for arm_len in [1, 2]:
+        for arm_len in [1, 2, 3]:
             config = LayoutConfig(
                 min_arm_len=arm_len,
                 max_arm_len=arm_len,
@@ -241,7 +241,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                       f'arm{arm_len}: {len(batch)} CW-sweep layouts')
 
         # Generate stacked layouts separately (parts share same hex)
-        for arm_len in [1, 2]:
+        for arm_len in [1, 2, 3]:
             config = LayoutConfig(
                 min_arm_len=arm_len,
                 max_arm_len=arm_len,
@@ -261,7 +261,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         # Generate deduplicated layouts when inputs share element types
         if deduped_puzzle is not None:
             deduped_analysis = analyze_puzzle(deduped_puzzle)
-            for arm_len in [1, 2]:
+            for arm_len in [1, 2, 3]:
                 config = LayoutConfig(
                     min_arm_len=arm_len,
                     max_arm_len=arm_len,
@@ -299,7 +299,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         plan = graph_to_plan(graph, puzzle, analysis)
         graph_plans[gi] = plan
 
-        for arm_len in [1, 2]:
+        for arm_len in [1, 2, 3]:
             config = LayoutConfig(
                 min_arm_len=arm_len,
                 max_arm_len=arm_len,
@@ -324,7 +324,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
             deduped_graphs = build_station_graph(deduped_puzzle, deduped_analysis_g)
             for dg in deduped_graphs:
                 dplan = graph_to_plan(dg, deduped_puzzle, deduped_analysis_g)
-                for arm_len in [1, 2]:
+                for arm_len in [1, 2, 3]:
                     config = LayoutConfig(
                         min_arm_len=arm_len,
                         max_arm_len=arm_len,
@@ -454,6 +454,8 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     # --- Phase 3b: GA on remaining layouts (parallel if possible, else sequential) ---
     if ga_candidates and (best is None or best.score > theory_min):
         # Prepare worker arguments (with pruning)
+        # best_tape_so_far: warm-start subsequent layouts with the best tape found so far
+        best_tape_so_far = None
         worker_args = []
         # Keep mapping from rank to (layout, base_sol) for solution reconstruction
         rank_to_layout = {}
@@ -465,8 +467,12 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
             if time.time() - t0 > time_limit:
                 break
             current_best_score = best.score if best is not None else None
+            # Warm-start: prepend best tape from any previous GA result
+            effective_seeds = seed_tapes
+            if best_tape_so_far is not None:
+                effective_seeds = [best_tape_so_far] + seed_tapes
             worker_args.append((
-                rank, base_sol, layout_info, puzzle_bytes, seed_tapes,
+                rank, base_sol, layout_info, puzzle_bytes, effective_seeds,
                 target, current_best_score, inst_weights, 42 + rank
             ))
             rank_to_layout[rank] = (layout, base_sol)
@@ -518,11 +524,18 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                 # Sequential fallback
                 if verbose:
                     print(f'  Running GA sequentially on {len(worker_args)} layouts...')
+                seq_best_tape: Optional[List[int]] = None
                 for args in worker_args:
                     if time.time() - t0 > time_limit:
                         if verbose:
                             print(f'  Time limit reached during GA')
                         break
+                    # Warm-start: inject best tape from previous sequential result
+                    if seq_best_tape is not None:
+                        (r, bs, li, pb, seeds, tgt, cbs, iw, gs) = args
+                        if seq_best_tape not in seeds:
+                            args = (r, bs, li, pb, [seq_best_tape] + seeds,
+                                    tgt, cbs, iw, gs)
                     rank_result, best_tape, metrics, score, n_evals = _ga_worker(args)
                     total_verified += n_evals
                     if best_tape is not None and (best is None or score < best.score):
@@ -533,11 +546,15 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                             metrics=metrics,
                             score=score,
                         )
+                        seq_best_tape = best_tape
                         if verbose:
                             m = metrics
                             print(f'  ** New best (layout {rank_result} GA): '
                                   f'{m["cost"]}g/{m["cycles"]}c/'
                                   f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+                    elif best_tape is not None and seq_best_tape is None:
+                        # Valid tape found but not better than best; still useful as seed
+                        seq_best_tape = best_tape
                     # Update pruning for subsequent layouts
                     if best is not None and best.score <= theory_min:
                         if verbose:
@@ -708,10 +725,17 @@ def _try_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
     # --- Path 1: Glyph-guided search ---
     # For each glyph needed, try all placements and map inputs to slot positions.
     # When bonding is needed, bonder slot positions are also candidates for inputs.
-    bonder_spec = None
+    # Try regular bonder, bonder-speed, and (if triplex bonds needed) bonder-prisma.
+    bonder_types = ['bonder', 'bonder-speed']
     if analysis.needs_bonding:
+        # Also try bonder-prisma for triplex bonds
+        bonder_types.append('bonder-prisma')
+
+    # Pre-load specs for all bonder types (skip any not in glyph_model)
+    bonder_specs: List[Tuple[str, object]] = []
+    for bt in bonder_types:
         try:
-            bonder_spec = get_glyph_spec('bonder')
+            bonder_specs.append((bt, get_glyph_spec(bt)))
         except KeyError:
             pass
 
@@ -731,17 +755,20 @@ def _try_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
                 out_world = [local_to_world(glyph_pos, glyph_rot, s.du, s.dv)
                              for s in output_slots]
 
-                if analysis.needs_bonding and bonder_spec:
-                    # Iterate bonder rotations to include bonder slots as candidates
-                    bonder_rots = range(6)
+                if analysis.needs_bonding and bonder_specs:
+                    # Iterate all bonder types and rotations to include bonder
+                    # slots as position candidates
+                    bonder_rots = [(bname, bspec, brot)
+                                   for bname, bspec in bonder_specs
+                                   for brot in range(6)]
                 else:
-                    bonder_rots = [None]
+                    bonder_rots = [(None, None, None)]
 
-                for brot in bonder_rots:
+                for bname, cur_bonder_spec, brot in bonder_rots:
                     # Build candidate positions from glyph slots + bonder slots
                     candidates_raw = list(ia_world) + [glyph_pos]
-                    if brot is not None and bonder_spec:
-                        for s in bonder_spec.slots:
+                    if brot is not None and cur_bonder_spec:
+                        for s in cur_bonder_spec.slots:
                             candidates_raw.append(
                                 local_to_world(glyph_pos, brot, s.du, s.dv))
 
@@ -775,7 +802,7 @@ def _try_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
                                         puzzle_name=puzzle.name,
                                         solution_name="ZA")
                                     sol.parts = list(base_parts) + [
-                                        Part(name='bonder',
+                                        Part(name=bname,
                                              position=glyph_pos,
                                              rotation=brot),
                                         Part(name='out-std',

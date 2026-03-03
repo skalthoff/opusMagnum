@@ -37,14 +37,38 @@ class Layout:
     """A valid placement of all parts."""
     arm_pos: HexCoord
     arm_rot: int            # starting direction (0-5)
-    arm_len: int            # 1 or 2
-    arm_type: str           # 'arm1' or 'arm2'
+    arm_len: int            # 1, 2, or 3
+    arm_type: str           # 'arm1', 'arm2', or 'arm3'
     stations: List[Tuple[str, object]]  # [(type, data), ...] in CW order
     directions: List[int]   # direction index for each station
     positions: List[HexCoord]  # world position for each station
     glyph_rotations: Dict[int, int]  # station_index -> glyph rotation
     output_rotations: Dict[int, int]  # station_index -> output rotation
     cost: int               # total cost of this layout
+
+    @property
+    def estimated_area(self) -> int:
+        """Estimate area as number of unique hex positions occupied.
+
+        Counts the arm base hex, all station positions, and glyph footprint
+        hexes.  Used as a secondary sort key for compactness.
+        """
+        occupied: Set[Tuple[int, int]] = set()
+        occupied.add((self.arm_pos.q, self.arm_pos.r))
+        for pos in self.positions:
+            occupied.add((pos.q, pos.r))
+        # Add glyph/bonder footprint hexes
+        for si, (stype, sdata) in enumerate(self.stations):
+            if stype in ('glyph', 'bonder'):
+                pos = self.positions[si]
+                rot = self.glyph_rotations.get(si, 0)
+                try:
+                    spec = get_glyph_spec(sdata)
+                    for h in footprint_world(pos, rot, spec):
+                        occupied.add((h.q, h.r))
+                except KeyError:
+                    pass
+        return len(occupied)
 
     def to_solution(self, puzzle: Puzzle, n_outputs: int) -> Solution:
         """Build a Solution from this layout (without arm tape)."""
@@ -331,7 +355,7 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
 
     for arm_pos in arm_positions:
         for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
-            arm_type = 'arm1' if arm_len == 1 else 'arm2'
+            arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
 
             # Quick cost check for branch-and-bound
             base_cost = _compute_layout_cost(arm_type, station_types, need_bonder)
@@ -459,8 +483,8 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
         if len(layouts) >= config.max_layouts:
             break
 
-    # Sort by cost (lower is better)
-    layouts.sort(key=lambda l: l.cost)
+    # Sort by cost then estimated area (lower is better)
+    layouts.sort(key=lambda l: (l.cost, l.estimated_area))
 
     # Limit to max_layouts
     return layouts[:config.max_layouts]
@@ -510,7 +534,7 @@ def generate_stacked_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
 
     for arm_pos in arm_positions:
         for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
-            arm_type = 'arm1' if arm_len == 1 else 'arm2'
+            arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
 
             # Build full station list: inputs first, then process stations
             all_stations = [('input', i) for i in range(n_inputs)] + process_stations
@@ -657,7 +681,7 @@ def generate_stacked_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
         if len(layouts) >= config.max_layouts:
             break
 
-    layouts.sort(key=lambda l: l.cost)
+    layouts.sort(key=lambda l: (l.cost, l.estimated_area))
     return layouts[:config.max_layouts]
 
 
@@ -907,7 +931,7 @@ def generate_layouts_from_graph(graph, puzzle: Puzzle,
             graph.bonder_type, config)
         all_layouts.extend(spread)
 
-    all_layouts.sort(key=lambda l: l.cost)
+    all_layouts.sort(key=lambda l: (l.cost, l.estimated_area))
     return all_layouts[:config.max_layouts]
 
 
@@ -947,7 +971,7 @@ def _generate_spread_layouts(
 
     for arm_pos in arm_positions:
         for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
-            arm_type = 'arm1' if arm_len == 1 else 'arm2'
+            arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
 
             # Compute tip positions for all 6 directions
             tips: Dict[int, HexCoord] = {}
@@ -1136,5 +1160,5 @@ def _generate_spread_layouts(
                             if len(layouts) >= config.max_layouts:
                                 return layouts
 
-    layouts.sort(key=lambda l: l.cost)
+    layouts.sort(key=lambda l: (l.cost, l.estimated_area))
     return layouts[:config.max_layouts]
