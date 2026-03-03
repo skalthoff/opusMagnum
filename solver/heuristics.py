@@ -1,28 +1,24 @@
 """Core heuristics for Opus Magnum god-solution generation.
 
-This module implements strategies for generating near-optimal solutions
-across different optimization targets (cycles, cost, area, instructions).
-
-Solution generation uses a template-based approach: each puzzle complexity
-class has a layout template that places parts and generates instruction tapes.
-Solutions are verified with omsim (libverify) after generation.
-
 Glyph spatial mechanics (from omsim):
   Directions 0-5 go CW: E(1,0), SE(0,1), SW(-1,1), W(-1,0), NW(0,-1), NE(1,-1)
-  CW rotation = direction index - 1
-  CCW rotation = direction index + 1
-  Glyph relative position: pos + direction_u(rot)*du + direction_v(rot)*dv
-  where direction_v(rot) = direction_u(rot+1)
+  CW rotation = direction index - 1; CCW = direction index + 1
+  Calcification: active hex at (0,0) — converts cardinal to salt
+  Projection: quicksilver at (0,0), metal at (1,0) — promotes metal
+  Bonder: bonds atoms at (0,0) and (1,0)
 """
 from __future__ import annotations
+import os
+import subprocess
+import tempfile
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Dict, List, Optional, Set, Tuple
 
 from .hex import HexCoord, DIRECTIONS, ORIGIN
-from .puzzle import AtomType, Puzzle, Molecule, Atom, Bond, BondType
-from .solution import Solution, Part, Instruction, Inst, TrackHex
-from .recipe import PuzzleAnalysis, Reaction, analyze_puzzle
+from .puzzle import AtomType, Puzzle, Molecule, Atom, Bond, BondType, PartFlag
+from .solution import Solution, Part, Instruction, Inst, TrackHex, write_solution
+from .recipe import PuzzleAnalysis, Reaction, analyze_puzzle, REACTION_GLYPHS
 
 
 class OptTarget(Enum):
@@ -30,315 +26,450 @@ class OptTarget(Enum):
     COST = auto()
     AREA = auto()
     INSTRUCTIONS = auto()
+    SUM4 = auto()
     BALANCED = auto()
 
 
-def generate_solution(puzzle: Puzzle, target: OptTarget = OptTarget.COST) -> Solution:
-    """Generate a solution for the given puzzle optimized for the target metric."""
+_OMSIM = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tools', 'omsim', 'omsim')
+_PUZZLE_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tools', 'omsim', 'test', 'puzzle')
+
+
+def _find_puzzle_path(puzzle_name: str) -> Optional[str]:
+    for root, dirs, files in os.walk(_PUZZLE_DIR):
+        for f in files:
+            if f == f'{puzzle_name}.puzzle':
+                return os.path.join(root, f)
+    return None
+
+
+def _verify(sol: Solution, puzzle_path: str) -> Optional[dict]:
+    """Verify a solution with omsim. Returns metrics dict or None."""
+    sol_path = None
+    try:
+        with tempfile.NamedTemporaryFile(suffix='.solution', delete=False) as f:
+            sol_path = f.name
+        write_solution(sol, sol_path)
+        result = subprocess.run(
+            [_OMSIM, '-p', puzzle_path,
+             '-m', 'cycles', '-m', 'cost', '-m', 'area', '-m', 'instructions',
+             sol_path],
+            capture_output=True, text=True, timeout=30
+        )
+        metrics = {}
+        for line in (result.stdout + result.stderr).strip().split('\n'):
+            if ':' in line:
+                k, v = line.split(':', 1)
+                v = v.strip()
+                if v.isdigit():
+                    metrics[k.strip()] = int(v)
+        if all(m in metrics for m in ('cost', 'cycles', 'area', 'instructions')):
+            metrics['sum4'] = sum(metrics[k] for k in ('cost', 'cycles', 'area', 'instructions'))
+            return metrics
+    except Exception:
+        pass
+    finally:
+        if sol_path:
+            try:
+                os.unlink(sol_path)
+            except Exception:
+                pass
+    return None
+
+
+def _score(metrics: dict, target: OptTarget) -> float:
+    if target == OptTarget.COST:
+        return metrics['cost']
+    elif target == OptTarget.CYCLES:
+        return metrics['cycles']
+    elif target == OptTarget.AREA:
+        return metrics['area']
+    elif target == OptTarget.INSTRUCTIONS:
+        return metrics['instructions']
+    return metrics['sum4']
+
+
+def generate_solution(puzzle: Puzzle, target: OptTarget = OptTarget.COST,
+                      puzzle_path: Optional[str] = None) -> Solution:
+    """Generate a solution, trying multiple strategies and returning the best."""
     analysis = analyze_puzzle(puzzle)
+    if puzzle_path is None:
+        puzzle_path = _find_puzzle_path(puzzle.name)
 
-    if analysis.complexity == "trivial":
-        return _solve_trivial(puzzle, analysis, target)
-    elif analysis.complexity in ("simple_conversion", "cardinal", "metal_chain",
-                                  "quintessence", "vital"):
-        return _solve_monoatomic_conversion(puzzle, analysis, target)
-    else:
-        return _solve_general(puzzle, analysis, target)
+    candidates = []
+
+    # Try each strategy
+    for strategy in _get_strategies(puzzle, analysis, target):
+        try:
+            sol = strategy(puzzle, analysis, target)
+            if sol is None:
+                continue
+            if puzzle_path and os.path.exists(_OMSIM):
+                metrics = _verify(sol, puzzle_path)
+                if metrics:
+                    candidates.append((sol, metrics))
+            else:
+                candidates.append((sol, None))
+        except Exception:
+            continue
+
+    if not candidates:
+        return _fallback(puzzle, analysis, target)
+
+    if any(m for _, m in candidates):
+        # Pick best by target metric
+        scored = [(sol, m, _score(m, target)) for sol, m in candidates if m]
+        if scored:
+            scored.sort(key=lambda x: x[2])
+            return scored[0][0]
+
+    return candidates[0][0]
+
+
+def _get_strategies(puzzle: Puzzle, analysis: PuzzleAnalysis, target: OptTarget) -> list:
+    strategies = []
+    if _can_zero_arm(puzzle, analysis):
+        strategies.append(_solve_zero_arm)
+    strategies.append(_solve_single_arm)
+    return strategies
 
 
 # =============================================================================
-# TRIVIAL: just move atoms from input to output (no conversion needed)
+# ZERO-ARM OVERLAP
 # =============================================================================
 
-def _solve_trivial(puzzle: Puzzle, analysis: PuzzleAnalysis,
-                   target: OptTarget) -> Solution:
-    """Solve trivial puzzles: grab from input, rotate to output, drop."""
-    sol = Solution(puzzle_name=puzzle.name, solution_name="God-Trivial")
+def _can_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis) -> bool:
+    if len(puzzle.inputs) != 2:
+        return False
+    if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
+        return False
+    if len(puzzle.outputs) != 1:
+        return False
+    out = puzzle.outputs[0].molecule
+    if out.atom_count != 2 or len(out.bonds) != 1:
+        return False
+    if analysis.recipe is None:
+        return False
+    active = {r: c for r, c in analysis.recipe.reactions.items() if c > 0}
+    if len(active) != 1:
+        return False
+    r = list(active.keys())[0]
+    return r in (Reaction.CALCIFICATION, Reaction.PROJECTION)
 
-    # Layout: arm at origin, input at one adjacent hex, output at another.
-    # Use 1 CW rotation for minimal cycles.
-    # Input at direction 1 (SE), output at direction 0 (E).
-    # Arm points SE (rot=1) to grab, CW to dir 0 to drop.
-    input_pos = DIRECTIONS[1]   # (0, 1) = SE
-    output_pos = DIRECTIONS[0]  # (1, 0) = E
-    arm_pos = ORIGIN
 
-    for i, pio in enumerate(puzzle.inputs):
-        sol.parts.append(Part(name='input', position=input_pos, io_index=i))
-    for i, pio in enumerate(puzzle.outputs):
-        out_name = 'out-rep' if getattr(pio, 'repeating', False) else 'out-std'
-        sol.parts.append(Part(name=out_name, position=output_pos, io_index=i))
+def _solve_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
+                    target: OptTarget) -> Optional[Solution]:
+    """Place inputs/glyph/bonder/output at overlapping positions, no arm needed."""
+    sol = Solution(puzzle_name=puzzle.name, solution_name="ZeroArm")
+    active = {r: c for r, c in analysis.recipe.reactions.items() if c > 0}
+    reaction = list(active.keys())[0]
 
-    arm = Part(name='arm1', position=arm_pos, size=1, rotation=1)
-    tape = [
-        Inst.GRAB,
-        Inst.ROTATE_CW,    # dir 1 -> 0: tip moves to output
-        Inst.DROP,
-        Inst.ROTATE_CCW,   # dir 0 -> 1: tip returns to input
-        Inst.REPEAT,
-    ]
-    arm.set_tape(tape)
-    sol.parts.append(arm)
+    pos_a = HexCoord(0, -1)
+    pos_b = HexCoord(1, -1)  # = pos_a + DIRECTIONS[0] (E)
+
+    in0_type = puzzle.inputs[0].molecule.atoms[0].atom_type
+    in1_type = puzzle.inputs[1].molecule.atoms[0].atom_type
+
+    if reaction == Reaction.CALCIFICATION:
+        # Glyph at pos_a converts cardinal→salt. Put the cardinal input at pos_a.
+        if in0_type.is_cardinal:
+            sol.parts.append(Part(name='input', position=pos_a, io_index=0))
+            sol.parts.append(Part(name='input', position=pos_b, io_index=1))
+        else:
+            sol.parts.append(Part(name='input', position=pos_a, io_index=1))
+            sol.parts.append(Part(name='input', position=pos_b, io_index=0))
+        sol.parts.append(Part(name='glyph-calcification', position=pos_a, rotation=0))
+
+    elif reaction == Reaction.PROJECTION:
+        # Projection: QS at (0,0)=pos_a, metal at (1,0)=pos_b
+        if in0_type == AtomType.QUICKSILVER:
+            sol.parts.append(Part(name='input', position=pos_a, io_index=0))
+            sol.parts.append(Part(name='input', position=pos_b, io_index=1))
+        else:
+            sol.parts.append(Part(name='input', position=pos_a, io_index=1))
+            sol.parts.append(Part(name='input', position=pos_b, io_index=0))
+        sol.parts.append(Part(name='glyph-projection', position=pos_a, rotation=0))
+
+    if analysis.needs_bonding:
+        sol.parts.append(Part(name='bonder', position=pos_a, rotation=0))
+
+    sol.parts.append(Part(name='out-std', position=pos_a, io_index=0))
     return sol
 
 
 # =============================================================================
-# MONOATOMIC CONVERSION: single-arm rotation through glyphs
+# SINGLE-ARM SOLVER
+#
+# The workhorse: handles 1-N inputs with various conversion needs.
+# Based on the dominant pattern in god-cost solutions.
+#
+# Key insight: arm at center, each input at a SEPARATE direction from the arm.
+# Glyphs placed at other directions. Tape does grab-rotate-drop-reset for each
+# atom that needs to be placed.
 # =============================================================================
 
-def _glyph_active_hex(glyph_name: str, glyph_pos: HexCoord, rotation: int,
-                      du: int = 0, dv: int = 0) -> HexCoord:
-    """Compute absolute hex position for a glyph's relative offset.
+def _solve_single_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
+                      target: OptTarget) -> Optional[Solution]:
+    """Single arm1 solver for any puzzle with monoatomic inputs."""
+    if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
+        return None  # TODO: multi-atom input handling
 
-    Uses omsim's mechanism_relative_position formula:
-      position + direction_u(rotation) * du + direction_v(rotation) * dv
-    where direction_v(rot) = direction_u(rot + 1).
-    """
-    dir_u = DIRECTIONS[rotation % 6]
-    dir_v = DIRECTIONS[(rotation + 1) % 6]
-    return HexCoord(
-        glyph_pos.q + dir_u.q * du + dir_v.q * dv,
-        glyph_pos.r + dir_u.r * du + dir_v.r * dv,
-    )
+    out_mol = puzzle.outputs[0].molecule if puzzle.outputs else None
+    if out_mol is None:
+        return None
 
+    n_inputs = len(puzzle.inputs)
+    n_outputs = len(puzzle.outputs)
 
-# Glyph spatial footprints: (du, dv) offsets for active hexes
-# From omsim sim.c apply_glyphs()
-GLYPH_FOOTPRINTS = {
-    'glyph-calcification':    {'active': [(0, 0)]},
-    'glyph-projection':       {'input_qs': (0, 0), 'input_metal': (1, 0)},
-    'glyph-life-and-death':   {'consume': [(0, 0), (1, 0)], 'produce': [(0, 1), (1, -1)]},
-    'glyph-dispersion':       {'consume': [(0, 0)], 'produce': [(1, 0), (1, -1), (0, -1), (-1, 0)]},
-    'glyph-unification':      {'consume': [(0, 1), (-1, 1), (0, -1), (1, -1)], 'produce': [(0, 0)]},
-    'glyph-purification':     {'consume': [(0, 0), (1, 0)], 'produce': [(0, 1)]},
-    'glyph-duplication':      {'source': (0, 0), 'target': (1, 0)},
-    'bonder':                 {'hex_a': (0, 0), 'hex_b': (1, 0)},
-    'unbonder':               {'hex_a': (0, 0), 'hex_b': (1, 0)},
-}
-
-
-def _solve_monoatomic_conversion(puzzle: Puzzle, analysis: PuzzleAnalysis,
-                                  target: OptTarget) -> Solution:
-    """Solve monoatomic conversion puzzles using single-arm rotation strategy.
-
-    Strategy: place arm at center, arrange input/glyphs/output around it so
-    the arm can grab from input, rotate through each glyph position to trigger
-    conversion, and drop at output.
-
-    For single-glyph puzzles (e.g., calcification only): 3 positions needed
-    around arm (input, glyph, output) = 3 rotations.
-
-    For multi-step: chain glyphs along the rotation path.
-    """
-    sol = Solution(puzzle_name=puzzle.name, solution_name="God-Conv")
-
-    # Determine the sequence of stations the atom must visit
-    stations = _plan_stations(puzzle, analysis)
-
-    if len(stations) <= 6:
-        return _single_arm_rotation_solver(puzzle, analysis, sol, stations, target)
-    else:
-        return _track_based_solver(puzzle, analysis, sol, stations, target)
-
-
-def _plan_stations(puzzle: Puzzle, analysis: PuzzleAnalysis) -> List[dict]:
-    """Plan the sequence of stations (input, glyphs, output) an atom must visit.
-
-    Returns a list of station dicts with 'type', 'part_name', etc.
-    """
-    stations = []
-
-    # Start at input
-    stations.append({'type': 'input', 'part_name': 'input', 'io_index': 0})
-
-    # Visit each required glyph
+    # Determine glyphs needed
+    glyphs_needed = []
     if analysis.recipe:
         for reaction, count in analysis.recipe.reactions.items():
-            if count <= 0:
-                continue
-            for glyph_name in _get_glyph_parts(reaction):
-                stations.append({'type': 'glyph', 'part_name': glyph_name,
-                                 'reaction': reaction})
+            if count > 0:
+                for glyph_name in REACTION_GLYPHS[reaction]:
+                    glyphs_needed.append(glyph_name)
 
-    # Bonding station
-    if analysis.needs_bonding:
-        stations.append({'type': 'glyph', 'part_name': 'bonder'})
+    need_bonder = analysis.needs_bonding
 
-    # End at output
-    stations.append({'type': 'output', 'part_name': 'out-std', 'io_index': 0})
+    # Total directions needed: inputs + glyphs + 1 (output/bonder area)
+    # Max 6 directions around arm
+    n_glyph_slots = len(glyphs_needed)
+    n_total = n_inputs + n_glyph_slots + 1  # +1 for output/drop zone
 
-    return stations
+    if n_total > 6:
+        # Too many stations. Try to overlap glyphs with output.
+        n_total = min(6, n_inputs + 1 + (1 if n_glyph_slots > 0 else 0))
 
-
-def _single_arm_rotation_solver(puzzle: Puzzle, analysis: PuzzleAnalysis,
-                                 sol: Solution, stations: List[dict],
-                                 target: OptTarget) -> Solution:
-    """Place stations around a single arm, connected by rotation.
-
-    Layout: arm at origin. Stations placed at consecutive direction indices
-    going CW from the arm (dir N, N-1, N-2, ...). Each CW rotation step
-    moves the grabbed atom to the next station.
-
-    For calcification-only puzzles:
-      dir 2 (SW): input
-      dir 1 (SE): calcification glyph active hex
-      dir 0 (E):  output
-      → 2 CW rotations from input to output
-    """
-    n_stations = len(stations)
-    if n_stations > 6:
-        # Fall back to track-based if too many stations
-        return _track_based_solver(puzzle, analysis, sol, stations, target)
-
+    # Build solution
+    sol = Solution(puzzle_name=puzzle.name, solution_name="SingleArm")
     arm_pos = ORIGIN
 
-    # Assign each station a direction index.
-    # Start at a high direction index and go CW (decreasing).
-    # This means: station[0] at dir (n_stations-1), station[1] at dir (n_stations-2), etc.
-    start_dir = n_stations - 1
-    station_dirs = list(range(start_dir, start_dir - n_stations, -1))
-    # Normalize to 0-5
-    station_dirs = [d % 6 for d in station_dirs]
+    # Assign direction slots going CW from a starting direction.
+    # Convention: inputs get the highest direction indices (furthest CW from output).
+    # Output gets direction 0 (E). Glyphs get directions between inputs and output.
+    #
+    # Example for 1 input + 1 glyph + output:
+    #   dir 2: input
+    #   dir 1: glyph (calcification)
+    #   dir 0: output/bonder
+    #   Tape: G (grab at dir 2), R (CW to dir 1, glyph fires), R (CW to dir 0), X (reset)
 
-    # Place parts at station positions
-    for i, station in enumerate(stations):
-        direction = station_dirs[i]
-        station_pos = arm_pos + DIRECTIONS[direction]
+    output_dir = 0
+    # Place glyphs after inputs (in CW order toward output)
+    glyph_start_dir = 1
+    input_start_dir = glyph_start_dir + n_glyph_slots
 
-        if station['type'] == 'input':
-            sol.parts.append(Part(name='input', position=station_pos,
-                                  io_index=station.get('io_index', 0)))
-        elif station['type'] == 'output':
-            out_name = station.get('part_name', 'out-std')
-            sol.parts.append(Part(name=out_name, position=station_pos,
-                                  io_index=station.get('io_index', 0)))
-        elif station['type'] == 'glyph':
-            glyph_name = station['part_name']
-            # For simple glyphs (calcification, etc.), the active hex is at (0,0)
-            # relative to the glyph position. So place the glyph AT the station.
-            if glyph_name == 'glyph-calcification':
-                # Calcification: atom placed directly on glyph hex → converted
-                sol.parts.append(Part(name=glyph_name, position=station_pos, rotation=0))
-            elif glyph_name == 'glyph-projection':
-                # Projection: quicksilver at (0,0), metal at (1,0)
-                # For now, place projection at station with appropriate rotation
-                # so the atom passes through (0,0) = quicksilver position
-                sol.parts.append(Part(name=glyph_name, position=station_pos, rotation=0))
-            elif glyph_name == 'bonder':
-                # Bonder needs two atoms on adjacent hexes.
-                # Place bonder so (0,0) is at this station and (1,0) is at adjacent
-                sol.parts.append(Part(name=glyph_name, position=station_pos, rotation=direction))
-            else:
-                sol.parts.append(Part(name=glyph_name, position=station_pos, rotation=0))
+    # --- Place inputs ---
+    for i in range(n_inputs):
+        d = (input_start_dir + i) % 6
+        pos = arm_pos + DIRECTIONS[d]
+        sol.parts.append(Part(name='input', position=pos, io_index=i))
 
-    # Create arm pointing at the input station
-    input_dir = station_dirs[0]
-    arm = Part(name='arm1', position=arm_pos, size=1, rotation=input_dir)
+    # --- Place glyphs ---
+    for gi, glyph_name in enumerate(glyphs_needed):
+        if gi >= 5:  # safety
+            break
+        d = (glyph_start_dir + gi) % 6
+        pos = arm_pos + DIRECTIONS[d]
+        sol.parts.append(Part(name=glyph_name, position=pos, rotation=0))
 
-    # Build tape: grab, rotate CW through stations, drop, rotate CCW back
-    tape = [Inst.GRAB]
-    n_rotations = n_stations - 1  # number of CW steps from input to output
-    for _ in range(n_rotations):
-        tape.append(Inst.ROTATE_CW)
-    tape.append(Inst.DROP)
-    for _ in range(n_rotations):
-        tape.append(Inst.ROTATE_CCW)
-    tape.append(Inst.REPEAT)
+    # --- Place bonder + output ---
+    output_pos = arm_pos + DIRECTIONS[output_dir]
+    if need_bonder:
+        sol.parts.append(Part(name='bonder', position=output_pos, rotation=output_dir))
+    sol.parts.append(Part(name='out-std', position=output_pos, io_index=0))
 
+    # Additional outputs at same position
+    for oi in range(1, n_outputs):
+        sol.parts.append(Part(name='out-std', position=output_pos, io_index=oi))
+
+    # --- Build arm and tape ---
+    # For single-input puzzles: just grab, rotate CW to output, reset
+    if n_inputs == 1:
+        first_input_dir = input_start_dir % 6
+        arm = Part(name='arm1', position=arm_pos, size=1, rotation=first_input_dir)
+
+        # CW steps from input to output
+        cw_steps = (first_input_dir - output_dir) % 6
+
+        tape = [Inst.GRAB]
+        for _ in range(cw_steps):
+            tape.append(Inst.ROTATE_CW)
+        tape.append(Inst.RESET)
+
+        arm.set_tape(tape)
+        sol.parts.append(arm)
+        return sol
+
+    elif n_inputs == 2:
+        return _two_input_tape(puzzle, analysis, sol, arm_pos, output_dir,
+                               input_start_dir, n_glyph_slots, glyphs_needed, target)
+
+    elif n_inputs >= 3:
+        return _multi_input_tape(puzzle, analysis, sol, arm_pos, output_dir,
+                                 input_start_dir, n_glyph_slots, target)
+
+    return sol
+
+
+def _two_input_tape(puzzle: Puzzle, analysis: PuzzleAnalysis,
+                    sol: Solution, arm_pos: HexCoord, output_dir: int,
+                    input_start_dir: int, n_glyph_slots: int,
+                    glyphs_needed: list, target: OptTarget) -> Solution:
+    """Build tape for 2-input puzzles.
+
+    Two approaches depending on output molecule:
+    A) Both atoms need the same treatment → alternate grab-convert-drop
+    B) One atom needs conversion, other doesn't → sequential
+    """
+    in0_dir = input_start_dir % 6
+    in1_dir = (input_start_dir + 1) % 6
+
+    out_mol = puzzle.outputs[0].molecule
+    in0_type = puzzle.inputs[0].molecule.atoms[0].atom_type
+    in1_type = puzzle.inputs[1].molecule.atoms[0].atom_type
+
+    # Start arm pointing at first input
+    arm = Part(name='arm1', position=arm_pos, size=1, rotation=in0_dir)
+
+    # CW steps from each input to output
+    cw0_to_out = (in0_dir - output_dir) % 6
+    cw1_to_out = (in1_dir - output_dir) % 6
+    cw0_to_1 = (in0_dir - in1_dir) % 6  # CW from input0 to input1
+    ccw_out_to_0 = (in0_dir - output_dir) % 6  # same as cw0_to_out since we go CCW back
+
+    if out_mol.atom_count == 1:
+        # Output is monoatomic — just handle first input
+        tape = [Inst.GRAB]
+        for _ in range(cw0_to_out):
+            tape.append(Inst.ROTATE_CW)
+        tape.append(Inst.RESET)
+        arm.set_tape(tape)
+        sol.parts.append(arm)
+        return sol
+
+    if out_mol.atom_count == 2 and analysis.needs_bonding:
+        # 2-atom bonded output: grab-convert-drop first atom,
+        # then grab-convert-drop second atom on bonder's other hex
+
+        # First atom: grab from input0, rotate CW through glyphs to output area, drop
+        tape = [Inst.GRAB]
+        for _ in range(cw0_to_out):
+            tape.append(Inst.ROTATE_CW)
+        tape.append(Inst.DROP)
+
+        # Return to input1: CCW back past glyphs to input1
+        # From output_dir, go CCW to in1_dir
+        ccw_out_to_1 = (in1_dir - output_dir) % 6
+        for _ in range(ccw_out_to_1):
+            tape.append(Inst.ROTATE_CCW)
+        tape.append(Inst.GRAB)
+
+        # Rotate CW from input1 through (fewer or more) glyphs to output area
+        for _ in range(cw1_to_out):
+            tape.append(Inst.ROTATE_CW)
+        tape.append(Inst.DROP)
+
+        # Reset back to start
+        tape.append(Inst.RESET)
+
+        arm.set_tape(tape)
+        sol.parts.append(arm)
+        return sol
+
+    # For larger outputs, do sequential atom-by-atom placement
+    n_atoms = out_mol.atom_count
+    tape = []
+    for atom_i in range(n_atoms):
+        input_idx = atom_i % 2
+        input_dir = (input_start_dir + input_idx) % 6
+
+        if atom_i == 0:
+            # Already pointing at input0
+            pass
+        else:
+            # Return from output to correct input
+            ccw_steps = (input_dir - output_dir) % 6
+            for _ in range(ccw_steps):
+                tape.append(Inst.ROTATE_CCW)
+
+        tape.append(Inst.GRAB)
+        cw_to_out = (input_dir - output_dir) % 6
+        for _ in range(cw_to_out):
+            tape.append(Inst.ROTATE_CW)
+        tape.append(Inst.DROP)
+
+    tape.append(Inst.RESET)
     arm.set_tape(tape)
     sol.parts.append(arm)
     return sol
 
 
-def _track_based_solver(puzzle: Puzzle, analysis: PuzzleAnalysis,
-                         sol: Solution, stations: List[dict],
-                         target: OptTarget) -> Solution:
-    """Track-based solver: arm on a linear track visits each station.
+def _multi_input_tape(puzzle: Puzzle, analysis: PuzzleAnalysis,
+                      sol: Solution, arm_pos: HexCoord, output_dir: int,
+                      input_start_dir: int, n_glyph_slots: int,
+                      target: OptTarget) -> Solution:
+    """Build tape for 3+ input puzzles."""
+    n_inputs = len(puzzle.inputs)
+    out_mol = puzzle.outputs[0].molecule
 
-    Layout: all stations in a line. Arm rides track from input end to output end.
-    Glyphs placed adjacent to the track so the arm tip sweeps through them.
-    """
-    arm_row = 1  # arm rides on r=1
-    station_row = 0  # stations are on r=0
+    arm = Part(name='arm1', position=arm_pos, size=1,
+               rotation=input_start_dir % 6)
 
-    # Place stations along q axis
-    for i, station in enumerate(stations):
-        q = i * 2
-        station_pos = HexCoord(q, station_row)
+    tape = []
+    n_atoms = out_mol.atom_count
 
-        if station['type'] == 'input':
-            sol.parts.append(Part(name='input', position=station_pos,
-                                  io_index=station.get('io_index', 0)))
-        elif station['type'] == 'output':
-            out_name = station.get('part_name', 'out-std')
-            sol.parts.append(Part(name=out_name, position=station_pos,
-                                  io_index=station.get('io_index', 0)))
-        elif station['type'] == 'glyph':
-            sol.parts.append(Part(name=station['part_name'], position=station_pos, rotation=0))
+    for atom_i in range(n_atoms):
+        input_idx = atom_i % n_inputs
+        input_dir = (input_start_dir + input_idx) % 6
 
-    # Track from input to output
-    total_q = (len(stations) - 1) * 2
-    arm_start_q = 0
-    arm_pos = HexCoord(arm_start_q, arm_row)
+        if atom_i > 0:
+            # Return from output to input
+            ccw_steps = (input_dir - output_dir) % 6
+            for _ in range(ccw_steps):
+                tape.append(Inst.ROTATE_CCW)
 
-    track = Part(name='track', position=arm_pos)
-    track_hexes = []
-    for tq in range(0, total_q + 1):
-        track_hexes.append(TrackHex(tq - arm_pos.q, station_row - arm_pos.r))
-    track.track_hexes = track_hexes
-    sol.parts.append(track)
+        tape.append(Inst.GRAB)
+        cw_to_out = (input_dir - output_dir) % 6
+        for _ in range(cw_to_out):
+            tape.append(Inst.ROTATE_CW)
+        tape.append(Inst.DROP)
 
-    # Arm at start of track, pointing up (toward station row)
-    # Direction from (q, 1) to (q, 0) is NW = direction 4
-    arm = Part(name='arm1', position=arm_pos, size=1, rotation=4)
-
-    # Tape: grab, track fwd to output, drop, track bwd to input, repeat
-    tape = [Inst.GRAB]
-    for _ in range(total_q):
-        tape.append(Inst.TRACK_FWD)
-    tape.append(Inst.DROP)
-    for _ in range(total_q):
-        tape.append(Inst.TRACK_BWD)
-    tape.append(Inst.REPEAT)
-
+    tape.append(Inst.RESET)
     arm.set_tape(tape)
     sol.parts.append(arm)
     return sol
 
 
+def _fallback(puzzle: Puzzle, analysis: PuzzleAnalysis,
+              target: OptTarget) -> Solution:
+    """Last-resort fallback: trivial grab-drop."""
+    sol = Solution(puzzle_name=puzzle.name, solution_name="Fallback")
+    input_pos = DIRECTIONS[1]
+    output_pos = DIRECTIONS[0]
+
+    for i in range(len(puzzle.inputs)):
+        sol.parts.append(Part(name='input', position=input_pos, io_index=i))
+    for i in range(len(puzzle.outputs)):
+        sol.parts.append(Part(name='out-std', position=output_pos, io_index=i))
+
+    arm = Part(name='arm1', position=ORIGIN, size=1, rotation=1)
+    arm.set_tape([Inst.GRAB, Inst.ROTATE_CW, Inst.DROP, Inst.ROTATE_CCW, Inst.REPEAT])
+    sol.parts.append(arm)
+    return sol
+
+
 # =============================================================================
-# GENERAL SOLVER: for complex multi-atom molecule puzzles
-# =============================================================================
-
-def _solve_general(puzzle: Puzzle, analysis: PuzzleAnalysis,
-                    target: OptTarget) -> Solution:
-    """General solver for complex puzzles.
-
-    Falls back to the monoatomic conversion solver for now.
-    Complex molecule puzzles need disassemble-convert-reassemble logic.
-    """
-    return _solve_monoatomic_conversion(puzzle, analysis, target)
-
-
-def _get_glyph_parts(reaction: Reaction) -> List[str]:
-    from .recipe import REACTION_GLYPHS
-    return REACTION_GLYPHS[reaction]
-
-
-# =============================================================================
-# GOD SOLUTION HEURISTICS - Theoretical bounds and optimization strategies
+# GOD SOLUTION HEURISTICS
 # =============================================================================
 
 @dataclass
 class GodHeuristics:
-    """Collection of heuristics for finding optimal solutions."""
-
     @staticmethod
     def min_arms_needed(puzzle: Puzzle) -> int:
         return 1
 
     @staticmethod
-    def min_glyphs_needed(analysis: PuzzleAnalysis) -> List[str]:
+    def min_glyphs_needed(analysis: PuzzleAnalysis) -> list:
         glyphs = []
         if analysis.recipe:
             glyphs.extend(analysis.recipe.required_glyphs)
@@ -350,7 +481,7 @@ class GodHeuristics:
 
     @staticmethod
     def theoretical_min_cost(analysis: PuzzleAnalysis) -> int:
-        cost = 20  # arm1
+        cost = 20
         if analysis.recipe:
             cost += analysis.recipe.glyph_cost
         if analysis.needs_bonding:
@@ -360,20 +491,7 @@ class GodHeuristics:
         return cost
 
     @staticmethod
-    def overlap_potential(puzzle: Puzzle, analysis: PuzzleAnalysis) -> int:
-        """Estimate D value (double-consume opportunities) for N-D+L formula."""
-        d = 0
-        if len(puzzle.outputs) >= 2:
-            d += 1
-        if analysis.recipe and Reaction.PROJECTION in analysis.recipe.reactions:
-            proj_count = analysis.recipe.reactions[Reaction.PROJECTION]
-            if proj_count >= 2:
-                d += proj_count // 2
-        return d
-
-    @staticmethod
-    def instruction_tape_heuristics(tape: List[int]) -> List[int]:
-        """Find shortest repeating unit and compress with Repeat."""
+    def instruction_tape_heuristics(tape: list) -> list:
         if not tape:
             return tape
         for period in range(1, len(tape) // 2 + 1):

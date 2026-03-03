@@ -103,26 +103,35 @@ class Molecule:
 
 
 class PartFlag(IntFlag):
-    """Bitmask of available parts in a puzzle."""
+    """Bitmask of available parts in a puzzle.
+
+    Bit positions match omsim's decode.c parts_available_bits_for_part_name()
+    and parts_available_bits_for_instruction().
+    """
     ARM1 = 1 << 0
-    ARM2 = 1 << 1
-    ARM3 = 1 << 2
-    ARM6 = 1 << 3
-    PISTON = 1 << 4
-    TRACK = 1 << 5
-    BONDER = 1 << 6
-    UNBONDER = 1 << 7
-    MULTI_BONDER = 1 << 8
-    TRIPLEX_BONDER = 1 << 9
-    CALCIFICATION = 1 << 10
-    DUPLICATION = 1 << 11
-    PROJECTION = 1 << 12
-    PURIFICATION = 1 << 13
-    ANIMISMUS = 1 << 14
-    DISPOSAL = 1 << 15
-    QUINTESSENCE_GLYPHS = 1 << 16  # Unification + Dispersion
-    VAN_BERLO = 1 << 22
-    EQUILIBRIUM = 1 << 23
+    ARM2 = 1 << 1          # arm2, arm3, arm6, glyph-marker all share bit 1
+    ARM3 = 1 << 1
+    ARM6 = 1 << 1
+    PISTON = 1 << 2
+    TRACK = 1 << 3
+    BONDER = 1 << 8
+    UNBONDER = 1 << 9
+    MULTI_BONDER = 1 << 10   # bonder-speed
+    TRIPLEX_BONDER = 1 << 11  # bonder-prisma
+    CALCIFICATION = 1 << 12
+    DUPLICATION = 1 << 13
+    PROJECTION = 1 << 14
+    PURIFICATION = 1 << 15
+    ANIMISMUS = 1 << 16       # glyph-life-and-death
+    DISPOSAL = 1 << 17
+    QUINTESSENCE_GLYPHS = 1 << 18  # dispersion + unification
+    ROTATE = 1 << 22
+    GRAB = 1 << 23
+    RESET = 1 << 24
+    REPEAT = 1 << 25
+    PIVOT = 1 << 26
+    VAN_BERLO = 1 << 28      # baron
+    EQUILIBRIUM = 1 << 1      # glyph-marker shares bit 1 with arm2/3/6
 
 
 @dataclass
