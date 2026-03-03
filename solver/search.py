@@ -561,6 +561,97 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                             print(f'  Reached theoretical minimum ({theory_min}), stopping')
                         break
 
+    # --- Phase 4: Final polish (re-run GA on best layout with double budget) ---
+    if (best is not None and best.score > theory_min
+            and time.time() - t0 < time_limit):
+        # Find the layout that produced the best result by checking all candidates
+        polish_layout = None
+        polish_base_sol = None
+        polish_seeds = None
+        polish_plan = None
+        for rank, layout, base_sol, layout_info, seed_tapes, plan in ga_candidates:
+            # Reconstruct and compare: the best solution came from one of these
+            # Use layout matching via rank_to_layout if available
+            if rank in rank_to_layout:
+                lay, bs = rank_to_layout[rank]
+                if lay is layout:
+                    polish_layout = layout
+                    polish_base_sol = base_sol
+                    polish_seeds = seed_tapes
+                    polish_plan = plan
+                    break
+        # If best came from screening (not GA), find the layout from layout_bounds
+        if polish_layout is None:
+            # Try to match best solution's parts to a layout
+            for lb, idx, layout, plan, graph_opt in layout_bounds:
+                base_sol = layout.to_solution(puzzle, n_outputs)
+                polish_layout = layout
+                polish_base_sol = base_sol
+                polish_seeds = _build_seed_tapes(
+                    layout, n_inputs, pattern_db,
+                    plan.glyph_names, analysis=analysis,
+                    puzzle=puzzle, plan=plan, graph=graph_opt)
+                polish_plan = plan
+                break  # Use the top-ranked layout as fallback
+
+        if polish_layout is not None:
+            if verbose:
+                print(f'  Phase 4: Final polish on best layout (pop=40, gen=120)...')
+            polish_layout_info = {
+                'arm_pos': polish_layout.arm_pos,
+                'arm_len': polish_layout.arm_len,
+                'arm_rot': polish_layout.arm_rot,
+                'arm_type': polish_layout.arm_type,
+            }
+            # Include the best solution's tape as a seed
+            best_tape_seed = []
+            if best.solution.parts:
+                for p in best.solution.parts:
+                    if p.is_arm and p.instructions:
+                        best_tape_seed = p.get_tape(max(i.index for i in p.instructions) + 1)
+                        break
+            polish_effective_seeds = ([best_tape_seed] if best_tape_seed else []) + (polish_seeds or [])
+            polish_args = (
+                0, polish_base_sol, polish_layout_info, puzzle_bytes,
+                polish_effective_seeds, target,
+                best.score, inst_weights, 99999
+            )
+            # Override GA config for polish: double budget
+            def _polish_worker(args):
+                (rank, base_sol, layout_info, pb, seeds,
+                 tgt, cbs, iw, gs) = args
+                sim = Simulator()
+                ga_config = GAConfig(
+                    pop_size=40,
+                    max_generations=120,
+                    stagnation_limit=30,
+                )
+                ga = TapeGA(sim, ga_config, iw, seed=gs)
+                ga_result = ga.optimize(
+                    base_sol, layout_info, pb, seeds, tgt, cbs)
+                n_evals = ga.total_evaluations
+                if ga_result is not None and ga_result.valid:
+                    return (rank, ga_result.tape, ga_result.metrics,
+                            ga_result.fitness, n_evals)
+                return (rank, None, None, None, n_evals)
+
+            rank_result, best_tape, metrics, score, n_evals = _polish_worker(polish_args)
+            total_verified += n_evals
+            if best_tape is not None and score < best.score:
+                final_sol = polish_layout.add_arm_with_tape(polish_base_sol, best_tape)
+                best = SearchResult(
+                    solution=final_sol,
+                    metrics=metrics,
+                    score=score,
+                )
+                if verbose:
+                    m = metrics
+                    print(f'  ** New best (polish GA): '
+                          f'{m["cost"]}g/{m["cycles"]}c/'
+                          f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+            elif verbose:
+                print(f'  Polish GA did not improve ({n_evals} evals)')
+
     elapsed = time.time() - t0
     if verbose:
         print(f'  Total verified: {total_verified} in {elapsed:.1f}s')
@@ -830,6 +921,101 @@ def _try_zero_arm(puzzle: Puzzle, analysis: PuzzleAnalysis,
                                             print(f'  Zero-arm checked '
                                                   f'{n_checked} candidates')
                                         return best
+
+    # --- Path 1b: Multi-glyph zero-arm search ---
+    # When multiple glyphs are needed, stack them all at ORIGIN and search
+    # over rotations for each additional glyph.
+    if len(glyphs_needed) >= 2 and (best is None or best.score > theory_min_sum4):
+        # Load specs for all needed glyphs
+        multi_glyph_specs = []
+        for gname in glyphs_needed:
+            try:
+                multi_glyph_specs.append((gname, get_glyph_spec(gname)))
+            except KeyError:
+                pass
+
+        if len(multi_glyph_specs) >= 2:
+            # First glyph fixed at ORIGIN rotation 0 (translation/rotation symmetry)
+            # Additional glyphs try all 6 rotations at ORIGIN (stacked)
+            first_name, first_spec = multi_glyph_specs[0]
+            rest_specs = multi_glyph_specs[1:]
+
+            # Generate rotation combos for the remaining glyphs (6^(n-1))
+            rot_ranges = [range(6) for _ in rest_specs]
+            for rot_combo in itertools.product(*rot_ranges):
+                if time.time() - t0 > time_limit:
+                    break
+
+                # Build glyph parts and collect all slot positions
+                glyph_parts = [Part(name=first_name, position=ORIGIN, rotation=0)]
+                all_slot_positions = set()
+
+                # Slots from first glyph (rotation 0)
+                for s in first_spec.slots:
+                    all_slot_positions.add(
+                        local_to_world(ORIGIN, 0, s.du, s.dv))
+
+                # Slots from remaining glyphs
+                for (gname, gspec), grot in zip(rest_specs, rot_combo):
+                    glyph_parts.append(
+                        Part(name=gname, position=ORIGIN, rotation=grot))
+                    for s in gspec.slots:
+                        all_slot_positions.add(
+                            local_to_world(ORIGIN, grot, s.du, s.dv))
+
+                # Add ORIGIN itself as a candidate
+                all_slot_positions.add(ORIGIN)
+
+                # Determine bonder configs
+                if analysis.needs_bonding and bonder_specs:
+                    mg_bonder_rots = [(bname, bspec, brot)
+                                      for bname, bspec in bonder_specs
+                                      for brot in range(6)]
+                else:
+                    mg_bonder_rots = [(None, None, None)]
+
+                for bname, cur_bonder_spec, brot in mg_bonder_rots:
+                    if time.time() - t0 > time_limit:
+                        break
+
+                    candidate_positions = list(all_slot_positions)
+                    extra_bonder_parts = []
+
+                    if brot is not None and cur_bonder_spec:
+                        extra_bonder_parts = [
+                            Part(name=bname, position=ORIGIN, rotation=brot)]
+                        for s in cur_bonder_spec.slots:
+                            bp = local_to_world(ORIGIN, brot, s.du, s.dv)
+                            if bp not in all_slot_positions:
+                                candidate_positions.append(bp)
+
+                    for input_assignment in itertools.product(
+                            candidate_positions, repeat=n_inputs):
+                        if time.time() - t0 > time_limit:
+                            break
+                        input_parts = [
+                            Part(name='input', position=input_assignment[i],
+                                 io_index=i)
+                            for i in range(n_inputs)
+                        ]
+                        out_candidates = list(
+                            set(input_assignment) | all_slot_positions)
+
+                        for out_pos in out_candidates:
+                            for out_rot in out_rotations:
+                                sol = Solution(
+                                    puzzle_name=puzzle.name,
+                                    solution_name="ZA")
+                                sol.parts = (input_parts + glyph_parts +
+                                             extra_bonder_parts + [
+                                    Part(name='out-std', position=out_pos,
+                                         rotation=out_rot, io_index=0),
+                                ])
+                                if _check_and_update(sol):
+                                    if verbose:
+                                        print(f'  Zero-arm (multi-glyph) checked '
+                                              f'{n_checked} candidates')
+                                    return best
 
     # --- Path 2: No-glyph bonding-only path ---
     # For puzzles where the output is just the inputs bonded together

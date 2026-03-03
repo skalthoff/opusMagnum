@@ -353,6 +353,131 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
     # Enumerate arm positions from a small hex spiral
     arm_positions = list(hex_spiral(ORIGIN, 2))  # 19 positions
 
+    def _try_direction_set(dirs, arm_pos, arm_len, arm_type, start_dir,
+                           base_cost, cap=None):
+        """Try a single direction assignment. Appends valid layouts.
+
+        If cap is given, stop after adding that many layouts from this call.
+        Returns the number of layouts added.
+        """
+        added = 0
+
+        # Check no duplicate directions (which would mean two stations
+        # at the same arm tip position)
+        if len(set(dirs)) != n_stations:
+            return 0
+
+        # Compute tip positions for each station
+        tip_positions = []
+        for d in dirs:
+            tip = arm_pos
+            for _ in range(arm_len):
+                tip = tip + DIRECTIONS[d]
+            tip_positions.append(tip)
+
+        # Check no two input positions overlap
+        input_tips = [tip_positions[i] for i in range(n_inputs)]
+        if len(set(input_tips)) != len(input_tips):
+            return 0
+
+        # Now find valid glyph/bonder/output rotations for each station
+        # Build per-station placement options
+        station_options: List[List[Tuple[HexCoord, int]]] = []
+        valid = True
+
+        for si, (stype, sdata) in enumerate(station_types):
+            tip = tip_positions[si]
+            if stype == 'input':
+                # Input just goes at the tip position, rotation 0
+                station_options.append([(tip, 0)])
+            elif stype == 'glyph':
+                placements = _find_glyph_placements(tip, sdata)
+                if not placements:
+                    valid = False
+                    break
+                station_options.append(placements)
+            elif stype == 'bonder':
+                placements = _find_bonder_placements(tip)
+                if not placements:
+                    valid = False
+                    break
+                station_options.append(placements)
+            elif stype == 'output':
+                placements = _find_output_placements(tip, puzzle)
+                if not placements:
+                    valid = False
+                    break
+                station_options.append(placements)
+
+        if not valid:
+            return 0
+
+        # Enumerate combinations of rotations across stations.
+        # To keep the count manageable, limit the total combinations.
+        combo_count = 1
+        for opts in station_options:
+            combo_count *= len(opts)
+            if combo_count > 500:
+                break
+
+        if combo_count > 500:
+            # Too many combos -- sample a subset
+            # Pick first option for inputs, iterate over glyph/output
+            # rotations only
+            _generate_sampled_layouts(
+                layouts, puzzle, station_types, station_options,
+                tip_positions, dirs, arm_pos, arm_type, arm_len,
+                start_dir, base_cost, config
+            )
+        else:
+            # Full enumeration
+            for combo in itertools.product(*station_options):
+                positions = []
+                glyph_rots: Dict[int, int] = {}
+                output_rots: Dict[int, int] = {}
+
+                for si, (pos, rot) in enumerate(combo):
+                    positions.append(pos)
+                    stype = station_types[si][0]
+                    if stype == 'glyph':
+                        glyph_rots[si] = rot
+                    elif stype == 'bonder':
+                        glyph_rots[si] = rot
+                    elif stype == 'output':
+                        output_rots[si] = rot
+
+                # Build placement list for collision check
+                placement_list = []
+                for si, (stype, sdata) in enumerate(station_types):
+                    rot = glyph_rots.get(si, output_rots.get(si, 0))
+                    placement_list.append((stype, sdata, positions[si], rot))
+
+                if not _check_no_footprint_collisions(placement_list, arm_pos):
+                    continue
+
+                layout = Layout(
+                    arm_pos=arm_pos,
+                    arm_rot=start_dir,
+                    arm_len=arm_len,
+                    arm_type=arm_type,
+                    stations=list(station_types),
+                    directions=dirs,
+                    positions=positions,
+                    glyph_rotations=glyph_rots,
+                    output_rotations=output_rots,
+                    cost=base_cost,
+                )
+                layouts.append(layout)
+                added += 1
+
+                if cap is not None and added >= cap:
+                    break
+                if len(layouts) >= config.max_layouts:
+                    break
+
+        return added
+
+    # --- Main CW-sweep loop ---
     for arm_pos in arm_positions:
         for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
             arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
@@ -365,116 +490,8 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
             for start_dir in range(6):
                 # Assign CW-consecutive directions to each station
                 dirs = [(start_dir - i) % 6 for i in range(n_stations)]
-
-                # Check no duplicate directions (which would mean two stations
-                # at the same arm tip position)
-                if len(set(dirs)) != n_stations:
-                    continue
-
-                # Compute tip positions for each station
-                tip_positions = []
-                for d in dirs:
-                    tip = arm_pos
-                    for _ in range(arm_len):
-                        tip = tip + DIRECTIONS[d]
-                    tip_positions.append(tip)
-
-                # Check no two input positions overlap
-                input_tips = [tip_positions[i] for i in range(n_inputs)]
-                if len(set(input_tips)) != len(input_tips):
-                    continue
-
-                # Now find valid glyph/bonder/output rotations for each station
-                # Build per-station placement options
-                station_options: List[List[Tuple[HexCoord, int]]] = []
-                valid = True
-
-                for si, (stype, sdata) in enumerate(station_types):
-                    tip = tip_positions[si]
-                    if stype == 'input':
-                        # Input just goes at the tip position, rotation 0
-                        station_options.append([(tip, 0)])
-                    elif stype == 'glyph':
-                        placements = _find_glyph_placements(tip, sdata)
-                        if not placements:
-                            valid = False
-                            break
-                        station_options.append(placements)
-                    elif stype == 'bonder':
-                        placements = _find_bonder_placements(tip)
-                        if not placements:
-                            valid = False
-                            break
-                        station_options.append(placements)
-                    elif stype == 'output':
-                        placements = _find_output_placements(tip, puzzle)
-                        if not placements:
-                            valid = False
-                            break
-                        station_options.append(placements)
-
-                if not valid:
-                    continue
-
-                # Enumerate combinations of rotations across stations.
-                # To keep the count manageable, limit the total combinations.
-                combo_count = 1
-                for opts in station_options:
-                    combo_count *= len(opts)
-                    if combo_count > 500:
-                        break
-
-                if combo_count > 500:
-                    # Too many combos -- sample a subset
-                    # Pick first option for inputs, iterate over glyph/output
-                    # rotations only
-                    _generate_sampled_layouts(
-                        layouts, puzzle, station_types, station_options,
-                        tip_positions, dirs, arm_pos, arm_type, arm_len,
-                        start_dir, base_cost, config
-                    )
-                else:
-                    # Full enumeration
-                    for combo in itertools.product(*station_options):
-                        positions = []
-                        glyph_rots: Dict[int, int] = {}
-                        output_rots: Dict[int, int] = {}
-
-                        for si, (pos, rot) in enumerate(combo):
-                            positions.append(pos)
-                            stype = station_types[si][0]
-                            if stype == 'glyph':
-                                glyph_rots[si] = rot
-                            elif stype == 'bonder':
-                                glyph_rots[si] = rot
-                            elif stype == 'output':
-                                output_rots[si] = rot
-
-                        # Build placement list for collision check
-                        placement_list = []
-                        for si, (stype, sdata) in enumerate(station_types):
-                            rot = glyph_rots.get(si, output_rots.get(si, 0))
-                            placement_list.append((stype, sdata, positions[si], rot))
-
-                        if not _check_no_footprint_collisions(placement_list, arm_pos):
-                            continue
-
-                        layout = Layout(
-                            arm_pos=arm_pos,
-                            arm_rot=start_dir,
-                            arm_len=arm_len,
-                            arm_type=arm_type,
-                            stations=list(station_types),
-                            directions=dirs,
-                            positions=positions,
-                            glyph_rotations=glyph_rots,
-                            output_rotations=output_rots,
-                            cost=base_cost,
-                        )
-                        layouts.append(layout)
-
-                        if len(layouts) >= config.max_layouts:
-                            break
+                _try_direction_set(dirs, arm_pos, arm_len, arm_type,
+                                   start_dir, base_cost)
 
                 if len(layouts) >= config.max_layouts:
                     break
@@ -482,6 +499,35 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
                 break
         if len(layouts) >= config.max_layouts:
             break
+
+    # --- Non-CW direction patterns (strategic alternatives) ---
+    # These generate additional layouts with non-consecutive direction
+    # assignments. Capped at 50 layouts per pattern to avoid explosion.
+    non_cw_cap = 50
+
+    for arm_pos in arm_positions:
+        for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
+            arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
+            base_cost = _compute_layout_cost(arm_type, station_types, need_bonder)
+            if config.cost_bound is not None and base_cost >= config.cost_bound:
+                continue
+
+            for start_dir in range(6):
+                # Pattern 1: CCW (reversed) — directions = [start, start+1, start+2, ...]
+                ccw_dirs = [(start_dir + i) % 6 for i in range(n_stations)]
+                _try_direction_set(ccw_dirs, arm_pos, arm_len, arm_type,
+                                   start_dir, base_cost, cap=non_cw_cap)
+
+                # Pattern 2: Skip-one — directions = [start, start+2, start+4, ...]
+                skip_dirs = [(start_dir + 2 * i) % 6 for i in range(n_stations)]
+                _try_direction_set(skip_dirs, arm_pos, arm_len, arm_type,
+                                   start_dir, base_cost, cap=non_cw_cap)
+
+            # Pattern 3: For 3-station puzzles, evenly-spaced patterns
+            if n_stations == 3:
+                for pattern in ([0, 2, 4], [1, 3, 5]):
+                    _try_direction_set(pattern, arm_pos, arm_len, arm_type,
+                                       pattern[0], base_cost, cap=non_cw_cap)
 
     # Sort by cost then estimated area (lower is better)
     layouts.sort(key=lambda l: (l.cost, l.estimated_area))
@@ -773,6 +819,13 @@ def compute_lower_bound(layout: Layout, analysis: PuzzleAnalysis) -> int:
 
     # Minimum cycles: at least n_stations (grab + rotate through + output)
     cycles_lower = len(layout.stations)
+
+    # For bonded outputs, we need at least 2 cycles per output atom
+    # (one grab + one drop per atom, rotation may be 0 if same direction).
+    # This is conservative: real solutions almost always need more.
+    if analysis.needs_bonding:
+        n_output_atoms = sum(analysis.output_elements.values())
+        cycles_lower = max(cycles_lower, 2 * n_output_atoms)
 
     # Minimum area: number of unique hex positions occupied
     # Includes arm position + all station positions
