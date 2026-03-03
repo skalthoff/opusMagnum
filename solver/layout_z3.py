@@ -599,6 +599,12 @@ def generate_stacked_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
     if n_distinct_needed > 6 or n_inputs < 1:
         return []
 
+    # Check output atom count for partially-stacked variant
+    n_output_atoms = 0
+    if puzzle.outputs:
+        mol = puzzle.outputs[0].molecule
+        n_output_atoms = len(mol.atoms)
+
     layouts: List[Layout] = []
 
     arm_positions = list(hex_spiral(ORIGIN, 2))
@@ -740,15 +746,187 @@ def generate_stacked_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
                     if len(layouts) >= config.max_layouts:
                         return
 
+    def _try_partially_stacked_arm(arm_pos, arm_len, arm_type):
+        """Try partially-stacked layouts where glyphs, bonder, and output are at
+        separate directions.  Used when the output molecule has 3+ atoms (branched
+        or multi-atom), because a large growing molecule blocks the arm's sweep
+        path when bonder and output share a hex with the glyphs.
+
+        Station grouping:
+          - inputs: each gets its own direction
+          - glyphs: share one direction (glyph_dir)
+          - bonder: gets its own direction (bonder_dir) != glyph_dir
+          - output: gets its own direction (output_dir) != glyph_dir, != bonder_dir
+        """
+        if not need_bonder or not glyph_stations:
+            # Partially-stacked only makes sense when we have bonder + glyphs to separate
+            return
+
+        # Directions needed: n_inputs + glyph + bonder + output (all distinct)
+        n_distinct = n_inputs + 3
+        if n_distinct > 6:
+            return
+
+        base_cost = _compute_layout_cost(arm_type,
+                                         [('input', i) for i in range(n_inputs)] +
+                                         glyph_stations + [('bonder', bonder_name), ('output', 0)],
+                                         need_bonder)
+        if config.cost_bound is not None and base_cost >= config.cost_bound:
+            return
+
+        for glyph_dir in range(6):
+            glyph_hex = arm_pos
+            for _ in range(arm_len):
+                glyph_hex = glyph_hex + DIRECTIONS[glyph_dir]
+
+            for bonder_dir in range(6):
+                if bonder_dir == glyph_dir:
+                    continue
+                bonder_hex = arm_pos
+                for _ in range(arm_len):
+                    bonder_hex = bonder_hex + DIRECTIONS[bonder_dir]
+
+                for output_dir in range(6):
+                    if output_dir == glyph_dir or output_dir == bonder_dir:
+                        continue
+                    output_hex = arm_pos
+                    for _ in range(arm_len):
+                        output_hex = output_hex + DIRECTIONS[output_dir]
+
+                    # Available dirs for inputs: anything not used by glyph/bonder/output
+                    used_dirs = {glyph_dir, bonder_dir, output_dir}
+                    available_input_dirs = [d for d in range(6) if d not in used_dirs]
+                    if n_inputs > len(available_input_dirs):
+                        continue
+
+                    for input_dir_combo in itertools.combinations(available_input_dirs, n_inputs):
+                        input_dirs = list(input_dir_combo)
+                        input_hexes = []
+                        for d in input_dirs:
+                            tip = arm_pos
+                            for _ in range(arm_len):
+                                tip = tip + DIRECTIONS[d]
+                            input_hexes.append(tip)
+
+                        # Build station list: inputs, glyphs, bonder, output
+                        all_stations = (
+                            [('input', i) for i in range(n_inputs)] +
+                            glyph_stations +
+                            [('bonder', bonder_name)] +
+                            [('output', 0)]
+                        )
+                        directions = (
+                            input_dirs +
+                            [glyph_dir] * len(glyph_stations) +
+                            [bonder_dir] +
+                            [output_dir]
+                        )
+
+                        start_dir = input_dirs[0]
+
+                        # Collect placement options per station
+                        station_options: List[List[Tuple[HexCoord, int]]] = []
+                        valid = True
+                        for si, (stype, sdata) in enumerate(all_stations):
+                            if stype == 'input':
+                                station_options.append([(input_hexes[si], 0)])
+                            elif stype == 'glyph':
+                                placements = _find_glyph_placements(glyph_hex, sdata)
+                                if not placements:
+                                    valid = False
+                                    break
+                                station_options.append(placements)
+                            elif stype == 'bonder':
+                                placements = _find_bonder_placements(bonder_hex, bonder_name)
+                                if not placements:
+                                    valid = False
+                                    break
+                                station_options.append(placements)
+                            elif stype == 'output':
+                                placements = _find_output_placements(output_hex, puzzle)
+                                if not placements:
+                                    valid = False
+                                    break
+                                station_options.append(placements)
+
+                        if not valid:
+                            continue
+
+                        combo_count = 1
+                        for opts in station_options:
+                            combo_count *= len(opts)
+                            if combo_count > 500:
+                                break
+
+                        if combo_count > 500:
+                            trimmed = []
+                            for si, opts in enumerate(station_options):
+                                stype = all_stations[si][0]
+                                if stype == 'input':
+                                    trimmed.append(opts[:1])
+                                else:
+                                    by_rot: Dict[int, Tuple[HexCoord, int]] = {}
+                                    for pos, rot in opts:
+                                        if rot not in by_rot:
+                                            by_rot[rot] = (pos, rot)
+                                    trimmed.append(list(by_rot.values())[:6])
+                            combo_iter = itertools.product(*trimmed)
+                        else:
+                            combo_iter = itertools.product(*station_options)
+
+                        for combo in combo_iter:
+                            positions = []
+                            glyph_rots: Dict[int, int] = {}
+                            output_rots: Dict[int, int] = {}
+
+                            for si, (pos, rot) in enumerate(combo):
+                                positions.append(pos)
+                                stype = all_stations[si][0]
+                                if stype == 'glyph':
+                                    glyph_rots[si] = rot
+                                elif stype == 'bonder':
+                                    glyph_rots[si] = rot
+                                elif stype == 'output':
+                                    output_rots[si] = rot
+
+                            arm_collision = False
+                            for si, (stype, sdata) in enumerate(all_stations):
+                                if (positions[si].q, positions[si].r) == (arm_pos.q, arm_pos.r):
+                                    arm_collision = True
+                                    break
+                            if arm_collision:
+                                continue
+
+                            layout = Layout(
+                                arm_pos=arm_pos,
+                                arm_rot=start_dir,
+                                arm_len=arm_len,
+                                arm_type=arm_type,
+                                stations=list(all_stations),
+                                directions=directions,
+                                positions=positions,
+                                glyph_rotations=glyph_rots,
+                                output_rotations=output_rots,
+                                cost=base_cost,
+                            )
+                            layouts.append(layout)
+
+                            if len(layouts) >= config.max_layouts:
+                                return
+
     for arm_pos in arm_positions:
         for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
             arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
             _try_stacked_arm(arm_pos, arm_len, arm_type)
+            if n_output_atoms >= 3:
+                _try_partially_stacked_arm(arm_pos, arm_len, arm_type)
             if len(layouts) >= config.max_layouts:
                 break
 
         # arm6 pass for stacked layouts
         _try_stacked_arm(arm_pos, 1, 'arm6')
+        if n_output_atoms >= 3:
+            _try_partially_stacked_arm(arm_pos, 1, 'arm6')
 
         if len(layouts) >= config.max_layouts:
             break

@@ -24,7 +24,8 @@ from .recipe import PuzzleAnalysis, analyze_puzzle, REACTION_GLYPHS
 from .production_planner import generate_plans, ProductionPlan
 from .simulator import Simulator, VerifyResult, PuzzleContext
 from .layout_z3 import (generate_layouts, compute_lower_bound, Layout,
-                        LayoutConfig, generate_layouts_from_graph)
+                        LayoutConfig, generate_layouts_from_graph,
+                        _find_glyph_placements)
 from .tape_ga import TapeGA, GAConfig, generate_geometric_tapes, Individual, _is_obviously_invalid
 from .pattern_db import PatternDB
 from .glyph_model import get_glyph_spec, local_to_world
@@ -201,6 +202,30 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     if time.time() - t0 > time_limit:
         if verbose:
             print(f'  Time limit reached after phase 0')
+        return best
+
+    # --- Phase 0b: Self-return layouts ---
+    # For puzzles where the arm can grab from input, sweep through glyph(s),
+    # and RESET to deposit back at the same position (which is also the output).
+    # The P013 WR uses this: input=output position, arm sweeps through calcification.
+    if verbose:
+        print(f'  Phase 0b: Trying self-return layouts...')
+    sr = _try_self_return_layouts(
+        puzzle, analysis, puzzle_bytes, simulator,
+        plans, pattern_db, target, verbose=verbose,
+        time_limit=min(10.0, max(0, time_limit - (time.time() - t0))),
+        current_best=best)
+    if sr is not None and (best is None or sr.score < best.score):
+        best = sr
+        if verbose:
+            m = sr.metrics
+            print(f'  Self-return: {m["cost"]}g/{m["cycles"]}c/'
+                  f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+
+    # Check time
+    if time.time() - t0 > time_limit:
+        if verbose:
+            print(f'  Time limit reached after phase 0b')
         return best
 
     # --- Phase 1: Generate layouts ---
@@ -665,6 +690,246 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
             print(f'  No valid solution found')
 
     return best
+
+
+def _try_self_return_layouts(
+    puzzle: Puzzle, analysis: PuzzleAnalysis,
+    puzzle_bytes: bytes, simulator: Simulator,
+    plans: List[ProductionPlan],
+    pattern_db: PatternDB,
+    target: str = 'sum4',
+    verbose: bool = False,
+    time_limit: float = 5.0,
+    current_best: Optional[SearchResult] = None,
+) -> Optional[SearchResult]:
+    """Try self-return layouts where input and output share the same position.
+
+    The arm grabs from input, sweeps through glyph(s) (which fire on the held
+    atom as it passes through), and RESET returns the arm to its start position.
+    The processed atom is deposited at the arm tip on reset, which is also the
+    output position.
+
+    This is the pattern used by the P013 WR: GRAB, CCW, CCW, CW, RESET.
+
+    Strategy: fix arm at ORIGIN with arm_rot=0, compute the 6 tip positions
+    the arm sweeps through during rotation. Then use _find_glyph_placements
+    to find glyph positions whose active slots land on these sweep positions.
+    """
+    if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
+        return None
+    if not plans:
+        return None
+
+    t0 = time.time()
+    best: Optional[SearchResult] = current_best
+    n_checked = 0
+
+    puzzle_ctx = simulator.create_puzzle_context(puzzle_bytes)
+
+    # Output rotation: monoatomic outputs are rotation-invariant
+    all_mono_out = all(len(pio.molecule.atoms) <= 1 for pio in puzzle.outputs)
+    out_rots = [0] if all_mono_out else range(6)
+
+    pass_tapes = _generate_pass_through_tapes(0)  # arm_rot doesn't matter for these
+
+    for plan in plans:
+        glyph_names = plan.glyph_names
+        need_bonder = plan.need_bonder
+        bonder_name = plan.bonder_type or 'bonder-speed'
+
+        for arm_len in [1, 2]:
+            arm_pos = ORIGIN
+
+            # Sweep tips are the same regardless of arm_rot
+            # (all 6 direction positions + origin)
+            sweep_tips = set()
+            for d in range(6):
+                sweep_tips.add(HexCoord(DIRECTIONS[d].q * arm_len,
+                                        DIRECTIONS[d].r * arm_len))
+            sweep_tips.add(arm_pos)
+
+            # Glyph placements: positions where a slot overlaps the sweep arc.
+            # For single-slot glyphs, collapse rotations.
+            glyph_placement_options = []
+            for gname in glyph_names:
+                try:
+                    spec = get_glyph_spec(gname)
+                except KeyError:
+                    break
+                is_single_slot = len(spec.slots) <= 1
+                placements = set()
+                for sweep_tip in sweep_tips:
+                    for gpos, grot in _find_glyph_placements(sweep_tip, gname):
+                        if is_single_slot:
+                            placements.add((gpos, 0))
+                        else:
+                            placements.add((gpos, grot))
+                    if is_single_slot:
+                        placements.add((sweep_tip, 0))
+                    else:
+                        for grot in range(6):
+                            placements.add((sweep_tip, grot))
+                glyph_placement_options.append(list(placements))
+
+            if len(glyph_placement_options) != len(glyph_names):
+                continue
+
+            # Bonder placements
+            if need_bonder:
+                bonder_placements = set()
+                for bname in [bonder_name, 'bonder']:
+                    try:
+                        get_glyph_spec(bname)
+                    except KeyError:
+                        continue
+                    for sweep_tip in sweep_tips:
+                        for bpos, brot in _find_glyph_placements(sweep_tip, bname):
+                            bonder_placements.add((bname, bpos, brot))
+                        for brot in range(6):
+                            bonder_placements.add((bname, sweep_tip, brot))
+                bonder_placements = list(bonder_placements)
+            else:
+                bonder_placements = [(None, None, None)]
+
+            # Generate glyph combos
+            if len(glyph_names) == 1:
+                glyph_combos = [(g,) for g in glyph_placement_options[0]]
+            elif len(glyph_names) == 2:
+                glyph_combos = list(itertools.product(
+                    glyph_placement_options[0],
+                    glyph_placement_options[1]))
+            else:
+                glyph_combos = list(itertools.product(
+                    *[opts[:30] for opts in glyph_placement_options]))
+
+            for glyph_combo in glyph_combos:
+                if time.time() - t0 > time_limit:
+                    break
+
+                glyph_parts = [
+                    Part(name=glyph_names[gi], position=gpos, rotation=grot)
+                    for gi, (gpos, grot) in enumerate(glyph_combo)
+                ]
+
+                for bname, bpos, brot in bonder_placements:
+                    if time.time() - t0 > time_limit:
+                        break
+
+                    bonder_parts = []
+                    if bname is not None:
+                        bonder_parts = [Part(name=bname, position=bpos,
+                                             rotation=brot)]
+
+                    # Try all arm rotations (input/output at each tip)
+                    for arm_rot in range(6):
+                        tip = HexCoord(DIRECTIONS[arm_rot].q * arm_len,
+                                       DIRECTIONS[arm_rot].r * arm_len)
+
+                        for out_rot in out_rots:
+                            if time.time() - t0 > time_limit:
+                                break
+                            # Build base solution and cache for fast tape splicing
+                            base_sol = Solution(
+                                puzzle_name=puzzle.name,
+                                solution_name="SR")
+                            for ii in range(len(puzzle.inputs)):
+                                base_sol.parts.append(
+                                    Part(name='input', position=tip,
+                                         io_index=ii))
+                            base_sol.parts.extend(glyph_parts)
+                            base_sol.parts.extend(bonder_parts)
+                            base_sol.parts.append(
+                                Part(name='out-std', position=tip,
+                                     rotation=out_rot, io_index=0))
+
+                            layout_info = {
+                                'arm_pos': arm_pos,
+                                'arm_len': arm_len,
+                                'arm_rot': arm_rot,
+                                'arm_type': f'arm{arm_len}',
+                            }
+                            from .solution import CachedSolutionBase
+                            cache = CachedSolutionBase(base_sol, layout_info)
+
+                            # Try each pass-through tape via fast splice
+                            for tape in pass_tapes:
+                                sol_bytes = cache.splice(tape)
+                                result = puzzle_ctx.verify(
+                                    sol_bytes, cycle_limit=1000)
+                                n_checked += 1
+
+                                if result.valid:
+                                    metrics = _make_metrics(result)
+                                    score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
+                                    if best is None or score < best.score:
+                                        # Reconstruct full solution
+                                        arm_part = Part(
+                                            name=f'arm{arm_len}',
+                                            position=arm_pos,
+                                            size=arm_len,
+                                            rotation=arm_rot)
+                                        arm_part.set_tape(tape)
+                                        final_sol = Solution(
+                                            puzzle_name=puzzle.name,
+                                            solution_name="SR")
+                                        final_sol.parts = list(base_sol.parts) + [arm_part]
+                                        best = SearchResult(
+                                            final_sol, metrics, score)
+                                        if verbose:
+                                            m = metrics
+                                            print(f'  ** Self-return hit: '
+                                                  f'{m["cost"]}g/{m["cycles"]}c/'
+                                                  f'{m["area"]}a/{m["instructions"]}i '
+                                                  f'= {m["sum4"]}s')
+
+    puzzle_ctx.destroy()
+
+    if verbose:
+        print(f'  Self-return checked {n_checked} candidates')
+
+    return best if best is not current_best else None
+
+
+def _generate_pass_through_tapes(arm_start_dir: int) -> List[List[int]]:
+    """Generate pass-through tapes: GRAB + rotations + RESET/REPEAT (no DROP).
+
+    These patterns sweep the held atom through glyphs which fire on contact.
+    The RESET returns the arm to start, depositing the atom at the tip.
+    """
+    tapes: List[List[int]] = []
+
+    # Simple sweep patterns: GRAB, rotate N steps, RESET
+    for n_rot in range(1, 6):
+        # CW sweeps
+        tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * n_rot + [Inst.RESET])
+        # CCW sweeps
+        tapes.append([Inst.GRAB] + [Inst.ROTATE_CCW] * n_rot + [Inst.RESET])
+
+    # Sweep-and-return patterns: GRAB, rotate out, rotate back, RESET
+    # This is the P013 WR pattern: GRAB, CCW, CCW, CW, RESET
+    for n_out in range(1, 5):
+        for n_back in range(1, 5):
+            if n_out == n_back:
+                continue  # Would return to same position, no glyph visit
+            # CW out, CCW back
+            tapes.append(
+                [Inst.GRAB]
+                + [Inst.ROTATE_CW] * n_out
+                + [Inst.ROTATE_CCW] * n_back
+                + [Inst.RESET])
+            # CCW out, CW back
+            tapes.append(
+                [Inst.GRAB]
+                + [Inst.ROTATE_CCW] * n_out
+                + [Inst.ROTATE_CW] * n_back
+                + [Inst.RESET])
+
+    # Repeat-terminal variants of the most common patterns
+    for n_rot in range(1, 4):
+        tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * n_rot + [Inst.REPEAT])
+        tapes.append([Inst.GRAB] + [Inst.ROTATE_CCW] * n_rot + [Inst.REPEAT])
+
+    return tapes
 
 
 def _build_seed_tapes(layout: Layout, n_inputs: int,

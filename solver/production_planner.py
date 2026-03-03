@@ -369,8 +369,17 @@ def _determine_bonder_type(puzzle: Puzzle) -> str:
 
     Regular bonder bonds in one direction (2 slots).
     bonder-speed bonds in 4 directions (4 slots).
+    bonder-prisma bonds triplex bonds (and handles normal bonds too).
     """
-    from .puzzle import PartFlag
+    from .puzzle import BondType, PartFlag
+
+    # Check for triplex bonds first — bonder-prisma handles both triplex and normal
+    if puzzle.has_part(PartFlag.TRIPLEX_BONDER):
+        for pio in puzzle.outputs:
+            for bond in pio.molecule.bonds:
+                if bond.bond_type & (BondType.TRIPLEX_R | BondType.TRIPLEX_Y | BondType.TRIPLEX_K):
+                    return 'bonder-prisma'
+
     for pio in puzzle.outputs:
         if len(pio.molecule.bonds) <= 1:
             continue
