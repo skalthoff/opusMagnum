@@ -278,7 +278,8 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         base_sol = layout.to_solution(puzzle, n_outputs)
 
         # 3c. Generate seed tapes from multiple sources
-        seed_tapes = _build_seed_tapes(layout, n_inputs, pattern_db, glyphs_needed)
+        seed_tapes = _build_seed_tapes(layout, n_inputs, pattern_db, glyphs_needed,
+                                       analysis=analysis, puzzle=puzzle)
 
         if verbose and rank < 10:
             print(f'  Layout {rank}: cost={layout.cost}g, lb={lb}, '
@@ -382,18 +383,27 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
 
 def _build_seed_tapes(layout: Layout, n_inputs: int,
                       pattern_db: PatternDB,
-                      glyphs_needed: List[str]) -> List[List[int]]:
+                      glyphs_needed: List[str],
+                      analysis: Optional[PuzzleAnalysis] = None,
+                      puzzle: Optional[Puzzle] = None) -> List[List[int]]:
     """Build seed tapes for GA from multiple sources.
 
-    Sources (approximate allocation):
-      1. Geometric templates based on layout geometry (60%)
-      2. Similar tapes from archive pattern DB (25%)
-      3. Common tape templates from archive (15%)
+    Sources (priority order):
+      1. Compiled tapes from dataflow analysis (highest priority)
+      2. Geometric templates based on layout geometry
+      3. Similar tapes from archive pattern DB
+      4. Common tape templates from archive
     """
     seed_tapes: List[List[int]] = []
     n_stations = len(layout.stations)
 
-    # Source 1: Geometric templates (60% of seeds)
+    # Source 1: Compiled tapes (dataflow-derived, highest priority)
+    if analysis is not None and puzzle is not None:
+        from .tape_compiler import compile_tapes
+        compiled = compile_tapes(layout, analysis, puzzle)
+        seed_tapes.extend(compiled)
+
+    # Source 2: Geometric templates
     geo_tapes = generate_geometric_tapes(n_stations, n_inputs, layout.directions)
     seed_tapes.extend(geo_tapes)
 
