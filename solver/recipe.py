@@ -220,6 +220,91 @@ def _calculate_recipe(puzzle: Puzzle, analysis: PuzzleAnalysis) -> Recipe:
                 need[AtomType.QUICKSILVER] = need.get(AtomType.QUICKSILVER, 0) + metal_need
                 need.pop(metal, None)
 
+    # Resolve multi-step chains: Quicksilver deficit via Purification
+    # After projection cascades, we may need Quicksilver that isn't in inputs.
+    # Purification: Metal -> PrevMetal + Quicksilver (consumes a higher metal,
+    # produces the next-lower metal and one Quicksilver).
+    qs_need = need.get(AtomType.QUICKSILVER, 0)
+    qs_have = have_extra.get(AtomType.QUICKSILVER, 0)
+    qs_deficit = qs_need - qs_have
+    if qs_deficit > 0 and puzzle.has_part(PartFlag.PURIFICATION):
+        # Find surplus metals we can purify to generate Quicksilver.
+        # Purify from highest surplus metal first (most valuable QS source).
+        purified = 0
+        for i in range(len(METAL_CHAIN) - 1, 0, -1):
+            metal = METAL_CHAIN[i]
+            surplus = have_extra.get(metal, 0) - need.get(metal, 0)
+            if surplus > 0:
+                use = min(surplus, qs_deficit - purified)
+                if use > 0:
+                    recipe.reactions[Reaction.PURIFICATION] = \
+                        recipe.reactions.get(Reaction.PURIFICATION, 0) + use
+                    prev_metal = METAL_CHAIN[i - 1]
+                    # Purification produces prev_metal as byproduct
+                    have_extra[prev_metal] = have_extra.get(prev_metal, 0) + use
+                    have_extra[metal] = have_extra.get(metal, 0) - use
+                    purified += use
+            if purified >= qs_deficit:
+                break
+
+        # Also check: if Lead is at the bottom of projection cascade and we
+        # have surplus Lead, we can't purify Lead further. But if we have
+        # surplus of *any* metal higher than what's needed, purify those.
+        # Check remaining QS deficit from metals that are themselves needed
+        # but available in excess from inputs (not just surplus).
+        if purified < qs_deficit:
+            # Try using input metals that aren't otherwise consumed.
+            # Each purification of metal[i] yields metal[i-1] + QS,
+            # so we can purify and still use the lower metal for projection.
+            for i in range(len(METAL_CHAIN) - 1, 0, -1):
+                metal = METAL_CHAIN[i]
+                available = analysis.input_elements.get(metal, 0)
+                already_used = need.get(metal, 0)
+                # We could request extra input sets to purify
+                extra = available - already_used
+                if extra > 0:
+                    use = min(extra, qs_deficit - purified)
+                    if use > 0:
+                        recipe.reactions[Reaction.PURIFICATION] = \
+                            recipe.reactions.get(Reaction.PURIFICATION, 0) + use
+                        prev_metal = METAL_CHAIN[i - 1]
+                        have_extra[prev_metal] = have_extra.get(prev_metal, 0) + use
+                        purified += use
+                if purified >= qs_deficit:
+                    break
+
+        if purified > 0:
+            # Reduce QS need by amount we can produce via purification
+            resolved = min(purified, qs_deficit)
+            need[AtomType.QUICKSILVER] = qs_need - resolved
+
+    # Resolve metal deficit at bottom of projection chain via Purification.
+    # If we need Lead (or another low metal) but only have higher metals,
+    # purification can step them down.
+    if puzzle.has_part(PartFlag.PURIFICATION):
+        for i in range(len(METAL_CHAIN) - 1):
+            metal = METAL_CHAIN[i]
+            metal_need_remaining = need.get(metal, 0) - have_extra.get(metal, 0)
+            if metal_need_remaining > 0:
+                # Look for surplus higher metals to purify down
+                for j in range(i + 1, len(METAL_CHAIN)):
+                    higher = METAL_CHAIN[j]
+                    higher_surplus = have_extra.get(higher, 0) - need.get(higher, 0)
+                    if higher_surplus > 0:
+                        # Each purification step-down from j to i needs (j - i) purifications
+                        steps = j - i
+                        use = min(higher_surplus, metal_need_remaining)
+                        recipe.reactions[Reaction.PURIFICATION] = \
+                            recipe.reactions.get(Reaction.PURIFICATION, 0) + use * steps
+                        # Each step also produces Quicksilver
+                        have_extra[AtomType.QUICKSILVER] = \
+                            have_extra.get(AtomType.QUICKSILVER, 0) + use * steps
+                        have_extra[higher] = have_extra.get(higher, 0) - use
+                        have_extra[metal] = have_extra.get(metal, 0) + use
+                        metal_need_remaining -= use
+                    if metal_need_remaining <= 0:
+                        break
+
     # Handle cardinals needed -> use Van Berlo or Salt
     total_cardinal_need = sum(need.get(c, 0) for c in
                               [AtomType.AIR, AtomType.EARTH, AtomType.FIRE, AtomType.WATER])

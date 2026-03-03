@@ -1549,6 +1549,21 @@ def compile_tapes_from_graph(layout: Layout, graph) -> List[List[int]]:
                 tape_r.append(terminal)
                 tapes.append(tape_r)
 
+    # --- Strategy G1c: 3+ input bonder interleaved templates ---
+    if graph.need_bonder and g1_bonder_dir is not None and g1_output_dir is not None:
+        bonder_flows = [f for f in ordered_flows if f.dest.kind == 'bonder']
+        if len(bonder_flows) >= 3:
+            _compile_multi_input_bonder_templates(
+                tapes, bonder_flows, layout, graph, _sid_dir,
+                arm_start, g1_bonder_dir, g1_output_dir)
+
+    # --- Strategy G8: Template composition for multi-stage puzzles ---
+    glyph_flows = [f for f in ordered_flows if f.via and not f.needs_ungrab]
+    if glyph_flows:
+        _compile_composed_multi_stage(
+            tapes, ordered_flows, layout, graph, _sid_dir,
+            arm_start, g1_bonder_dir, g1_output_dir)
+
     # --- Strategy G7: Per-atom slot delivery for spread layouts ---
     # When the layout has _atom_dirs, each output atom has its own
     # arm direction for delivery
@@ -1699,3 +1714,409 @@ def _compile_spread_delivery(
         tapes.append(nav_to_src + [Inst.GRAB] + nav + [Inst.RESET])
         tapes.append(nav_to_src + [Inst.GRAB] + nav
                      + [Inst.DROP, Inst.RESET])
+
+
+def _compile_multi_input_bonder_templates(
+    tapes: List[List[int]],
+    bonder_flows: list,
+    layout: Layout,
+    graph,
+    sid_dir_fn,
+    arm_start: int,
+    bonder_dir: int,
+    output_dir: int,
+) -> None:
+    """Strategy G1c: Generate interleaved delivery templates for 3+ input
+    bonder puzzles.
+
+    Tries permutations of bonder-targeting flows with three delivery variants:
+      A) sequential delivery — deliver all, then pickup bonded
+      B) navigate-back — explicitly navigate to next source between deliveries
+      C) grouped by source direction — group flows sharing same source dir
+    Caps total output at 100 templates.
+    """
+    n = len(bonder_flows)
+    cap = 100
+    count = 0
+
+    # Determine which permutations to try based on flow count
+    if n <= 4:
+        # All permutations (up to 24)
+        perms = list(itertools.permutations(bonder_flows))
+    elif n <= 6:
+        # Cap at 30 permutations
+        perms = list(itertools.islice(itertools.permutations(bonder_flows), 30))
+    else:
+        # Forward + reverse only for 7+
+        perms = [tuple(bonder_flows), tuple(reversed(bonder_flows))]
+
+    rot_bond_to_out = _rotation_instructions(bonder_dir, output_dir)
+
+    for perm in perms:
+        if count >= cap:
+            break
+
+        # --- Variant A: Sequential delivery ---
+        # Deliver each flow to bonder, then pickup bonded to output
+        tape_a: List[int] = []
+        cur_dir = arm_start
+        valid = True
+
+        for flow in perm:
+            src_dir = sid_dir_fn(flow.source)
+            if src_dir is None:
+                valid = False
+                break
+
+            # Navigate to source
+            tape_a.extend(_rotation_instructions(cur_dir, src_dir))
+            tape_a.append(Inst.GRAB)
+
+            # Route through glyph if via
+            if flow.via and not flow.needs_ungrab:
+                via_dirs = [sid_dir_fn(via) for via in flow.via]
+                via_dirs = [d for d in via_dirs if d is not None]
+                if via_dirs:
+                    tape_a.extend(_route_through_glyph(
+                        src_dir, bonder_dir, via_dirs[0]))
+                else:
+                    tape_a.extend(
+                        _rotation_instructions(src_dir, bonder_dir))
+            else:
+                tape_a.extend(_rotation_instructions(src_dir, bonder_dir))
+
+            tape_a.append(Inst.DROP)
+            cur_dir = bonder_dir
+
+        if valid and tape_a:
+            # Pickup bonded molecule
+            tape_a.append(Inst.GRAB)
+            tape_a.extend(rot_bond_to_out)
+            tape_a.append(Inst.DROP)
+            tape_a.append(Inst.RESET)
+            tapes.append(tape_a)
+            count += 1
+
+            # Also REPEAT variant
+            if count < cap:
+                tape_a_rep = tape_a[:-1]  # remove RESET
+                tape_a_rep.extend(
+                    _rotation_instructions(output_dir, arm_start))
+                tape_a_rep.append(Inst.REPEAT)
+                tapes.append(tape_a_rep)
+                count += 1
+
+        if count >= cap:
+            break
+
+        # --- Variant B: Navigate-back (explicit nav to next source) ---
+        tape_b: List[int] = []
+        cur_dir = arm_start
+        valid = True
+
+        for fi, flow in enumerate(perm):
+            src_dir = sid_dir_fn(flow.source)
+            if src_dir is None:
+                valid = False
+                break
+
+            # Explicit navigation to source from current position
+            nav_to_src = _rotation_instructions(cur_dir, src_dir)
+            tape_b.extend(nav_to_src)
+            tape_b.append(Inst.GRAB)
+
+            # Route through glyph if via
+            if flow.via and not flow.needs_ungrab:
+                via_dirs = [sid_dir_fn(via) for via in flow.via]
+                via_dirs = [d for d in via_dirs if d is not None]
+                if via_dirs:
+                    tape_b.extend(_route_through_glyph(
+                        src_dir, bonder_dir, via_dirs[0]))
+                else:
+                    tape_b.extend(
+                        _rotation_instructions(src_dir, bonder_dir))
+            else:
+                tape_b.extend(_rotation_instructions(src_dir, bonder_dir))
+
+            tape_b.append(Inst.DROP)
+
+            # Navigate back toward next source if not last
+            if fi < len(perm) - 1:
+                next_src = sid_dir_fn(perm[fi + 1].source)
+                if next_src is not None:
+                    tape_b.extend(
+                        _rotation_instructions(bonder_dir, next_src))
+                    cur_dir = next_src
+                else:
+                    cur_dir = bonder_dir
+            else:
+                cur_dir = bonder_dir
+
+        if valid and tape_b:
+            tape_b.append(Inst.GRAB)
+            tape_b.extend(rot_bond_to_out)
+            tape_b.append(Inst.DROP)
+            tape_b.append(Inst.RESET)
+            tapes.append(tape_b)
+            count += 1
+
+        if count >= cap:
+            break
+
+    # --- Variant C: Grouped by source direction ---
+    if count < cap:
+        # Group flows by source direction
+        dir_groups: Dict[int, list] = {}
+        for flow in bonder_flows:
+            d = sid_dir_fn(flow.source)
+            if d is not None:
+                dir_groups.setdefault(d, []).append(flow)
+
+        group_keys = list(dir_groups.keys())
+        if len(group_keys) >= 2:
+            # Try permutations of group ordering
+            group_perms = list(itertools.islice(
+                itertools.permutations(group_keys),
+                min(24, cap - count)))
+
+            for gp in group_perms:
+                if count >= cap:
+                    break
+                tape_c: List[int] = []
+                cur_dir = arm_start
+                valid = True
+
+                for gk in gp:
+                    for flow in dir_groups[gk]:
+                        src_dir = sid_dir_fn(flow.source)
+                        if src_dir is None:
+                            valid = False
+                            break
+
+                        tape_c.extend(
+                            _rotation_instructions(cur_dir, src_dir))
+                        tape_c.append(Inst.GRAB)
+
+                        if flow.via and not flow.needs_ungrab:
+                            via_dirs = [sid_dir_fn(via)
+                                        for via in flow.via]
+                            via_dirs = [d for d in via_dirs
+                                        if d is not None]
+                            if via_dirs:
+                                tape_c.extend(_route_through_glyph(
+                                    src_dir, bonder_dir, via_dirs[0]))
+                            else:
+                                tape_c.extend(_rotation_instructions(
+                                    src_dir, bonder_dir))
+                        else:
+                            tape_c.extend(_rotation_instructions(
+                                src_dir, bonder_dir))
+
+                        tape_c.append(Inst.DROP)
+                        cur_dir = bonder_dir
+
+                    if not valid:
+                        break
+
+                if valid and tape_c:
+                    tape_c.append(Inst.GRAB)
+                    tape_c.extend(rot_bond_to_out)
+                    tape_c.append(Inst.DROP)
+                    tape_c.append(Inst.RESET)
+                    tapes.append(tape_c)
+                    count += 1
+
+
+def _compile_composed_multi_stage(
+    tapes: List[List[int]],
+    ordered_flows: list,
+    layout: Layout,
+    graph,
+    sid_dir_fn,
+    arm_start: int,
+    bonder_dir: Optional[int],
+    output_dir: Optional[int],
+) -> None:
+    """Strategy G8: Template composition for multi-stage puzzles.
+
+    Identifies flows that pass through glyphs (via non-empty) and direct flows,
+    then builds composed sub-tapes:
+      Stage A: input -> glyph (deliver raw atoms to conversion glyphs)
+      Stage B: glyph -> bonder (deliver converted atoms to bonder)
+      Stage C: bonder -> output (pickup bonded molecule)
+    Composes via concatenation + RESET. Caps at 100 templates.
+    """
+    cap = 100
+    count = 0
+
+    glyph_flows = [f for f in ordered_flows if f.via and not f.needs_ungrab]
+    direct_flows = [f for f in ordered_flows
+                    if not f.via or f.needs_ungrab]
+
+    # --- Sub-tape builders ---
+
+    def _build_stage_a(flows: list, start_dir: int):
+        """Input -> glyph: deliver atoms to their first via station."""
+        tape: List[int] = []
+        cur = start_dir
+        for flow in flows:
+            src_dir = sid_dir_fn(flow.source)
+            if src_dir is None or not flow.via:
+                return None, cur
+            glyph_dir = sid_dir_fn(flow.via[0])
+            if glyph_dir is None:
+                return None, cur
+            tape.extend(_rotation_instructions(cur, src_dir))
+            tape.append(Inst.GRAB)
+            tape.extend(_rotation_instructions(src_dir, glyph_dir))
+            tape.append(Inst.DROP)
+            cur = glyph_dir
+        return tape, cur
+
+    def _build_stage_b(flows: list, start_dir: int, target_dir: int):
+        """Glyph -> bonder/output: pickup from glyph, deliver to target."""
+        tape: List[int] = []
+        cur = start_dir
+        for flow in flows:
+            if not flow.via:
+                continue
+            glyph_dir = sid_dir_fn(flow.via[0])
+            if glyph_dir is None:
+                return None, cur
+            tape.extend(_rotation_instructions(cur, glyph_dir))
+            tape.append(Inst.GRAB)
+            tape.extend(_rotation_instructions(glyph_dir, target_dir))
+            tape.append(Inst.DROP)
+            cur = target_dir
+        return tape, cur
+
+    def _build_stage_c(start_dir: int, b_dir: int, o_dir: int):
+        """Bonder -> output: pickup bonded molecule."""
+        tape: List[int] = []
+        tape.extend(_rotation_instructions(start_dir, b_dir))
+        tape.append(Inst.GRAB)
+        tape.extend(_rotation_instructions(b_dir, o_dir))
+        tape.append(Inst.DROP)
+        return tape, o_dir
+
+    def _build_direct_deliveries(flows: list, start_dir: int):
+        """Direct flows: source -> dest without via."""
+        tape: List[int] = []
+        cur = start_dir
+        for flow in flows:
+            src_dir = sid_dir_fn(flow.source)
+            dest_dir = sid_dir_fn(flow.dest)
+            if src_dir is None or dest_dir is None:
+                return None, cur
+            tape.extend(_rotation_instructions(cur, src_dir))
+            tape.append(Inst.GRAB)
+            tape.extend(_rotation_instructions(src_dir, dest_dir))
+            tape.append(Inst.DROP)
+            cur = dest_dir
+        return tape, cur
+
+    # --- Composition 1: A + B + C (glyph flows staged, then pickup) ---
+    if glyph_flows and bonder_dir is not None and output_dir is not None:
+        stage_a, end_a = _build_stage_a(glyph_flows, arm_start)
+        if stage_a is not None:
+            stage_b, end_b = _build_stage_b(
+                glyph_flows, end_a, bonder_dir)
+            if stage_b is not None:
+                stage_c, end_c = _build_stage_c(
+                    end_b, bonder_dir, output_dir)
+                composed = stage_a + stage_b + stage_c + [Inst.RESET]
+                tapes.append(composed)
+                count += 1
+
+                # REPEAT variant
+                if count < cap:
+                    rep = (stage_a + stage_b + stage_c
+                           + _rotation_instructions(end_c, arm_start)
+                           + [Inst.REPEAT])
+                    tapes.append(rep)
+                    count += 1
+
+    # --- Composition 2: Direct flows + glyph flows interleaved ---
+    if direct_flows and glyph_flows and count < cap:
+        # Direct first, then glyph stages
+        direct_tape, end_d = _build_direct_deliveries(
+            direct_flows, arm_start)
+        if direct_tape is not None:
+            stage_a, end_a = _build_stage_a(glyph_flows, end_d)
+            if stage_a is not None:
+                dest_dir_final = output_dir if output_dir is not None \
+                    else sid_dir_fn(glyph_flows[-1].dest)
+                if dest_dir_final is not None:
+                    stage_b, end_b = _build_stage_b(
+                        glyph_flows, end_a, dest_dir_final)
+                    if stage_b is not None:
+                        composed = (direct_tape + stage_a + stage_b
+                                    + [Inst.RESET])
+                        tapes.append(composed)
+                        count += 1
+
+        # Glyph first, then direct
+        if count < cap:
+            stage_a, end_a = _build_stage_a(glyph_flows, arm_start)
+            if stage_a is not None:
+                dest_target = bonder_dir if bonder_dir is not None \
+                    else (output_dir if output_dir is not None
+                          else sid_dir_fn(glyph_flows[-1].dest))
+                if dest_target is not None:
+                    stage_b, end_b = _build_stage_b(
+                        glyph_flows, end_a, dest_target)
+                    if stage_b is not None:
+                        direct_tape, end_d = _build_direct_deliveries(
+                            direct_flows, end_b)
+                        if direct_tape is not None:
+                            composed = (stage_a + stage_b + direct_tape
+                                        + [Inst.RESET])
+                            tapes.append(composed)
+                            count += 1
+
+    # --- Composition 3: Full multi-atom composed sequence ---
+    # Deliver all atoms to glyphs, pickup all to bonder, pickup bonded
+    if glyph_flows and bonder_dir is not None and output_dir is not None:
+        # Try different orderings of glyph flows
+        flow_orderings: list = []
+        if len(glyph_flows) <= 4:
+            flow_orderings = list(itertools.permutations(glyph_flows))
+        elif len(glyph_flows) <= 6:
+            flow_orderings = list(itertools.islice(
+                itertools.permutations(glyph_flows), 30))
+        else:
+            flow_orderings = [
+                tuple(glyph_flows), tuple(reversed(glyph_flows))]
+
+        for ordering in flow_orderings:
+            if count >= cap:
+                break
+
+            # Stage A: deliver all to glyphs
+            stage_a, end_a = _build_stage_a(list(ordering), arm_start)
+            if stage_a is None:
+                continue
+
+            # Stage B: pickup all from glyphs to bonder
+            stage_b, end_b = _build_stage_b(
+                list(ordering), end_a, bonder_dir)
+            if stage_b is None:
+                continue
+
+            # Stage C: pickup bonded to output
+            stage_c, end_c = _build_stage_c(
+                end_b, bonder_dir, output_dir)
+
+            composed = stage_a + stage_b + stage_c + [Inst.RESET]
+            tapes.append(composed)
+            count += 1
+
+            # Also include direct flows if any
+            if direct_flows and count < cap:
+                direct_tape, end_dir = _build_direct_deliveries(
+                    direct_flows, arm_start)
+                if direct_tape is not None:
+                    full = (direct_tape + stage_a + stage_b + stage_c
+                            + [Inst.RESET])
+                    tapes.append(full)
+                    count += 1

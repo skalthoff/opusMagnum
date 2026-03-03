@@ -241,7 +241,16 @@ def _trace_single_atom(out_type: AtomType,
                         reactions: Dict[Reaction, int],
                         analysis: PuzzleAnalysis
                         ) -> Tuple[AtomType, List[str], bool]:
-    """Trace one output atom backwards to find source type and glyph visits."""
+    """Trace one output atom backwards to find source type and glyph visits.
+
+    Handles multi-step reaction chains. For example, if output needs Gold
+    but inputs only have Lead:
+      - source = Lead, via = ['glyph-purification', 'glyph-projection']
+    If Quicksilver is needed for projection but not in inputs and purification
+    is available, the chain is extended accordingly.
+    """
+    from .puzzle import METAL_CHAIN
+
     # Salt from calcification
     if out_type == AtomType.SALT and reactions.get(Reaction.CALCIFICATION, 0) > 0:
         for elem in [AtomType.AIR, AtomType.EARTH, AtomType.FIRE, AtomType.WATER]:
@@ -253,9 +262,32 @@ def _trace_single_atom(out_type: AtomType,
         if reactions.get(Reaction.ANIMISMUS, 0) > 0:
             return (AtomType.SALT, ['glyph-life-and-death'], True)
 
-    # Metal from projection
+    # Metal from projection (with multi-step chain support)
     if out_type.is_metal and reactions.get(Reaction.PROJECTION, 0) > 0:
-        return (AtomType.QUICKSILVER, ['glyph-projection'], False)
+        # Quicksilver is the default source for projection
+        source = AtomType.QUICKSILVER
+        via = ['glyph-projection']
+
+        # Check if Quicksilver is directly available in inputs
+        if AtomType.QUICKSILVER not in analysis.input_elements:
+            # Quicksilver not in inputs -- check if purification can produce it
+            if reactions.get(Reaction.PURIFICATION, 0) > 0:
+                # Find the highest-rank metal available in inputs to purify
+                purify_source = _find_purification_source(analysis)
+                if purify_source is not None:
+                    source = purify_source
+                    via = ['glyph-purification', 'glyph-projection']
+
+        return (source, via, False)
+
+    # Quicksilver needed but not in inputs -- resolve via purification
+    if out_type == AtomType.QUICKSILVER:
+        if reactions.get(Reaction.PURIFICATION, 0) > 0:
+            purify_source = _find_purification_source(analysis)
+            if purify_source is not None:
+                return (purify_source, ['glyph-purification'], False)
+        if out_type in analysis.input_elements:
+            return (out_type, [], False)
 
     # Cardinal from Van Berlo
     if out_type.is_cardinal and reactions.get(Reaction.VAN_BERLO, 0) > 0:
@@ -266,7 +298,38 @@ def _trace_single_atom(out_type: AtomType,
     if out_type in analysis.input_elements:
         return (out_type, [], False)
 
+    # Metal not in inputs -- try purification chain (higher metal -> lower metal)
+    if out_type.is_metal and reactions.get(Reaction.PURIFICATION, 0) > 0:
+        # Find a higher metal in inputs that can be purified down
+        target_rank = out_type.metal_rank
+        for metal in reversed(METAL_CHAIN):
+            if metal.metal_rank > target_rank and metal in analysis.input_elements:
+                steps = metal.metal_rank - target_rank
+                via = ['glyph-purification'] * steps
+                return (metal, via, False)
+
     return (out_type, [], False)
+
+
+def _find_purification_source(analysis: PuzzleAnalysis) -> Optional[AtomType]:
+    """Find the best metal in inputs to purify for Quicksilver production.
+
+    Returns the highest-rank metal available in inputs (above Lead, since
+    purifying Lead produces nothing below it). Purification of metal[i]
+    yields metal[i-1] + Quicksilver.
+    """
+    from .puzzle import METAL_CHAIN
+
+    # Search from highest metal down; any metal above Lead can be purified
+    for metal in reversed(METAL_CHAIN):
+        if metal == METAL_CHAIN[0]:
+            continue  # Can't purify the lowest metal usefully
+        if metal in analysis.input_elements:
+            return metal
+    # Fallback: even Lead could be purified in some game contexts
+    if METAL_CHAIN[0] in analysis.input_elements:
+        return METAL_CHAIN[0]
+    return None
 
 
 def _find_input_sid(atom_type: AtomType,

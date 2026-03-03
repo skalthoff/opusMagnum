@@ -38,7 +38,7 @@ class Layout:
     arm_pos: HexCoord
     arm_rot: int            # starting direction (0-5)
     arm_len: int            # 1, 2, or 3
-    arm_type: str           # 'arm1', 'arm2', or 'arm3'
+    arm_type: str           # 'arm1', 'arm2', 'arm3', or 'arm6'
     stations: List[Tuple[str, object]]  # [(type, data), ...] in CW order
     directions: List[int]   # direction index for each station
     positions: List[HexCoord]  # world position for each station
@@ -497,6 +497,16 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
                     break
             if len(layouts) >= config.max_layouts:
                 break
+
+        # arm6 pass: always length 1, grabs all 6 neighbors, cost 30g
+        arm6_cost = _compute_layout_cost('arm6', station_types, need_bonder)
+        if config.cost_bound is None or arm6_cost < config.cost_bound:
+            for start_dir in range(6):
+                dirs = [(start_dir - i) % 6 for i in range(n_stations)]
+                _try_direction_set(dirs, arm_pos, 1, 'arm6', start_dir,
+                                   arm6_cost)
+                if len(layouts) >= config.max_layouts:
+                    break
         if len(layouts) >= config.max_layouts:
             break
 
@@ -528,6 +538,21 @@ def generate_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
                 for pattern in ([0, 2, 4], [1, 3, 5]):
                     _try_direction_set(pattern, arm_pos, arm_len, arm_type,
                                        pattern[0], base_cost, cap=non_cw_cap)
+
+        # arm6 non-CW patterns
+        arm6_cost = _compute_layout_cost('arm6', station_types, need_bonder)
+        if config.cost_bound is None or arm6_cost < config.cost_bound:
+            for start_dir in range(6):
+                ccw_dirs = [(start_dir + i) % 6 for i in range(n_stations)]
+                _try_direction_set(ccw_dirs, arm_pos, 1, 'arm6', start_dir,
+                                   arm6_cost, cap=non_cw_cap)
+                skip_dirs = [(start_dir + 2 * i) % 6 for i in range(n_stations)]
+                _try_direction_set(skip_dirs, arm_pos, 1, 'arm6', start_dir,
+                                   arm6_cost, cap=non_cw_cap)
+            if n_stations == 3:
+                for pattern in ([0, 2, 4], [1, 3, 5]):
+                    _try_direction_set(pattern, arm_pos, 1, 'arm6',
+                                       pattern[0], arm6_cost, cap=non_cw_cap)
 
     # Sort by cost then estimated area (lower is better)
     layouts.sort(key=lambda l: (l.cost, l.estimated_area))
@@ -578,152 +603,153 @@ def generate_stacked_layouts(puzzle: Puzzle, analysis: PuzzleAnalysis,
 
     arm_positions = list(hex_spiral(ORIGIN, 2))
 
+    def _try_stacked_arm(arm_pos, arm_len, arm_type):
+        """Try all stacked layouts for a given arm position, length, and type."""
+        all_stations = [('input', i) for i in range(n_inputs)] + process_stations
+        n_stations = len(all_stations)
+
+        base_cost = _compute_layout_cost(arm_type, all_stations, need_bonder)
+        if config.cost_bound is not None and base_cost >= config.cost_bound:
+            return
+
+        for process_dir in range(6):
+            process_hex = arm_pos
+            for _ in range(arm_len):
+                process_hex = process_hex + DIRECTIONS[process_dir]
+
+            # Pick input directions: distinct directions != process_dir
+            available_dirs = [d for d in range(6) if d != process_dir]
+            if n_inputs > len(available_dirs):
+                continue
+
+            for input_dir_combo in itertools.combinations(available_dirs, n_inputs):
+                input_dirs = list(input_dir_combo)
+                input_hexes = []
+                for d in input_dirs:
+                    tip = arm_pos
+                    for _ in range(arm_len):
+                        tip = tip + DIRECTIONS[d]
+                    input_hexes.append(tip)
+
+                # Build direction and position lists
+                directions = input_dirs + [process_dir] * len(process_stations)
+
+                # Determine arm_rot: the first station's direction (first input)
+                start_dir = input_dirs[0]
+
+                # Now find valid placements for each process station
+                # Inputs are simple (placed at their tip)
+                station_options: List[List[Tuple[HexCoord, int]]] = []
+                valid = True
+
+                for si, (stype, sdata) in enumerate(all_stations):
+                    if stype == 'input':
+                        station_options.append([(input_hexes[si], 0)])
+                    elif stype == 'glyph':
+                        placements = _find_glyph_placements(process_hex, sdata)
+                        if not placements:
+                            valid = False
+                            break
+                        station_options.append(placements)
+                    elif stype == 'bonder':
+                        placements = _find_bonder_placements(process_hex)
+                        if not placements:
+                            valid = False
+                            break
+                        station_options.append(placements)
+                    elif stype == 'output':
+                        placements = _find_output_placements(process_hex, puzzle)
+                        if not placements:
+                            valid = False
+                            break
+                        station_options.append(placements)
+
+                if not valid:
+                    continue
+
+                # Limit combination explosion
+                combo_count = 1
+                for opts in station_options:
+                    combo_count *= len(opts)
+                    if combo_count > 500:
+                        break
+
+                if combo_count > 500:
+                    # Sample: pick first option for inputs, iterate process stations
+                    trimmed = []
+                    for si, opts in enumerate(station_options):
+                        stype = all_stations[si][0]
+                        if stype == 'input':
+                            trimmed.append(opts[:1])
+                        else:
+                            # Pick up to 6 representative rotations
+                            by_rot: Dict[int, Tuple[HexCoord, int]] = {}
+                            for pos, rot in opts:
+                                if rot not in by_rot:
+                                    by_rot[rot] = (pos, rot)
+                            trimmed.append(list(by_rot.values())[:6])
+                    combo_iter = itertools.product(*trimmed)
+                else:
+                    combo_iter = itertools.product(*station_options)
+
+                for combo in combo_iter:
+                    positions = []
+                    glyph_rots: Dict[int, int] = {}
+                    output_rots: Dict[int, int] = {}
+
+                    for si, (pos, rot) in enumerate(combo):
+                        positions.append(pos)
+                        stype = all_stations[si][0]
+                        if stype == 'glyph':
+                            glyph_rots[si] = rot
+                        elif stype == 'bonder':
+                            glyph_rots[si] = rot
+                        elif stype == 'output':
+                            output_rots[si] = rot
+
+                    # Collision check -- but skip input-vs-glyph overlap
+                    # (inputs must overlap with glyphs for processing)
+                    placement_list = []
+                    for si, (stype, sdata) in enumerate(all_stations):
+                        rot = glyph_rots.get(si, output_rots.get(si, 0))
+                        placement_list.append((stype, sdata, positions[si], rot))
+
+                    # Only check arm_pos collision; allow glyph/output overlap
+                    arm_collision = False
+                    for stype, sdata, pos, rot in placement_list:
+                        if (pos.q, pos.r) == (arm_pos.q, arm_pos.r):
+                            arm_collision = True
+                            break
+                    if arm_collision:
+                        continue
+
+                    layout = Layout(
+                        arm_pos=arm_pos,
+                        arm_rot=start_dir,
+                        arm_len=arm_len,
+                        arm_type=arm_type,
+                        stations=list(all_stations),
+                        directions=directions,
+                        positions=positions,
+                        glyph_rotations=glyph_rots,
+                        output_rotations=output_rots,
+                        cost=base_cost,
+                    )
+                    layouts.append(layout)
+
+                    if len(layouts) >= config.max_layouts:
+                        return
+
     for arm_pos in arm_positions:
         for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
             arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
-
-            # Build full station list: inputs first, then process stations
-            all_stations = [('input', i) for i in range(n_inputs)] + process_stations
-            n_stations = len(all_stations)
-
-            base_cost = _compute_layout_cost(arm_type, all_stations, need_bonder)
-            if config.cost_bound is not None and base_cost >= config.cost_bound:
-                continue
-
-            for process_dir in range(6):
-                process_hex = arm_pos
-                for _ in range(arm_len):
-                    process_hex = process_hex + DIRECTIONS[process_dir]
-
-                # Pick input directions: distinct directions != process_dir
-                available_dirs = [d for d in range(6) if d != process_dir]
-                if n_inputs > len(available_dirs):
-                    continue
-
-                for input_dir_combo in itertools.combinations(available_dirs, n_inputs):
-                    input_dirs = list(input_dir_combo)
-                    input_hexes = []
-                    for d in input_dirs:
-                        tip = arm_pos
-                        for _ in range(arm_len):
-                            tip = tip + DIRECTIONS[d]
-                        input_hexes.append(tip)
-
-                    # Build direction and position lists
-                    directions = input_dirs + [process_dir] * len(process_stations)
-                    positions_template = input_hexes + [process_hex] * len(process_stations)
-
-                    # Determine arm_rot: the first station's direction (first input)
-                    start_dir = input_dirs[0]
-
-                    # Now find valid placements for each process station
-                    # Inputs are simple (placed at their tip)
-                    station_options: List[List[Tuple[HexCoord, int]]] = []
-                    valid = True
-
-                    for si, (stype, sdata) in enumerate(all_stations):
-                        if stype == 'input':
-                            station_options.append([(input_hexes[si], 0)])
-                        elif stype == 'glyph':
-                            placements = _find_glyph_placements(process_hex, sdata)
-                            if not placements:
-                                valid = False
-                                break
-                            station_options.append(placements)
-                        elif stype == 'bonder':
-                            placements = _find_bonder_placements(process_hex)
-                            if not placements:
-                                valid = False
-                                break
-                            station_options.append(placements)
-                        elif stype == 'output':
-                            placements = _find_output_placements(process_hex, puzzle)
-                            if not placements:
-                                valid = False
-                                break
-                            station_options.append(placements)
-
-                    if not valid:
-                        continue
-
-                    # Limit combination explosion
-                    combo_count = 1
-                    for opts in station_options:
-                        combo_count *= len(opts)
-                        if combo_count > 500:
-                            break
-
-                    if combo_count > 500:
-                        # Sample: pick first option for inputs, iterate process stations
-                        trimmed = []
-                        for si, opts in enumerate(station_options):
-                            stype = all_stations[si][0]
-                            if stype == 'input':
-                                trimmed.append(opts[:1])
-                            else:
-                                # Pick up to 6 representative rotations
-                                by_rot: Dict[int, Tuple[HexCoord, int]] = {}
-                                for pos, rot in opts:
-                                    if rot not in by_rot:
-                                        by_rot[rot] = (pos, rot)
-                                trimmed.append(list(by_rot.values())[:6])
-                        combo_iter = itertools.product(*trimmed)
-                    else:
-                        combo_iter = itertools.product(*station_options)
-
-                    for combo in combo_iter:
-                        positions = []
-                        glyph_rots: Dict[int, int] = {}
-                        output_rots: Dict[int, int] = {}
-
-                        for si, (pos, rot) in enumerate(combo):
-                            positions.append(pos)
-                            stype = all_stations[si][0]
-                            if stype == 'glyph':
-                                glyph_rots[si] = rot
-                            elif stype == 'bonder':
-                                glyph_rots[si] = rot
-                            elif stype == 'output':
-                                output_rots[si] = rot
-
-                        # Collision check -- but skip input-vs-glyph overlap
-                        # (inputs must overlap with glyphs for processing)
-                        placement_list = []
-                        for si, (stype, sdata) in enumerate(all_stations):
-                            rot = glyph_rots.get(si, output_rots.get(si, 0))
-                            placement_list.append((stype, sdata, positions[si], rot))
-
-                        # Only check arm_pos collision; allow glyph/output overlap
-                        arm_collision = False
-                        for stype, sdata, pos, rot in placement_list:
-                            if (pos.q, pos.r) == (arm_pos.q, arm_pos.r):
-                                arm_collision = True
-                                break
-                        if arm_collision:
-                            continue
-
-                        layout = Layout(
-                            arm_pos=arm_pos,
-                            arm_rot=start_dir,
-                            arm_len=arm_len,
-                            arm_type=arm_type,
-                            stations=list(all_stations),
-                            directions=directions,
-                            positions=positions,
-                            glyph_rotations=glyph_rots,
-                            output_rotations=output_rots,
-                            cost=base_cost,
-                        )
-                        layouts.append(layout)
-
-                        if len(layouts) >= config.max_layouts:
-                            break
-                    if len(layouts) >= config.max_layouts:
-                        break
-                if len(layouts) >= config.max_layouts:
-                    break
+            _try_stacked_arm(arm_pos, arm_len, arm_type)
             if len(layouts) >= config.max_layouts:
                 break
+
+        # arm6 pass for stacked layouts
+        _try_stacked_arm(arm_pos, 1, 'arm6')
+
         if len(layouts) >= config.max_layouts:
             break
 
@@ -1022,9 +1048,14 @@ def _generate_spread_layouts(
     layouts: List[Layout] = []
     arm_positions = list(hex_spiral(ORIGIN, 2))
 
+    # Build list of (arm_len, arm_type) pairs to try, including arm6
+    _spread_arm_variants = [
+        (al, 'arm1' if al == 1 else ('arm3' if al == 3 else 'arm2'))
+        for al in range(config.min_arm_len, config.max_arm_len + 1)
+    ] + [(1, 'arm6')]
+
     for arm_pos in arm_positions:
-        for arm_len in range(config.min_arm_len, config.max_arm_len + 1):
-            arm_type = 'arm1' if arm_len == 1 else ('arm3' if arm_len == 3 else 'arm2')
+        for arm_len, arm_type in _spread_arm_variants:
 
             # Compute tip positions for all 6 directions
             tips: Dict[int, HexCoord] = {}

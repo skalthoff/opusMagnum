@@ -202,12 +202,10 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
         return best
 
     # --- Phase 1: Generate layouts ---
-    # Skip non-monoatomic inputs unless the planner has unbonder support
     has_mono_inputs = all(pio.molecule.is_monoatomic for pio in puzzle.inputs)
     if not has_mono_inputs:
         if verbose:
-            print(f'  Skipping layout search: non-monoatomic inputs')
-        return best
+            print(f'  Non-monoatomic inputs: skipping CW/stacked layouts, trying graph-constrained only')
 
     if verbose:
         print(f'  Phase 1: Generating layouts via Z3...')
@@ -217,50 +215,14 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     # Each entry: (layout, plan, optional_graph)
     layouts_with_plans: List[Tuple[Layout, ProductionPlan, Optional[StationGraph]]] = []
 
-    for plan in plans:
-        plan_glyphs = plan.glyph_names
-        plan_bonder = plan.need_bonder
-        plan_bonder_name = plan.bonder_type
+    # CW-sweep and stacked layouts assume monoatomic inputs — skip for polyatomic
+    if has_mono_inputs:
+        for plan in plans:
+            plan_glyphs = plan.glyph_names
+            plan_bonder = plan.need_bonder
+            plan_bonder_name = plan.bonder_type
 
-        # Generate layouts for each arm length separately to ensure diversity
-        for arm_len in [1, 2, 3]:
-            config = LayoutConfig(
-                min_arm_len=arm_len,
-                max_arm_len=arm_len,
-                max_layouts=200,
-            )
-            if best is not None:
-                config.cost_bound = best.metrics.get('cost', None)
-            batch = generate_layouts(puzzle, analysis, plan_glyphs,
-                                     plan_bonder, config,
-                                     bonder_name=plan_bonder_name)
-            for lay in batch:
-                layouts_with_plans.append((lay, plan, None))
-            if verbose:
-                print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
-                      f'arm{arm_len}: {len(batch)} CW-sweep layouts')
-
-        # Generate stacked layouts separately (parts share same hex)
-        for arm_len in [1, 2, 3]:
-            config = LayoutConfig(
-                min_arm_len=arm_len,
-                max_arm_len=arm_len,
-                max_layouts=200,
-            )
-            if best is not None:
-                config.cost_bound = best.metrics.get('cost', None)
-            stacked = generate_stacked_layouts(
-                puzzle, analysis, plan_glyphs, plan_bonder, config,
-                bonder_name=plan_bonder_name)
-            for lay in stacked:
-                layouts_with_plans.append((lay, plan, None))
-            if verbose:
-                print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
-                      f'arm{arm_len}: {len(stacked)} stacked layouts')
-
-        # Generate deduplicated layouts when inputs share element types
-        if deduped_puzzle is not None:
-            deduped_analysis = analyze_puzzle(deduped_puzzle)
+            # Generate layouts for each arm length separately to ensure diversity
             for arm_len in [1, 2, 3]:
                 config = LayoutConfig(
                     min_arm_len=arm_len,
@@ -269,22 +231,60 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                 )
                 if best is not None:
                     config.cost_bound = best.metrics.get('cost', None)
-                batch = generate_layouts(
-                    deduped_puzzle, deduped_analysis, plan_glyphs,
-                    plan_bonder, config, bonder_name=plan_bonder_name)
+                batch = generate_layouts(puzzle, analysis, plan_glyphs,
+                                         plan_bonder, config,
+                                         bonder_name=plan_bonder_name)
                 for lay in batch:
                     layouts_with_plans.append((lay, plan, None))
                 if verbose:
                     print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
-                          f'arm{arm_len}: {len(batch)} deduped CW-sweep layouts')
+                          f'arm{arm_len}: {len(batch)} CW-sweep layouts')
+
+            # Generate stacked layouts separately (parts share same hex)
+            for arm_len in [1, 2, 3]:
+                config = LayoutConfig(
+                    min_arm_len=arm_len,
+                    max_arm_len=arm_len,
+                    max_layouts=200,
+                )
+                if best is not None:
+                    config.cost_bound = best.metrics.get('cost', None)
                 stacked = generate_stacked_layouts(
-                    deduped_puzzle, deduped_analysis, plan_glyphs,
-                    plan_bonder, config, bonder_name=plan_bonder_name)
+                    puzzle, analysis, plan_glyphs, plan_bonder, config,
+                    bonder_name=plan_bonder_name)
                 for lay in stacked:
                     layouts_with_plans.append((lay, plan, None))
                 if verbose:
                     print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
-                          f'arm{arm_len}: {len(stacked)} deduped stacked layouts')
+                          f'arm{arm_len}: {len(stacked)} stacked layouts')
+
+            # Generate deduplicated layouts when inputs share element types
+            if deduped_puzzle is not None:
+                deduped_analysis = analyze_puzzle(deduped_puzzle)
+                for arm_len in [1, 2, 3]:
+                    config = LayoutConfig(
+                        min_arm_len=arm_len,
+                        max_arm_len=arm_len,
+                        max_layouts=200,
+                    )
+                    if best is not None:
+                        config.cost_bound = best.metrics.get('cost', None)
+                    batch = generate_layouts(
+                        deduped_puzzle, deduped_analysis, plan_glyphs,
+                        plan_bonder, config, bonder_name=plan_bonder_name)
+                    for lay in batch:
+                        layouts_with_plans.append((lay, plan, None))
+                    if verbose:
+                        print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
+                              f'arm{arm_len}: {len(batch)} deduped CW-sweep layouts')
+                    stacked = generate_stacked_layouts(
+                        deduped_puzzle, deduped_analysis, plan_glyphs,
+                        plan_bonder, config, bonder_name=plan_bonder_name)
+                    for lay in stacked:
+                        layouts_with_plans.append((lay, plan, None))
+                    if verbose:
+                        print(f'  Plan glyphs={plan_glyphs} bonder={plan_bonder_name}: '
+                              f'arm{arm_len}: {len(stacked)} deduped stacked layouts')
 
     # --- Phase 1b: Station graph constrained layouts ---
     # Build station graphs and generate alignment-constrained layouts

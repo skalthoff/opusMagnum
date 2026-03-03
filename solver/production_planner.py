@@ -141,11 +141,21 @@ def _trace_atom_routes(puzzle: Puzzle, analysis: PuzzleAnalysis,
     routes: List[AtomRoute] = []
 
     # Build input element -> io_index mapping
+    # For monoatomic inputs: map the single atom type directly
+    # For polyatomic inputs: map each atom type in the molecule (needs unbonding)
     input_elem_to_idx: Dict[AtomType, List[int]] = {}
     for pio in puzzle.inputs:
         if pio.molecule.is_monoatomic:
             elem = pio.molecule.atoms[0].atom_type
             input_elem_to_idx.setdefault(elem, []).append(pio.index)
+        else:
+            # Polyatomic input: each atom type in the molecule is available
+            # after unbonding the input molecule
+            seen_types: set = set()
+            for atom in pio.molecule.atoms:
+                if atom.atom_type not in seen_types:
+                    input_elem_to_idx.setdefault(atom.atom_type, []).append(pio.index)
+                    seen_types.add(atom.atom_type)
 
     # Track grab counts per input index
     grab_counts: Dict[int, int] = {}
