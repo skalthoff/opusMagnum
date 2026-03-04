@@ -392,6 +392,44 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     if verbose:
         print(f'  Lower bounds range: {layout_bounds[0][0]} - {layout_bounds[-1][0]}')
 
+    # --- Phase 2.5: DL layout scoring for prioritization ---
+    try:
+        from .dl_inference import get_dl_model, score_and_sort_layouts, _dl_device
+        dl_score_model = get_dl_model()
+        if dl_score_model is not None and len(layout_bounds) > 5:
+            layouts_only = [lb_entry[2] for lb_entry in layout_bounds]
+            dl_scores = score_and_sort_layouts(
+                dl_score_model, layouts_only, device=_dl_device,
+                analysis=analysis, puzzle=puzzle)
+            # Re-sort: blend lower bound rank with DL score rank
+            lb_rank = {layout_bounds[i][1]: i for i in range(len(layout_bounds))}
+            dl_rank = {dl_scores[i][1]: i for i in range(len(dl_scores))}
+            blended = []
+            for lb, idx, layout, plan, graph_opt in layout_bounds:
+                # Weighted rank: 60% lower bound, 40% DL prediction
+                r_lb = lb_rank.get(idx, len(layout_bounds))
+                r_dl = dl_rank.get(idx, len(layout_bounds))
+                blend = 0.6 * r_lb + 0.4 * r_dl
+                blended.append((blend, lb, idx, layout, plan, graph_opt))
+            blended.sort(key=lambda x: x[0])
+            layout_bounds = [(lb, idx, layout, plan, graph_opt)
+                             for _, lb, idx, layout, plan, graph_opt in blended]
+
+            # Skip layouts predicted >1.5x current best
+            if best is not None:
+                cutoff = best.score * 1.5
+                dl_score_map = {idx: score for score, idx in dl_scores}
+                n_before = len(layout_bounds)
+                layout_bounds = [
+                    (lb, idx, layout, plan, graph_opt)
+                    for lb, idx, layout, plan, graph_opt in layout_bounds
+                    if dl_score_map.get(idx, 0) < cutoff or lb < best.score
+                ]
+                if verbose and len(layout_bounds) < n_before:
+                    print(f'  DL scoring pruned {n_before - len(layout_bounds)} layouts')
+    except (ImportError, Exception):
+        pass
+
     # --- Phase 3: For each layout, optimize tapes via GA ---
     if verbose:
         print(f'  Phase 3: GA tape optimization...')
@@ -692,7 +730,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
     # Use archive solutions as layout templates. Especially useful for journal
     # puzzles that need multi-arm coordination.
     if time.time() - t0 < time_limit:
-        archive_time = min(time_limit - (time.time() - t0), 60.0)
+        archive_time = time_limit - (time.time() - t0)
         if verbose:
             print(f'  Phase 5a: Archive-guided search ({archive_time:.0f}s budget)...')
         archive_result = _try_archive_guided_search(
@@ -720,7 +758,7 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
             puzzle, analysis, plans, graphs,
             puzzle_bytes, simulator,
             target=target,
-            time_limit=min(time_remaining, 30.0),
+            time_limit=time_remaining,
             verbose=verbose,
             current_best=best,
         )
@@ -1043,8 +1081,13 @@ def _build_seed_tapes(layout: Layout, n_inputs: int,
         from .dl_inference import get_dl_model, generate_tapes_for_layout
         dl_model = get_dl_model()
         if dl_model is not None:
-            dl_tapes = generate_tapes_for_layout(dl_model, layout, beam_width=16, max_len=50)
-            seed_tapes.extend(dl_tapes[:20])  # top 20 from DL model
+            from .dl_inference import _dl_device
+            dl_tapes = generate_tapes_for_layout(
+                dl_model, layout, beam_width=64, max_len=60,
+                device=_dl_device,
+                analysis=analysis, puzzle=puzzle,
+                n_temperature_samples=64, temperature=0.8)
+            seed_tapes.extend(dl_tapes[:100])  # top 100 from DL model
     except (ImportError, Exception):
         pass  # DL model not available or not trained
 
@@ -1209,6 +1252,24 @@ def _try_archive_guided_search(
         except Exception:
             pass
 
+        # Source 4: DL-generated per-arm tapes
+        try:
+            from .dl_inference import get_dl_model, generate_tapes_for_layout, _dl_device
+            dl_model = get_dl_model()
+            if dl_model is not None:
+                for ai in range(n_arms):
+                    from .dl_inference import encode_layout as _enc_layout
+                    from .dl_inference import beam_search_generate, temperature_sample_generate
+                    ctx = _enc_layout(layout, ai, analysis=analysis, puzzle=puzzle)
+                    dl_tapes = beam_search_generate(
+                        dl_model, ctx, beam_width=32, max_len=60, device=_dl_device)
+                    dl_tapes.extend(temperature_sample_generate(
+                        dl_model, ctx, n_samples=32, max_len=60,
+                        temperature=0.8, device=_dl_device))
+                    seed_tape_sets[ai].extend(dl_tapes[:50])
+        except (ImportError, Exception):
+            pass
+
         # Skip if no seeds for any arm
         if any(not seeds for seeds in seed_tape_sets):
             continue
@@ -1282,7 +1343,7 @@ def _try_archive_guided_search(
         # GA optimization on this layout
         if time.time() - t0 < time_limit:
             ga = MultiTapeGA(simulator, GAConfig(
-                pop_size=40, max_generations=80, stagnation_limit=25,
+                pop_size=80, max_generations=200, stagnation_limit=40,
                 cycle_limit=2000))
             ga_result = ga.optimize(
                 cached, seed_tape_sets, puzzle_bytes,
@@ -1328,7 +1389,7 @@ def _try_multi_arm_layouts(
     best = current_best
 
     # Generate multi-arm layouts
-    config = LayoutConfig(max_layouts=50, timeout_ms=5000)
+    config = LayoutConfig(max_layouts=200, timeout_ms=15000)
     multi_layouts = generate_multi_arm_layouts(puzzle, analysis, plans, graphs, config)
 
     if not multi_layouts:
@@ -1352,6 +1413,24 @@ def _try_multi_arm_layouts(
 
         # Compile per-arm seed tapes
         seed_tape_sets = compile_tapes_for_multi_arm(layout, analysis, puzzle)
+
+        # DL-generated per-arm tapes
+        try:
+            from .dl_inference import get_dl_model, _dl_device
+            from .dl_inference import encode_layout as _enc_layout
+            from .dl_inference import beam_search_generate, temperature_sample_generate
+            dl_model = get_dl_model()
+            if dl_model is not None:
+                for ai in range(len(layout.arms)):
+                    ctx = _enc_layout(layout, ai, analysis=analysis, puzzle=puzzle)
+                    dl_tapes = beam_search_generate(
+                        dl_model, ctx, beam_width=32, max_len=60, device=_dl_device)
+                    dl_tapes.extend(temperature_sample_generate(
+                        dl_model, ctx, n_samples=32, max_len=60,
+                        temperature=0.8, device=_dl_device))
+                    seed_tape_sets[ai].extend(dl_tapes[:50])
+        except (ImportError, Exception):
+            pass
 
         # Quick screening: try all combinations of first few seeds per arm
         cached = CachedMultiArmSolutionBase(base_sol, layout.arms)
@@ -1391,7 +1470,7 @@ def _try_multi_arm_layouts(
         # GA optimization
         if time.time() - t0 < time_limit:
             ga = MultiTapeGA(simulator, GAConfig(
-                pop_size=20, max_generations=40, stagnation_limit=15))
+                pop_size=60, max_generations=120, stagnation_limit=30))
             ga_result = ga.optimize(
                 cached, seed_tape_sets, puzzle_bytes,
                 target=target,

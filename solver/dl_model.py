@@ -12,7 +12,7 @@ from typing import Optional
 import torch
 import torch.nn as nn
 
-from .dl_data import VOCAB_SIZE, CONTEXT_DIM, MAX_SEQ_LEN, PAD_TOKEN
+from .dl_data import VOCAB_SIZE, CONTEXT_DIM, LAYOUT_DIM, MAX_SEQ_LEN, PAD_TOKEN
 
 
 class PositionalEncoding(nn.Module):
@@ -80,8 +80,18 @@ class TapeTransformer(nn.Module):
         )
         self.decoder = nn.TransformerDecoder(decoder_layer, num_layers=n_layers)
 
-        # Output head
+        # Output head (tape tokens)
         self.output_head = nn.Linear(d_model, vocab_size)
+
+        # Score head: predict sum4 from CLS embedding
+        self.score_head = nn.Sequential(
+            nn.Linear(d_model, d_model),
+            nn.ReLU(),
+            nn.Linear(d_model, 1),
+        )
+
+        # Store context_dim for checkpoint compat
+        self.context_dim = context_dim
 
         # Initialize weights
         self._init_weights()
@@ -135,6 +145,17 @@ class TapeTransformer(nn.Module):
         logits = self.output_head(out)  # [B, seq_len, vocab_size]
         return logits
 
+    def predict_score(
+        self,
+        context: torch.Tensor,      # [batch, CONTEXT_DIM]
+    ) -> torch.Tensor:
+        """Predict sum4 score from layout+puzzle context.
+
+        Returns [batch] tensor of predicted sum4 values.
+        """
+        cls = self.layout_encoder(context)  # [B, d_model]
+        return self.score_head(cls).squeeze(-1)  # [B]
+
     def generate_step(
         self,
         context: torch.Tensor,      # [batch, CONTEXT_DIM]
@@ -155,6 +176,7 @@ class TapeTransformer(nn.Module):
             'd_model': self.d_model,
             'vocab_size': self.vocab_size,
             'max_seq_len': self.max_seq_len,
+            'context_dim': self.context_dim,
         }, path)
 
     @classmethod
@@ -165,7 +187,19 @@ class TapeTransformer(nn.Module):
             d_model=checkpoint.get('d_model', 128),
             vocab_size=checkpoint.get('vocab_size', VOCAB_SIZE),
             max_seq_len=checkpoint.get('max_seq_len', MAX_SEQ_LEN),
+            context_dim=checkpoint.get('context_dim', LAYOUT_DIM),
         )
-        model.load_state_dict(checkpoint['model_state_dict'])
+        # Handle loading old checkpoints (120-dim) into new model (164-dim)
+        state = checkpoint['model_state_dict']
+        saved_ctx = checkpoint.get('context_dim', LAYOUT_DIM)
+        if saved_ctx != model.context_dim:
+            # Resize layout_encoder.0.weight: [d_model, old_dim] → [d_model, new_dim]
+            old_w = state['layout_encoder.0.weight']
+            old_b = state['layout_encoder.0.bias']
+            new_w = torch.zeros(model.d_model, model.context_dim)
+            new_w[:, :old_w.shape[1]] = old_w
+            state['layout_encoder.0.weight'] = new_w
+            state['layout_encoder.0.bias'] = old_b
+        model.load_state_dict(state, strict=False)
         model.eval()
         return model
