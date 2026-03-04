@@ -534,6 +534,83 @@ def _count_required_directions(flows: List[Flow],
     return len(used_sids)
 
 
+def partition_flows_to_arms(graph: StationGraph) -> List[List[int]]:
+    """Partition station indices into arm assignments using flow connectivity.
+
+    Each flow's stations (source + via + dest) form a connected component.
+    Flows sharing stations merge into the same arm. Returns a list of
+    station-index sets (one per arm).
+
+    Falls back to angular gap splitting if all flows share stations but
+    the total station count exceeds 6.
+    """
+    if not graph.flows:
+        return [list(range(len(graph.stations)))]
+
+    # Map StationID -> integer index for partitioning
+    sid_list = list(graph.stations.keys())
+    sid_to_idx: Dict[StationID, int] = {sid: i for i, sid in enumerate(sid_list)}
+    n = len(sid_list)
+
+    # Union-Find
+    parent = list(range(n))
+
+    def find(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a: int, b: int):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    # Union stations connected by the same flow
+    for flow in graph.flows:
+        flow_sids = [flow.source, flow.dest] + list(flow.via)
+        indices = [sid_to_idx[sid] for sid in flow_sids if sid in sid_to_idx]
+        for i in range(1, len(indices)):
+            union(indices[0], indices[i])
+
+    # Group by component
+    components: Dict[int, List[int]] = {}
+    for i in range(n):
+        root = find(i)
+        components.setdefault(root, []).append(i)
+
+    partitions = list(components.values())
+
+    # If only one partition and >6 stations, try angular gap splitting
+    if len(partitions) == 1 and len(partitions[0]) > 6:
+        partitions = _split_by_angular_gap(partitions[0], sid_list, graph)
+
+    return partitions
+
+
+def _split_by_angular_gap(indices: List[int],
+                           sid_list: List['StationID'],
+                           graph: StationGraph) -> List[List[int]]:
+    """Split a single large partition into two by finding the largest angular gap.
+
+    Assigns each station a direction (0-5) and splits at the largest gap.
+    """
+    # Assign directions based on station kind ordering
+    # Use flow priority to approximate angular ordering
+    n = len(indices)
+    if n <= 6:
+        return [indices]
+
+    # Sort by station kind priority: input=0, glyph=1, bonder=2, output=3
+    kind_order = {'input': 0, 'glyph': 1, 'bonder': 2, 'unbonder': 2, 'output': 3}
+    sorted_indices = sorted(indices,
+                            key=lambda i: kind_order.get(sid_list[i].kind, 5))
+
+    # Split roughly in half
+    mid = n // 2
+    return [sorted_indices[:mid], sorted_indices[mid:]]
+
+
 # ---------------------------------------------------------------------------
 # Main construction
 # ---------------------------------------------------------------------------

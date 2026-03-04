@@ -9,7 +9,8 @@ import random
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Callable
 
-from .solution import Solution, Part, Inst, solution_to_bytes, Instruction, CachedSolutionBase
+from .solution import (Solution, Part, Inst, solution_to_bytes, Instruction,
+                       CachedSolutionBase, CachedMultiArmSolutionBase)
 from .simulator import Simulator, VerifyResult, PuzzleContext
 
 
@@ -49,6 +50,16 @@ class Individual:
     """A single tape in the population."""
     tape: List[int]
     fitness: float = float('inf')  # lower is better (sum4 or target metric)
+    metrics: Optional[Dict[str, int]] = None
+    valid: bool = False
+
+
+@dataclass
+class MultiArmIndividual:
+    """A multi-arm tape set in the population."""
+    tapes: List[List[int]]           # one tape per arm
+    start_cycles: List[int]          # per-arm start cycle offsets
+    fitness: float = float('inf')
     metrics: Optional[Dict[str, int]] = None
     valid: bool = False
 
@@ -943,4 +954,241 @@ def generate_geometric_tapes(
                   Inst.PIVOT_CCW, Inst.PIVOT_CCW, Inst.PIVOT_CCW,
                   Inst.DROP, Inst.RESET])
 
+    # -----------------------------------------------------------------
+    # Pass-through templates (glyph fires on held atom, no DROP)
+    # -----------------------------------------------------------------
+    # Sweep-and-return: rotate out through glyph, partial return, RESET
+    # This is the P013 WR pattern shape: GRAB, CCW, CCW, CW, RESET
+    for n_out in range(1, 5):
+        for n_back in range(1, 5):
+            if n_out == n_back:
+                continue  # Net zero rotation — no glyph visit
+            tapes.append(
+                [Inst.GRAB]
+                + [Inst.ROTATE_CW] * n_out
+                + [Inst.ROTATE_CCW] * n_back
+                + [Inst.RESET])
+            tapes.append(
+                [Inst.GRAB]
+                + [Inst.ROTATE_CCW] * n_out
+                + [Inst.ROTATE_CW] * n_back
+                + [Inst.RESET])
+
     return tapes
+
+
+# =====================================================================
+# Multi-arm GA
+# =====================================================================
+
+class MultiTapeGA:
+    """GA for optimizing multi-arm tape sets jointly.
+
+    Phase 1: Independent per-arm optimization using standard TapeGA.
+    Phase 2: Joint timing — mutate start_cycles and synchronization.
+    """
+
+    def __init__(self, simulator: Simulator, config: GAConfig = None,
+                 instruction_weights: Optional[Dict[int, float]] = None,
+                 seed: int = 42):
+        self.sim = simulator
+        self.config = config or GAConfig()
+        self.rng = random.Random(seed)
+        self._inst_weights = instruction_weights
+        self.total_evaluations = 0
+        self.best_ever: Optional[MultiArmIndividual] = None
+
+    def optimize(
+        self,
+        cached_base: 'CachedMultiArmSolutionBase',
+        seed_tape_sets: List[List[List[int]]],
+        puzzle_bytes: bytes,
+        target: str = 'sum4',
+        current_best: Optional[float] = None,
+        n_arms: int = 2,
+    ) -> Optional[MultiArmIndividual]:
+        """Optimize multi-arm tapes.
+
+        Args:
+            cached_base: Pre-serialized multi-arm solution base.
+            seed_tape_sets: seed_tape_sets[arm_idx] = list of candidate tapes.
+            puzzle_bytes: Raw puzzle file bytes.
+            target: Optimization target metric.
+            current_best: Current best score for pruning.
+            n_arms: Number of arms.
+
+        Returns:
+            Best valid MultiArmIndividual, or None.
+        """
+        puzzle_ctx = self.sim.create_puzzle_context(puzzle_bytes)
+
+        # Phase 1: Independent per-arm optimization
+        # Use TapeGA on each arm independently first
+        best_per_arm: List[List[int]] = []
+        for arm_idx in range(n_arms):
+            arm_seeds = seed_tape_sets[arm_idx] if arm_idx < len(seed_tape_sets) else []
+            if not arm_seeds:
+                best_per_arm.append([Inst.GRAB, Inst.ROTATE_CW, Inst.DROP, Inst.RESET])
+                continue
+            # Pick the shortest valid-looking seed
+            candidates = [t for t in arm_seeds if not _is_obviously_invalid(t)]
+            if candidates:
+                candidates.sort(key=len)
+                best_per_arm.append(list(candidates[0]))
+            else:
+                best_per_arm.append(list(arm_seeds[0]))
+
+        # Phase 2: Joint timing optimization
+        # Build initial population of MultiArmIndividuals
+        pop_size = self.config.pop_size
+        population: List[MultiArmIndividual] = []
+
+        # Seed population from tape combinations
+        for _ in range(pop_size):
+            tapes = []
+            for arm_idx in range(n_arms):
+                arm_seeds = seed_tape_sets[arm_idx] if arm_idx < len(seed_tape_sets) else []
+                valid_seeds = [t for t in arm_seeds if not _is_obviously_invalid(t)]
+                if valid_seeds:
+                    tapes.append(list(self.rng.choice(valid_seeds)))
+                else:
+                    tapes.append(list(best_per_arm[arm_idx]))
+            start_cycles = [0] + [self.rng.randint(0, 5) for _ in range(n_arms - 1)]
+            population.append(MultiArmIndividual(
+                tapes=tapes, start_cycles=start_cycles))
+
+        # Evaluate initial population
+        for ind in population:
+            self._evaluate_multi(ind, cached_base, puzzle_ctx, target)
+
+        # Generational loop
+        for gen in range(self.config.max_generations):
+            gen_best = min(population, key=lambda i: i.fitness)
+
+            if current_best is not None and gen_best.valid:
+                if gen >= 10 and gen_best.fitness > current_best * 1.2:
+                    break
+
+            # Create children
+            children: List[MultiArmIndividual] = []
+            while len(children) < pop_size:
+                parent = min(self.rng.sample(population,
+                             min(self.config.tournament_k, len(population))),
+                             key=lambda i: i.fitness)
+                child_tapes = [list(t) for t in parent.tapes]
+                child_sc = list(parent.start_cycles)
+
+                # Mutate: pick an arm and mutate its tape, or mutate start_cycle
+                mutation_type = self.rng.random()
+                if mutation_type < 0.6:
+                    # Mutate a random arm's tape
+                    arm_idx = self.rng.randint(0, n_arms - 1)
+                    child_tapes[arm_idx] = self._mutate_tape(child_tapes[arm_idx])
+                elif mutation_type < 0.85:
+                    # Mutate start_cycle
+                    arm_idx = self.rng.randint(0, n_arms - 1)
+                    delta = self.rng.randint(-3, 3)
+                    child_sc[arm_idx] = max(0, child_sc[arm_idx] + delta)
+                else:
+                    # Replace an arm's tape with a random seed
+                    arm_idx = self.rng.randint(0, n_arms - 1)
+                    arm_seeds = seed_tape_sets[arm_idx] if arm_idx < len(seed_tape_sets) else []
+                    valid = [t for t in arm_seeds if not _is_obviously_invalid(t)]
+                    if valid:
+                        child_tapes[arm_idx] = list(self.rng.choice(valid))
+
+                children.append(MultiArmIndividual(
+                    tapes=child_tapes, start_cycles=child_sc))
+
+            for child in children:
+                self._evaluate_multi(child, cached_base, puzzle_ctx, target)
+
+            population.sort(key=lambda i: i.fitness)
+            elites = population[:self.config.elite_count]
+            combined = elites + children
+            combined.sort(key=lambda i: i.fitness)
+            population = combined[:pop_size]
+
+            for ind in population:
+                if ind.valid:
+                    if self.best_ever is None or ind.fitness < self.best_ever.fitness:
+                        self.best_ever = MultiArmIndividual(
+                            tapes=[list(t) for t in ind.tapes],
+                            start_cycles=list(ind.start_cycles),
+                            fitness=ind.fitness,
+                            metrics=ind.metrics,
+                            valid=True,
+                        )
+
+        puzzle_ctx.destroy()
+        return self.best_ever if self.best_ever and self.best_ever.valid else None
+
+    def _evaluate_multi(self, ind: MultiArmIndividual,
+                        cached_base: 'CachedMultiArmSolutionBase',
+                        puzzle_ctx: 'PuzzleContext',
+                        target: str):
+        """Evaluate a multi-arm individual."""
+        self.total_evaluations += 1
+
+        # Fast-reject: each arm tape must be minimally valid
+        for tape in ind.tapes:
+            if _is_obviously_invalid(tape):
+                ind.fitness = float(self.config.invalid_penalty_base)
+                ind.valid = False
+                return
+
+        sol_bytes = cached_base.splice(ind.tapes, ind.start_cycles)
+        result = puzzle_ctx.verify(sol_bytes, cycle_limit=self.config.cycle_limit)
+
+        if result.valid:
+            metrics = {
+                'cycles': result.cycles,
+                'cost': result.cost,
+                'area': result.area,
+                'instructions': result.instructions,
+            }
+            metrics['sum4'] = metrics['cost'] + metrics['cycles'] + metrics['area'] + metrics['instructions']
+            ind.fitness = float(metrics[target]) if target in metrics else float(metrics['sum4'])
+            ind.metrics = metrics
+            ind.valid = True
+        else:
+            penalty = self.config.invalid_penalty_base
+            ind.fitness = float(penalty)
+            ind.valid = False
+
+    def _mutate_tape(self, tape: List[int]) -> List[int]:
+        """Apply a random mutation to a single tape."""
+        tape = list(tape)
+        if not tape:
+            return tape
+        op = self.rng.random()
+        if op < 0.3:
+            # Change random instruction
+            idx = self.rng.randint(0, len(tape) - 1)
+            insts = [Inst.GRAB, Inst.DROP, Inst.ROTATE_CW, Inst.ROTATE_CCW,
+                     Inst.RESET, Inst.REPEAT]
+            tape[idx] = self.rng.choice(insts)
+        elif op < 0.5:
+            # Insert
+            if len(tape) < self.config.max_tape_len:
+                pos = self.rng.randint(0, len(tape))
+                insts = [Inst.GRAB, Inst.DROP, Inst.ROTATE_CW, Inst.ROTATE_CCW,
+                         Inst.RESET, Inst.REPEAT, Inst.NOOP]
+                tape.insert(pos, self.rng.choice(insts))
+        elif op < 0.7:
+            # Delete
+            if len(tape) > self.config.min_tape_len:
+                idx = self.rng.randint(0, len(tape) - 1)
+                tape.pop(idx)
+        elif op < 0.85:
+            # Swap adjacent
+            if len(tape) >= 2:
+                idx = self.rng.randint(0, len(tape) - 2)
+                tape[idx], tape[idx + 1] = tape[idx + 1], tape[idx]
+        else:
+            # Change terminal
+            if tape and tape[-1] == Inst.RESET:
+                tape[-1] = Inst.REPEAT
+            elif tape and tape[-1] == Inst.REPEAT:
+                tape[-1] = Inst.RESET
+        return tape

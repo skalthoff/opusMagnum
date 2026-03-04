@@ -691,6 +691,51 @@ def compile_tapes(layout: Layout, analysis: PuzzleAnalysis,
                 tapes.append([Inst.GRAB] + [rot_inst] * n_rot
                              + [Inst.DROP, terminal])
 
+    # --- Strategy 9: Pass-through (no DROP) ---
+    # Glyph fires on held atom as arm sweeps through. RESET deposits atom
+    # back at arm tip (useful for self-return layouts where input=output).
+    # Also useful for any layout where the arm returns to a bonder/output.
+    for si in input_stations:
+        inp_dir = layout.directions[si]
+        # Sweep through each glyph direction and back
+        for gi, (st, sd) in enumerate(layout.stations):
+            if st != 'glyph':
+                continue
+            glyph_dir = layout.directions[gi]
+
+            # CW to glyph, then continue or return
+            for n_extra in range(0, 4):
+                # Sweep CW past glyph, then back CCW
+                cw_to_glyph = _rotation_instructions_cw(inp_dir, glyph_dir)
+                if cw_to_glyph:
+                    tape = ([Inst.GRAB] + cw_to_glyph
+                            + [Inst.ROTATE_CCW] * n_extra + [Inst.RESET])
+                    tapes.append(tape)
+                    tape = ([Inst.GRAB] + cw_to_glyph
+                            + [Inst.ROTATE_CW] * n_extra + [Inst.RESET])
+                    tapes.append(tape)
+
+                # Sweep CCW past glyph, then back CW
+                ccw_to_glyph = _rotation_instructions_ccw(inp_dir, glyph_dir)
+                if ccw_to_glyph:
+                    tape = ([Inst.GRAB] + ccw_to_glyph
+                            + [Inst.ROTATE_CW] * n_extra + [Inst.RESET])
+                    tapes.append(tape)
+                    tape = ([Inst.GRAB] + ccw_to_glyph
+                            + [Inst.ROTATE_CCW] * n_extra + [Inst.RESET])
+                    tapes.append(tape)
+
+        # Multi-glyph pass-through: sweep through multiple glyphs in one motion
+        glyph_dirs = [layout.directions[gi]
+                      for gi, (st, _) in enumerate(layout.stations)
+                      if st == 'glyph']
+        if len(glyph_dirs) >= 1:
+            # Sweep from input through all glyphs and reset (no DROP)
+            for first_dir in [Inst.ROTATE_CW, Inst.ROTATE_CCW]:
+                for total_rot in range(1, 6):
+                    tape = [Inst.GRAB] + [first_dir] * total_rot + [Inst.RESET]
+                    tapes.append(tape)
+
     # --- Strategy 8: Per-atom spread delivery for multi-atom outputs ---
     atom_dirs = getattr(layout, '_atom_dirs', None)
     if atom_dirs and graph.tasks:
@@ -2186,6 +2231,34 @@ def compile_bonding_chain_tapes(layout: Layout, analysis: PuzzleAnalysis,
             tapes, input_dirs, n_atoms_needed, bonder_dir, out_dir,
             arm_start, glyph_stations, layout)
 
+    # Case 3: Pass-through bonding chains (no DROP at glyphs)
+    # For self-return layouts where glyph fires on held atom during sweep,
+    # then RESET deposits at bonder/output. Each GRAB-sweep-RESET delivers
+    # one atom; the tape repeats N times for N atoms.
+    if len(input_dirs) >= 1:
+        for si, inp_dir in input_dirs:
+            # Simple pass-through: GRAB, rotate N, RESET (repeat auto for chain)
+            for n_rot in range(1, 6):
+                for rot_inst in [Inst.ROTATE_CW, Inst.ROTATE_CCW]:
+                    tape = [Inst.GRAB] + [rot_inst] * n_rot + [Inst.RESET]
+                    tapes.append(tape)
+
+            # Sweep-and-partial-return pass-through
+            for n_out in range(1, 5):
+                for n_back in range(1, 5):
+                    if n_out == n_back:
+                        continue
+                    tapes.append(
+                        [Inst.GRAB]
+                        + [Inst.ROTATE_CW] * n_out
+                        + [Inst.ROTATE_CCW] * n_back
+                        + [Inst.RESET])
+                    tapes.append(
+                        [Inst.GRAB]
+                        + [Inst.ROTATE_CCW] * n_out
+                        + [Inst.ROTATE_CW] * n_back
+                        + [Inst.RESET])
+
     # Deduplicate
     seen: Set[Tuple[int, ...]] = set()
     unique: List[List[int]] = []
@@ -2351,3 +2424,323 @@ def _compile_chain_single_input(
                     tape.extend(_rotation_instructions(cur_dir, arm_start))
                 tape.append(terminal)
                 tapes.append(tape)
+
+
+# ---------------------------------------------------------------------------
+# Multi-arm tape compilation
+# ---------------------------------------------------------------------------
+
+def _arm_to_sub_layout(arm, parent_layout) -> Layout:
+    """Build a synthetic single-arm Layout from one arm's station subset.
+
+    Maps the arm's station_indices into a self-contained Layout with
+    remapped directions, positions, and rotations.
+    """
+    sub_stations = []
+    sub_directions = []
+    sub_positions = []
+    sub_glyph_rots = {}
+    sub_output_rots = {}
+
+    for new_idx, old_idx in enumerate(arm.station_indices):
+        if old_idx < len(parent_layout.stations):
+            sub_stations.append(parent_layout.stations[old_idx])
+            sub_directions.append(parent_layout.directions[old_idx])
+            sub_positions.append(parent_layout.positions[old_idx])
+            if old_idx in parent_layout.glyph_rotations:
+                sub_glyph_rots[new_idx] = parent_layout.glyph_rotations[old_idx]
+            if old_idx in parent_layout.output_rotations:
+                sub_output_rots[new_idx] = parent_layout.output_rotations[old_idx]
+
+    return Layout(
+        arm_pos=arm.arm_pos,
+        arm_rot=arm.arm_rot,
+        arm_len=arm.arm_len,
+        arm_type=arm.arm_type,
+        stations=sub_stations,
+        directions=sub_directions,
+        positions=sub_positions,
+        glyph_rotations=sub_glyph_rots,
+        output_rotations=sub_output_rots,
+        cost=0,
+    )
+
+
+def compile_tapes_for_multi_arm(layout, analysis, puzzle) -> list:
+    """Compile per-arm seed tapes for a MultiArmLayout.
+
+    Returns seed_tapes_per_arm[arm_idx] = List[candidate_tapes].
+    Each arm gets tapes compiled from its own station subset using
+    existing single-arm compilation strategies.
+    """
+    result = []
+    for arm in layout.arms:
+        sub_layout = _arm_to_sub_layout(arm, layout)
+        if not sub_layout.stations:
+            result.append([])
+            continue
+        arm_tapes = compile_tapes(sub_layout, analysis, puzzle)
+        result.append(arm_tapes)
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Beam search tape compiler
+# ---------------------------------------------------------------------------
+
+def beam_search_tape(layout: Layout, analysis, puzzle,
+                     beam_width: int = 12, max_len: int = 30) -> List[List[int]]:
+    """Build tapes instruction-by-instruction using beam search.
+
+    Keeps top-K partial candidates, scored by angular distance from the
+    current arm direction to the next required station. Produces tapes
+    that respect layout geometry better than template-based approaches.
+
+    Returns a list of complete candidate tapes.
+    """
+    input_stations = _find_input_stations(layout)
+    output_idx = _find_output_station(layout)
+    if output_idx is None or not input_stations:
+        return []
+
+    arm_start = layout.arm_rot
+    out_dir = layout.directions[output_idx]
+
+    # Candidate instructions for beam expansion
+    expand_insts = [
+        Inst.GRAB, Inst.DROP, Inst.ROTATE_CW, Inst.ROTATE_CCW,
+        Inst.RESET, Inst.REPEAT,
+    ]
+
+    # Scoring: lower is better
+    def _score_partial(tape: List[int], cur_dir: int, has_grabbed: bool,
+                       has_dropped: bool) -> float:
+        """Heuristic score for a partial tape."""
+        score = len(tape) * 0.1  # prefer shorter tapes
+
+        if has_grabbed and not has_dropped:
+            # Holding an atom — reward being close to output
+            dist_to_out = min((cur_dir - out_dir) % 6, (out_dir - cur_dir) % 6)
+            score += dist_to_out * 0.5
+        elif not has_grabbed:
+            # Need to grab — reward being close to an input
+            min_dist = 6
+            for si in input_stations:
+                inp_dir = layout.directions[si]
+                d = min((cur_dir - inp_dir) % 6, (inp_dir - cur_dir) % 6)
+                min_dist = min(min_dist, d)
+            score += min_dist * 0.5
+
+        return score
+
+    # Initial beam: empty tape, arm at start direction
+    # State: (tape, cur_dir, has_grabbed, has_dropped)
+    beam = [([], arm_start, False, False)]
+    complete_tapes: List[List[int]] = []
+
+    for step in range(max_len):
+        if not beam:
+            break
+
+        candidates = []
+        for tape, cur_dir, has_grabbed, has_dropped in beam:
+            for inst in expand_insts:
+                new_tape = tape + [inst]
+                new_dir = cur_dir
+                new_grabbed = has_grabbed
+                new_dropped = has_dropped
+
+                if inst == Inst.ROTATE_CW:
+                    new_dir = (cur_dir - 1) % 6
+                elif inst == Inst.ROTATE_CCW:
+                    new_dir = (cur_dir + 1) % 6
+                elif inst == Inst.GRAB:
+                    new_grabbed = True
+                    new_dropped = False
+                elif inst == Inst.DROP:
+                    new_dropped = True
+                    new_grabbed = False
+                elif inst in (Inst.RESET, Inst.REPEAT):
+                    # Terminal — complete tape
+                    if has_grabbed or has_dropped:
+                        complete_tapes.append(new_tape)
+                    continue
+
+                score = _score_partial(new_tape, new_dir, new_grabbed, new_dropped)
+                candidates.append((score, new_tape, new_dir, new_grabbed, new_dropped))
+
+        # Keep top beam_width candidates
+        candidates.sort(key=lambda x: x[0])
+        beam = [(t, d, g, dr) for _, t, d, g, dr in candidates[:beam_width]]
+
+        if len(complete_tapes) >= beam_width * 2:
+            break
+
+    # Also add terminal to remaining beam entries
+    for tape, cur_dir, has_grabbed, has_dropped in beam:
+        if has_grabbed or has_dropped:
+            complete_tapes.append(tape + [Inst.RESET])
+            complete_tapes.append(tape + [Inst.REPEAT])
+
+    # Deduplicate
+    seen: Set[Tuple[int, ...]] = set()
+    unique: List[List[int]] = []
+    for tape in complete_tapes:
+        key = tuple(tape)
+        if key not in seen and len(tape) >= 2:
+            seen.add(key)
+            unique.append(tape)
+
+    return unique
+
+
+# ---------------------------------------------------------------------------
+# Multi-grab bonding loop tape compiler
+# ---------------------------------------------------------------------------
+
+def compile_bonding_loop_tapes(layout, n_atoms: int) -> List[List[List[int]]]:
+    """Generate multi-grab bonding tape templates for N-atom assembly.
+
+    Returns [delivery_arm_tapes, reposition_arm_tapes] where each is a list
+    of candidate tapes for that arm role.
+
+    Delivery arm pattern: grab input, deliver to bonder, return, repeat N times.
+    Reposition arm pattern: delayed grab of molecule, pivot to reposition, reset.
+    """
+    if not hasattr(layout, 'arms') or len(layout.arms) < 2:
+        return [[], []]
+
+    # Identify delivery arm (has input stations) and reposition arm (has output)
+    delivery_arm_idx = -1
+    reposition_arm_idx = -1
+    for ai, arm in enumerate(layout.arms):
+        has_input = any(
+            layout.stations[si][0] == 'input'
+            for si in arm.station_indices
+            if si < len(layout.stations)
+        )
+        has_output = any(
+            layout.stations[si][0] == 'output'
+            for si in arm.station_indices
+            if si < len(layout.stations)
+        )
+        if has_input and delivery_arm_idx == -1:
+            delivery_arm_idx = ai
+        if has_output and reposition_arm_idx == -1:
+            reposition_arm_idx = ai
+
+    if delivery_arm_idx == -1:
+        delivery_arm_idx = 0
+    if reposition_arm_idx == -1:
+        reposition_arm_idx = 1 if len(layout.arms) > 1 else 0
+
+    delivery_tapes: List[List[int]] = []
+    reposition_tapes: List[List[int]] = []
+
+    # --- Delivery arm tapes ---
+    d_arm = layout.arms[delivery_arm_idx]
+    input_dirs = []
+    bonder_dirs = []
+    for si in d_arm.station_indices:
+        if si < len(layout.stations):
+            stype = layout.stations[si][0]
+            d = layout.directions[si]
+            if stype == 'input':
+                input_dirs.append(d)
+            elif stype == 'bonder':
+                bonder_dirs.append(d)
+
+    if not input_dirs:
+        input_dirs = [d_arm.arm_rot]
+    if not bonder_dirs:
+        bonder_dirs = input_dirs
+
+    for inp_dir in input_dirs:
+        for bond_dir in bonder_dirs:
+            rot_to_bond = _rotation_instructions(inp_dir, bond_dir)
+            rot_to_bond_cw = _rotation_instructions_cw(inp_dir, bond_dir)
+            rot_to_bond_ccw = _rotation_instructions_ccw(inp_dir, bond_dir)
+            rot_back = _rotation_instructions(bond_dir, inp_dir)
+
+            for n_del in range(2, min(n_atoms + 1, 11)):
+                for rot_fn_result in [rot_to_bond, rot_to_bond_cw, rot_to_bond_ccw]:
+                    tape: List[int] = []
+                    for di in range(n_del):
+                        tape.append(Inst.GRAB)
+                        tape.extend(rot_fn_result)
+                        tape.append(Inst.DROP)
+                        if di < n_del - 1:
+                            tape.extend(rot_back)
+                    tape.append(Inst.RESET)
+                    delivery_tapes.append(tape)
+
+                    tape_r = list(tape[:-1])
+                    tape_r.extend(rot_back)
+                    tape_r.append(Inst.REPEAT)
+                    delivery_tapes.append(tape_r)
+
+                    # Variant: one delivery uses PIVOT instead of ROTATE
+                    if n_del >= 3 and len(rot_fn_result) > 0:
+                        tape_p: List[int] = []
+                        for di in range(n_del):
+                            tape_p.append(Inst.GRAB)
+                            if di == 1:
+                                tape_p.append(Inst.PIVOT_CCW)
+                            else:
+                                tape_p.extend(rot_fn_result)
+                            tape_p.append(Inst.DROP)
+                            if di < n_del - 1:
+                                tape_p.extend(rot_back)
+                        tape_p.append(Inst.RESET)
+                        delivery_tapes.append(tape_p)
+
+    # Multi-input alternating patterns
+    if len(input_dirs) >= 2 and bonder_dirs:
+        bond_dir = bonder_dirs[0]
+        for n_del in range(2, min(n_atoms + 1, 8)):
+            tape: List[int] = []
+            for di in range(n_del):
+                src = input_dirs[di % len(input_dirs)]
+                rot_to = _rotation_instructions(src, bond_dir)
+                tape.append(Inst.GRAB)
+                tape.extend(rot_to)
+                tape.append(Inst.DROP)
+                if di < n_del - 1:
+                    next_src = input_dirs[(di + 1) % len(input_dirs)]
+                    tape.extend(_rotation_instructions(bond_dir, next_src))
+            tape.append(Inst.RESET)
+            delivery_tapes.append(tape)
+
+    # --- Reposition arm tapes ---
+    for delay in range(0, 12, 2):
+        for pivot_inst in [Inst.PIVOT_CW, Inst.PIVOT_CCW]:
+            for n_pivots in range(1, 7):
+                tape = [Inst.NOOP] * delay + [Inst.GRAB]
+                tape.extend([pivot_inst] * n_pivots)
+                tape.append(Inst.RESET)
+                reposition_tapes.append(tape)
+
+            for n_bursts in range(2, 4):
+                for k in range(1, 4):
+                    for gap in range(0, 4):
+                        tape = [Inst.NOOP] * delay + [Inst.GRAB]
+                        for bi in range(n_bursts):
+                            tape.extend([pivot_inst] * k)
+                            if bi < n_bursts - 1:
+                                tape.extend([Inst.NOOP] * gap)
+                        tape.append(Inst.RESET)
+                        if len(tape) <= 40:
+                            reposition_tapes.append(tape)
+
+    # Deduplicate each
+    def _dedup(tapes_list):
+        seen_set: Set[Tuple[int, ...]] = set()
+        out = []
+        for t in tapes_list:
+            key = tuple(t)
+            if key not in seen_set and len(t) >= 2:
+                seen_set.add(key)
+                out.append(t)
+        return out
+
+    return [_dedup(delivery_tapes), _dedup(reposition_tapes)]

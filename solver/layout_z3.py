@@ -15,7 +15,7 @@ except ImportError:
 
 from .hex import HexCoord, DIRECTIONS, ORIGIN, hex_spiral
 from .puzzle import Puzzle, AtomType, PartFlag
-from .solution import Solution, Part, Inst, PART_COSTS, Instruction
+from .solution import Solution, Part, Inst, PART_COSTS, Instruction, _serialize_arm_part
 from .recipe import PuzzleAnalysis, REACTION_GLYPHS
 from .glyph_model import (GlyphSpec, GLYPH_SPECS, local_to_world,
                            footprint_world, get_glyph_spec)
@@ -106,6 +106,97 @@ class Layout:
                    size=self.arm_len, rotation=self.arm_rot)
         arm.set_tape(tape)
         sol.parts.append(arm)
+        return sol
+
+    def to_multi(self) -> 'MultiArmLayout':
+        """Wrap this single-arm layout as a MultiArmLayout."""
+        arm = ArmSpec(
+            arm_pos=self.arm_pos,
+            arm_rot=self.arm_rot,
+            arm_len=self.arm_len,
+            arm_type=self.arm_type,
+            station_indices=list(range(len(self.stations))),
+        )
+        return MultiArmLayout(
+            arms=[arm],
+            stations=self.stations,
+            directions=self.directions,
+            positions=self.positions,
+            glyph_rotations=self.glyph_rotations,
+            output_rotations=self.output_rotations,
+            cost=self.cost,
+            handoff_positions=[],
+        )
+
+
+@dataclass
+class ArmSpec:
+    """Specification for one arm in a multi-arm layout."""
+    arm_pos: HexCoord
+    arm_rot: int            # starting direction (0-5)
+    arm_len: int            # 1, 2, or 3
+    arm_type: str           # 'arm1', 'arm2', 'arm3', or 'arm6'
+    station_indices: List[int]  # indices into parent layout's stations list
+
+
+@dataclass
+class MultiArmLayout:
+    """A layout with one or more arms, each serving a subset of stations."""
+    arms: List[ArmSpec]
+    stations: List[Tuple[str, object]]
+    directions: List[int]
+    positions: List[HexCoord]
+    glyph_rotations: Dict[int, int]
+    output_rotations: Dict[int, int]
+    cost: int
+    handoff_positions: List[HexCoord]  # hexes reachable by multiple arms
+
+    def to_solution(self, puzzle: 'Puzzle', n_outputs: int) -> Solution:
+        """Build a Solution from this layout (without arm tapes)."""
+        sol = Solution(puzzle_name=puzzle.name, solution_name="MultiArm")
+        for i, (stype, sdata) in enumerate(self.stations):
+            pos = self.positions[i]
+            if stype == 'input':
+                sol.parts.append(Part(name='input', position=pos, io_index=sdata))
+            elif stype == 'glyph':
+                grot = self.glyph_rotations.get(i, 0)
+                sol.parts.append(Part(name=sdata, position=pos, rotation=grot))
+            elif stype == 'bonder':
+                brot = self.glyph_rotations.get(i, 0)
+                sol.parts.append(Part(name=sdata, position=pos, rotation=brot))
+            elif stype == 'output':
+                orot = self.output_rotations.get(i, 0)
+                sol.parts.append(Part(name='out-std', position=pos,
+                                      rotation=orot, io_index=0))
+                for oi in range(1, n_outputs):
+                    sol.parts.append(Part(name='out-std', position=pos,
+                                          rotation=orot, io_index=oi))
+        return sol
+
+    def add_arms_with_tapes(self, base_sol: Solution,
+                            tapes: List[List[int]],
+                            start_cycles: Optional[List[int]] = None) -> Solution:
+        """Copy solution and add N arms with their tapes."""
+        sol = Solution(puzzle_name=base_sol.puzzle_name,
+                       solution_name=base_sol.solution_name)
+        sol.parts = [Part(name=p.name, position=p.position, size=p.size,
+                          rotation=p.rotation, io_index=p.io_index)
+                     for p in base_sol.parts]
+        if start_cycles is None:
+            start_cycles = [0] * len(self.arms)
+        for arm_idx, arm in enumerate(self.arms):
+            tape = tapes[arm_idx] if arm_idx < len(tapes) else []
+            sc = start_cycles[arm_idx] if arm_idx < len(start_cycles) else 0
+            arm_part = Part(name=arm.arm_type, position=arm.arm_pos,
+                            size=arm.arm_len, rotation=arm.arm_rot,
+                            arm_number=arm_idx)
+            # Offset instructions by start_cycle
+            instructions = []
+            for i, code in enumerate(tape):
+                if code and code != Inst.NOOP:
+                    instructions.append(Instruction(i + sc, code))
+            arm_part.instructions = instructions
+            sol.parts.append(arm_part)
         return sol
 
 
@@ -1424,3 +1515,355 @@ def _generate_spread_layouts(
 
     layouts.sort(key=lambda l: (l.cost, l.estimated_area))
     return layouts[:config.max_layouts]
+
+
+# ---------------------------------------------------------------------------
+# Multi-arm layout generation
+# ---------------------------------------------------------------------------
+
+def generate_multi_arm_layouts(
+    puzzle: 'Puzzle',
+    analysis: 'PuzzleAnalysis',
+    plans: list,
+    graphs: list,
+    config: Optional[LayoutConfig] = None,
+) -> List[MultiArmLayout]:
+    """Generate MultiArmLayout instances with 2+ arms.
+
+    Takes station partitions from partition_flows_to_arms(), then places
+    2 arms via Z3 constraints. Each arm serves its partition's stations.
+
+    Args:
+        puzzle: The puzzle to solve.
+        analysis: Recipe analysis.
+        plans: Production plans.
+        graphs: StationGraph variants.
+        config: Layout generation config.
+
+    Returns:
+        List of MultiArmLayout instances.
+    """
+    if z3 is None:
+        return []
+
+    from .station_graph import partition_flows_to_arms, StationGraph
+
+    if config is None:
+        config = LayoutConfig(max_layouts=100, timeout_ms=5000)
+
+    layouts: List[MultiArmLayout] = []
+
+    for graph in graphs:
+        partitions = partition_flows_to_arms(graph)
+        if len(partitions) < 2:
+            continue
+
+        # Merge to exactly 2 partitions
+        if len(partitions) > 2:
+            partitions.sort(key=len)
+            while len(partitions) > 2:
+                smallest = partitions.pop(0)
+                partitions[0] = partitions[0] + smallest
+
+        sid_list = list(graph.stations.keys())
+
+        # Build station list
+        stations = []
+        glyph_rotations = {}
+        output_rotations = {}
+
+        for si, sid in enumerate(sid_list):
+            station = graph.stations[sid]
+            if sid.kind == 'input':
+                stations.append(('input', station.io_index))
+            elif sid.kind == 'glyph':
+                stations.append(('glyph', station.part_name))
+            elif sid.kind == 'bonder':
+                stations.append(('bonder', station.part_name))
+            elif sid.kind == 'output':
+                stations.append(('output', 0))
+            else:
+                stations.append((sid.kind, station.part_name))
+
+        n_stations = len(stations)
+        part_a, part_b = partitions[0], partitions[1]
+
+        dir_dq = [DIRECTIONS[d].q for d in range(6)]
+        dir_dr = [DIRECTIONS[d].r for d in range(6)]
+
+        for arm_len in [1, 2]:
+            solver = z3.Solver()
+            solver.set('timeout', config.timeout_ms)
+
+            arm_pq = [z3.Int(f'arm{a}_pq') for a in range(2)]
+            arm_pr = [z3.Int(f'arm{a}_pr') for a in range(2)]
+            for a in range(2):
+                solver.add(arm_pq[a] >= -config.position_range)
+                solver.add(arm_pq[a] <= config.position_range)
+                solver.add(arm_pr[a] >= -config.position_range)
+                solver.add(arm_pr[a] <= config.position_range)
+
+            sdir = [z3.Int(f'sdir_{i}') for i in range(n_stations)]
+            for i in range(n_stations):
+                solver.add(sdir[i] >= 0, sdir[i] <= 5)
+
+            # Distinct directions within each arm's partition
+            for partition in [part_a, part_b]:
+                valid = [si for si in partition if si < n_stations]
+                for i in range(len(valid)):
+                    for j in range(i + 1, len(valid)):
+                        solver.add(sdir[valid[i]] != sdir[valid[j]])
+
+            # Max 6 stations per arm
+            for partition in [part_a, part_b]:
+                if len([si for si in partition if si < n_stations]) > 6:
+                    continue  # Infeasible
+
+            # Symmetry breaking
+            solver.add(arm_pq[0] <= arm_pq[1])
+
+            for shared_base in [True, False]:
+                if shared_base:
+                    solver.push()
+                    solver.add(arm_pq[0] == arm_pq[1])
+                    solver.add(arm_pr[0] == arm_pr[1])
+
+                count = 0
+                while count < config.max_layouts // 2:
+                    result = solver.check()
+                    if result != z3.sat:
+                        break
+
+                    model = solver.model()
+                    apq = [model.eval(arm_pq[a]).as_long() for a in range(2)]
+                    apr = [model.eval(arm_pr[a]).as_long() for a in range(2)]
+                    sdirs = [model.eval(sdir[i]).as_long() for i in range(n_stations)]
+
+                    arm_specs = []
+                    final_positions = [ORIGIN] * n_stations
+                    final_directions = list(sdirs)
+
+                    for a_idx, partition in enumerate([part_a, part_b]):
+                        arm_pos = HexCoord(apq[a_idx], apr[a_idx])
+                        arm = ArmSpec(
+                            arm_pos=arm_pos,
+                            arm_rot=sdirs[partition[0]] if partition else 0,
+                            arm_len=arm_len,
+                            arm_type=f'arm{arm_len}',
+                            station_indices=[si for si in partition if si < n_stations],
+                        )
+                        arm_specs.append(arm)
+                        for si in partition:
+                            if si < n_stations:
+                                d = sdirs[si]
+                                final_positions[si] = HexCoord(
+                                    apq[a_idx] + dir_dq[d] * arm_len,
+                                    apr[a_idx] + dir_dr[d] * arm_len,
+                                )
+
+                    cost = sum(PART_COSTS.get(f'arm{arm_len}', 20) for _ in range(2))
+                    for si, (stype, sdata) in enumerate(stations):
+                        if stype in ('glyph', 'bonder'):
+                            cost += PART_COSTS.get(sdata, 0)
+
+                    # Handoff positions
+                    arm0_tips = set()
+                    arm1_tips = set()
+                    for d in range(6):
+                        arm0_tips.add(HexCoord(
+                            apq[0] + dir_dq[d] * arm_len,
+                            apr[0] + dir_dr[d] * arm_len))
+                        arm1_tips.add(HexCoord(
+                            apq[1] + dir_dq[d] * arm_len,
+                            apr[1] + dir_dr[d] * arm_len))
+                    handoff = list(arm0_tips & arm1_tips)
+
+                    ml = MultiArmLayout(
+                        arms=arm_specs,
+                        stations=stations,
+                        directions=final_directions,
+                        positions=final_positions,
+                        glyph_rotations=glyph_rotations,
+                        output_rotations=output_rotations,
+                        cost=cost,
+                        handoff_positions=handoff,
+                    )
+                    layouts.append(ml)
+                    count += 1
+
+                    # Block this solution
+                    block = z3.Or(
+                        *[arm_pq[a] != apq[a] for a in range(2)],
+                        *[arm_pr[a] != apr[a] for a in range(2)],
+                        *[sdir[i] != sdirs[i] for i in range(n_stations)],
+                    )
+                    solver.add(block)
+
+                if shared_base:
+                    solver.pop()
+
+                if len(layouts) >= config.max_layouts:
+                    break
+
+    return layouts[:config.max_layouts if config else 100]
+
+
+# ---------------------------------------------------------------------------
+# Archive solution → MultiArmLayout extraction
+# ---------------------------------------------------------------------------
+
+def extract_layout_from_solution(sol: Solution) -> Optional[Tuple['MultiArmLayout', List[List[int]]]]:
+    """Parse an archive Solution into a MultiArmLayout + per-arm seed tapes.
+
+    Separates parts into arms and non-arms, builds stations list,
+    computes which stations each arm can reach, and extracts tapes.
+
+    Returns (MultiArmLayout, seed_tapes_per_arm) or None if extraction fails.
+    """
+    arms_parts = [p for p in sol.parts if p.is_arm]
+    non_arms = [p for p in sol.parts if not p.is_arm]
+
+    if not arms_parts or not non_arms:
+        return None
+
+    # Build stations list from non-arm parts
+    stations: List[Tuple[str, object]] = []
+    positions: List[HexCoord] = []
+    glyph_rotations: Dict[int, int] = {}
+    output_rotations: Dict[int, int] = {}
+
+    for part in non_arms:
+        si = len(stations)
+        if part.name == 'input':
+            stations.append(('input', part.io_index))
+        elif part.name in ('out-std', 'out-rep'):
+            stations.append(('output', part.io_index))
+            output_rotations[si] = part.rotation % 6
+        elif part.name.startswith('bonder') or part.name == 'unbonder':
+            stations.append(('bonder', part.name))
+            glyph_rotations[si] = part.rotation % 6
+        elif part.name.startswith('glyph-') or part.name == 'track':
+            stations.append(('glyph', part.name))
+            glyph_rotations[si] = part.rotation % 6
+        else:
+            # Unknown part type (e.g. pipe) — include anyway
+            stations.append(('glyph', part.name))
+            glyph_rotations[si] = part.rotation % 6
+        positions.append(part.position)
+
+    n_stations = len(stations)
+    if n_stations == 0:
+        return None
+
+    # For each arm, compute which stations it can reach and at what direction
+    directions = [0] * n_stations  # filled per-arm below
+    arm_specs: List[ArmSpec] = []
+    seed_tapes: List[List[int]] = []
+    claimed: set = set()  # station indices already assigned to an arm
+
+    # Sort arms by arm_number for deterministic ordering
+    arms_parts.sort(key=lambda p: p.arm_number)
+
+    for arm_part in arms_parts:
+        arm_pos = arm_part.position
+        arm_len = arm_part.size
+        arm_rot = arm_part.rotation % 6
+        arm_type = arm_part.name
+
+        # Find all stations reachable by this arm
+        reachable: List[int] = []
+        for si in range(n_stations):
+            if si in claimed:
+                continue
+            sp = positions[si]
+            # Check if station is at arm_pos + DIRECTIONS[d] * arm_len for any d
+            for d in range(6):
+                tip = HexCoord(
+                    arm_pos.q + DIRECTIONS[d].q * arm_len,
+                    arm_pos.r + DIRECTIONS[d].r * arm_len,
+                )
+                if tip.q == sp.q and tip.r == sp.r:
+                    directions[si] = d
+                    reachable.append(si)
+                    break
+
+        # Also check arm_len=0 edge case (station at arm base)
+        if arm_len == 0:
+            for si in range(n_stations):
+                if si not in claimed and positions[si] == arm_pos:
+                    reachable.append(si)
+
+        for si in reachable:
+            claimed.add(si)
+
+        arm_specs.append(ArmSpec(
+            arm_pos=arm_pos,
+            arm_rot=arm_rot,
+            arm_len=arm_len,
+            arm_type=arm_type,
+            station_indices=reachable,
+        ))
+
+        # Extract tape from arm's instructions
+        if arm_part.instructions:
+            tape_len = max(i.index for i in arm_part.instructions) + 1
+            tape = arm_part.get_tape(tape_len)
+            # Strip leading NOOPs to get the raw tape (start_cycle is separate)
+            start_cycle = min(i.index for i in arm_part.instructions)
+            raw_tape = tape[start_cycle:]
+            seed_tapes.append(raw_tape)
+        else:
+            seed_tapes.append([])
+
+    # Assign unclaimed stations to the nearest arm
+    for si in range(n_stations):
+        if si in claimed:
+            continue
+        sp = positions[si]
+        best_arm = 0
+        best_dist = float('inf')
+        for ai, arm in enumerate(arm_specs):
+            dx = sp.q - arm.arm_pos.q
+            dy = sp.r - arm.arm_pos.r
+            dist = abs(dx) + abs(dy)
+            if dist < best_dist:
+                best_dist = dist
+                best_arm = ai
+        arm_specs[best_arm].station_indices.append(si)
+        claimed.add(si)
+
+    # Compute cost
+    cost = sum(PART_COSTS.get(a.arm_type, 20) for a in arm_specs)
+    for si, (stype, sdata) in enumerate(stations):
+        if stype in ('glyph', 'bonder'):
+            cost += PART_COSTS.get(sdata, 0)
+
+    # Compute handoff positions (hexes reachable by multiple arms)
+    arm_tip_sets: List[set] = []
+    for arm in arm_specs:
+        tips = set()
+        for d in range(6):
+            tips.add(HexCoord(
+                arm.arm_pos.q + DIRECTIONS[d].q * arm.arm_len,
+                arm.arm_pos.r + DIRECTIONS[d].r * arm.arm_len,
+            ))
+        arm_tip_sets.append(tips)
+    handoff = []
+    if len(arm_tip_sets) >= 2:
+        common = arm_tip_sets[0]
+        for s in arm_tip_sets[1:]:
+            common = common & s
+        handoff = list(common)
+
+    layout = MultiArmLayout(
+        arms=arm_specs,
+        stations=stations,
+        directions=directions,
+        positions=positions,
+        glyph_rotations=glyph_rotations,
+        output_rotations=output_rotations,
+        cost=cost,
+        handoff_positions=handoff,
+    )
+
+    return (layout, seed_tapes)

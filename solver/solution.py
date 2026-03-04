@@ -321,8 +321,14 @@ def write_solution(sol: Solution, path: str):
 
 
 def _serialize_arm_part(arm_type: str, pos: 'HexCoord', size: int,
-                        rotation: int, tape: List[int]) -> bytes:
-    """Serialize a single arm part to binary format."""
+                        rotation: int, tape: List[int],
+                        arm_number: int = 0,
+                        start_cycle: int = 0) -> bytes:
+    """Serialize a single arm part to binary format.
+
+    When start_cycle > 0, instruction indices are offset so omsim derives
+    the correct arm_tape_start_cycle from the minimum instruction index.
+    """
     buf = bytearray()
     buf += _write_string(arm_type)
     buf += struct.pack('<B', 1)  # marker byte
@@ -331,15 +337,17 @@ def _serialize_arm_part(arm_type: str, pos: 'HexCoord', size: int,
     buf += struct.pack('<i', rotation)
     buf += struct.pack('<I', 0)  # io_index
 
-    # Instructions: only non-noop entries
-    instructions = [(i, code) for i, code in enumerate(tape) if code and code != Inst.NOOP]
+    # Instructions: only non-noop entries, offset by start_cycle
+    instructions = [(i + start_cycle, code)
+                    for i, code in enumerate(tape)
+                    if code and code != Inst.NOOP]
     buf += struct.pack('<I', len(instructions))
     for idx, code in instructions:
         buf += struct.pack('<i', idx)
         buf += struct.pack('<B', code)
 
     # Arm number
-    buf += struct.pack('<I', 0)
+    buf += struct.pack('<I', arm_number)
 
     return bytes(buf)
 
@@ -416,3 +424,90 @@ class CachedSolutionBase:
             self._arm_type, self._arm_pos, self._arm_size,
             self._arm_rot, tape)
         return self._header + self._parts_data + arm_bytes
+
+
+class CachedMultiArmSolutionBase:
+    """Pre-serialized solution bytes for multi-arm layouts.
+
+    Like CachedSolutionBase but supports N arms with distinct arm_numbers
+    and start_cycle offsets.
+    """
+
+    __slots__ = ('_header', '_parts_data', '_base_part_count', '_arms')
+
+    def __init__(self, base_sol: Solution, arms: list):
+        """Initialize with base solution (no arms) and arm specs.
+
+        Args:
+            base_sol: Solution with glyphs/inputs/outputs but no arms.
+            arms: List of ArmSpec (from layout_z3) with arm_pos, arm_rot,
+                  arm_len, arm_type fields.
+        """
+        n_arms = len(arms)
+
+        # Serialize header
+        header = bytearray()
+        header += struct.pack('<I', 7)  # version
+        header += _write_string(base_sol.puzzle_name)
+        header += _write_string(base_sol.solution_name)
+        header += struct.pack('<I', 1 if base_sol.solved else 0)
+        if base_sol.solved:
+            header += struct.pack('<II', 0, base_sol.cycles)
+            header += struct.pack('<II', 1, base_sol.cost)
+            header += struct.pack('<II', 2, base_sol.area)
+            header += struct.pack('<II', 3, base_sol.instruction_count)
+
+        self._base_part_count = len(base_sol.parts)
+        header += struct.pack('<I', self._base_part_count + n_arms)
+
+        # Serialize base parts
+        parts_data = bytearray()
+        for part in base_sol.parts:
+            parts_data += _write_string(part.name)
+            parts_data += struct.pack('<B', 1)
+            parts_data += struct.pack('<ii', part.position.q, part.position.r)
+            parts_data += struct.pack('<I', part.size)
+            parts_data += struct.pack('<i', part.rotation)
+            parts_data += struct.pack('<I', part.io_index)
+
+            parts_data += struct.pack('<I', len(part.instructions))
+            for inst in part.instructions:
+                parts_data += struct.pack('<i', inst.index)
+                parts_data += struct.pack('<B', inst.instruction)
+
+            if part.name == 'track':
+                parts_data += struct.pack('<I', len(part.track_hexes))
+                for th in part.track_hexes:
+                    parts_data += struct.pack('<ii', th.offset_q, th.offset_r)
+
+            parts_data += struct.pack('<I', part.arm_number)
+
+            if part.name == 'pipe':
+                parts_data += struct.pack('<I', part.conduit_id)
+                parts_data += struct.pack('<I', len(part.conduit_hexes))
+                for ch in part.conduit_hexes:
+                    parts_data += struct.pack('<ii', ch.offset_q, ch.offset_r)
+
+        self._header = bytes(header)
+        self._parts_data = bytes(parts_data)
+        self._arms = [(a.arm_type, a.arm_pos, a.arm_len, a.arm_rot)
+                      for a in arms]
+
+    def splice(self, tapes: list, start_cycles: list = None) -> bytes:
+        """Build complete solution bytes with N arm tapes.
+
+        Args:
+            tapes: List of tape (List[int]) per arm.
+            start_cycles: Optional list of start cycle offsets per arm.
+        """
+        if start_cycles is None:
+            start_cycles = [0] * len(self._arms)
+        result = bytearray(self._header)
+        result += self._parts_data
+        for arm_idx, (arm_type, arm_pos, arm_size, arm_rot) in enumerate(self._arms):
+            tape = tapes[arm_idx] if arm_idx < len(tapes) else []
+            sc = start_cycles[arm_idx] if arm_idx < len(start_cycles) else 0
+            result += _serialize_arm_part(
+                arm_type, arm_pos, arm_size, arm_rot, tape,
+                arm_number=arm_idx, start_cycle=sc)
+        return bytes(result)

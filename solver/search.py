@@ -19,14 +19,19 @@ import itertools
 
 from .hex import HexCoord, DIRECTIONS, ORIGIN, hex_spiral
 from .puzzle import Puzzle, PuzzleIO, parse_puzzle
-from .solution import Solution, Part, Inst, solution_to_bytes, write_solution, PART_COSTS
 from .recipe import PuzzleAnalysis, analyze_puzzle, REACTION_GLYPHS
 from .production_planner import generate_plans, ProductionPlan
 from .simulator import Simulator, VerifyResult, PuzzleContext
 from .layout_z3 import (generate_layouts, compute_lower_bound, Layout,
                         LayoutConfig, generate_layouts_from_graph,
-                        _find_glyph_placements)
-from .tape_ga import TapeGA, GAConfig, generate_geometric_tapes, Individual, _is_obviously_invalid
+                        _find_glyph_placements,
+                        ArmSpec, MultiArmLayout, generate_multi_arm_layouts,
+                        extract_layout_from_solution)
+from .solution import (Solution, Part, Inst, solution_to_bytes, write_solution,
+                       PART_COSTS, parse_solution as parse_solution_file,
+                       CachedSolutionBase, CachedMultiArmSolutionBase)
+from .tape_ga import (TapeGA, GAConfig, generate_geometric_tapes, Individual,
+                      _is_obviously_invalid, MultiTapeGA, MultiArmIndividual)
 from .pattern_db import PatternDB
 from .glyph_model import get_glyph_spec, local_to_world
 from .station_graph import build_station_graph, StationGraph, graph_to_plan
@@ -552,10 +557,14 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
                 if verbose:
                     print(f'  Running GA sequentially on {len(worker_args)} layouts...')
                 seq_best_tape: Optional[List[int]] = None
+                # Reserve time for later phases (archive, multi-arm)
+                # Short limits: reserve less; long limits: reserve more
+                reserve_frac = 0.3 if time_limit > 60 else 0.15
+                ga_deadline = t0 + time_limit * (1.0 - reserve_frac)
                 for args in worker_args:
-                    if time.time() - t0 > time_limit:
+                    if time.time() > ga_deadline:
                         if verbose:
-                            print(f'  Time limit reached during GA')
+                            print(f'  GA time budget reached, reserving time for later phases')
                         break
                     # Warm-start: inject best tape from previous sequential result
                     if seq_best_tape is not None:
@@ -679,6 +688,45 @@ def search_solve(puzzle: Puzzle, puzzle_path: str,
             elif verbose:
                 print(f'  Polish GA did not improve ({n_evals} evals)')
 
+    # --- Phase 5a: Archive-guided search ---
+    # Use archive solutions as layout templates. Especially useful for journal
+    # puzzles that need multi-arm coordination.
+    if time.time() - t0 < time_limit:
+        archive_time = min(time_limit - (time.time() - t0), 60.0)
+        if verbose:
+            print(f'  Phase 5a: Archive-guided search ({archive_time:.0f}s budget)...')
+        archive_result = _try_archive_guided_search(
+            puzzle, puzzle_path, analysis, puzzle_bytes, simulator,
+            target=target, time_limit=archive_time,
+            verbose=verbose, current_best=best)
+        if archive_result is not None and (best is None or archive_result.score < best.score):
+            best = archive_result
+
+    # --- Phase 5b: Multi-arm escalation ---
+    # Try multi-arm solutions when single-arm failed or has room to improve.
+    # Only attempt when: time remaining > 10s AND (no solution found OR
+    # best single-arm score leaves room for multi-arm to win despite cost overhead).
+    time_remaining = time_limit - (time.time() - t0)
+    multi_arm_overhead = 20  # extra arm costs ~20g minimum
+    should_try_multi = (
+        time_remaining > 10
+        and (best is None
+             or (best.score > theory_min + multi_arm_overhead))
+    )
+    if should_try_multi:
+        if verbose:
+            print(f'  Phase 5: Multi-arm escalation ({time_remaining:.0f}s remaining)...')
+        multi_result = _try_multi_arm_layouts(
+            puzzle, analysis, plans, graphs,
+            puzzle_bytes, simulator,
+            target=target,
+            time_limit=min(time_remaining, 30.0),
+            verbose=verbose,
+            current_best=best,
+        )
+        if multi_result is not None and (best is None or multi_result.score < best.score):
+            best = multi_result
+
     elapsed = time.time() - t0
     if verbose:
         print(f'  Total verified: {total_verified} in {elapsed:.1f}s')
@@ -711,9 +759,8 @@ def _try_self_return_layouts(
 
     This is the pattern used by the P013 WR: GRAB, CCW, CCW, CW, RESET.
 
-    Strategy: fix arm at ORIGIN with arm_rot=0, compute the 6 tip positions
-    the arm sweeps through during rotation. Then use _find_glyph_placements
-    to find glyph positions whose active slots land on these sweep positions.
+    Strategy: fix arm at ORIGIN, compute sweep tip positions. Place glyphs and
+    bonders at positions where their slots overlap the sweep arc.
     """
     if not all(pio.molecule.is_monoatomic for pio in puzzle.inputs):
         return None
@@ -725,169 +772,178 @@ def _try_self_return_layouts(
     n_checked = 0
 
     puzzle_ctx = simulator.create_puzzle_context(puzzle_bytes)
+    from .solution import CachedSolutionBase
 
-    # Output rotation: monoatomic outputs are rotation-invariant
     all_mono_out = all(len(pio.molecule.atoms) <= 1 for pio in puzzle.outputs)
-    out_rots = [0] if all_mono_out else range(6)
+    out_rots = [0] if all_mono_out else list(range(6))
+    pass_tapes = _generate_pass_through_tapes_compact()
+    arm_pos = ORIGIN
 
-    pass_tapes = _generate_pass_through_tapes(0)  # arm_rot doesn't matter for these
+    # Build all (plan, arm_len) configs, interleaved by arm_len for diversity
+    configs = [(plan, arm_len) for arm_len in [1, 2] for plan in plans]
+    per_config_budget = time_limit / max(len(configs), 1)
 
-    for plan in plans:
+    for cfg_idx, (plan, arm_len) in enumerate(configs):
+        if time.time() - t0 > time_limit:
+            break
+        config_deadline = t0 + per_config_budget * (cfg_idx + 1)
         glyph_names = plan.glyph_names
         need_bonder = plan.need_bonder
         bonder_name = plan.bonder_type or 'bonder-speed'
 
-        for arm_len in [1, 2]:
-            arm_pos = ORIGIN
+        # Sweep tip positions (same for all arm_rot values)
+        sweep_tips = [HexCoord(DIRECTIONS[d].q * arm_len,
+                               DIRECTIONS[d].r * arm_len) for d in range(6)]
+        sweep_set = set(sweep_tips) | {arm_pos}
 
-            # Sweep tips are the same regardless of arm_rot
-            # (all 6 direction positions + origin)
-            sweep_tips = set()
-            for d in range(6):
-                sweep_tips.add(HexCoord(DIRECTIONS[d].q * arm_len,
-                                        DIRECTIONS[d].r * arm_len))
-            sweep_tips.add(arm_pos)
+        # Glyph placements: slot must overlap a sweep position
+        glyph_options = []
+        for gname in glyph_names:
+            try:
+                spec = get_glyph_spec(gname)
+            except KeyError:
+                break
+            is_single = len(spec.slots) <= 1
+            pset = set()
+            for sp in sweep_set:
+                for gpos, grot in _find_glyph_placements(sp, gname):
+                    pset.add((gpos, 0 if is_single else grot))
+                if is_single:
+                    pset.add((sp, 0))
+                else:
+                    for grot in range(6):
+                        pset.add((sp, grot))
+            glyph_options.append(list(pset))
+        if len(glyph_options) != len(glyph_names):
+            continue
 
-            # Glyph placements: positions where a slot overlaps the sweep arc.
-            # For single-slot glyphs, collapse rotations.
-            glyph_placement_options = []
-            for gname in glyph_names:
-                try:
-                    spec = get_glyph_spec(gname)
-                except KeyError:
-                    break
-                is_single_slot = len(spec.slots) <= 1
-                placements = set()
-                for sweep_tip in sweep_tips:
-                    for gpos, grot in _find_glyph_placements(sweep_tip, gname):
-                        if is_single_slot:
-                            placements.add((gpos, 0))
-                        else:
-                            placements.add((gpos, grot))
-                    if is_single_slot:
-                        placements.add((sweep_tip, 0))
-                    else:
-                        for grot in range(6):
-                            placements.add((sweep_tip, grot))
-                glyph_placement_options.append(list(placements))
-
-            if len(glyph_placement_options) != len(glyph_names):
-                continue
-
-            # Bonder placements
-            if need_bonder:
-                bonder_placements = set()
+        # Pre-compute per-arm_rot bonder placements (slot overlaps tip)
+        bonder_by_armrot = {}
+        if need_bonder:
+            for arm_rot_c in range(6):
+                candidate_tip = sweep_tips[arm_rot_c]
+                bset = set()
                 for bname in [bonder_name, 'bonder']:
                     try:
                         get_glyph_spec(bname)
                     except KeyError:
                         continue
-                    for sweep_tip in sweep_tips:
-                        for bpos, brot in _find_glyph_placements(sweep_tip, bname):
-                            bonder_placements.add((bname, bpos, brot))
-                        for brot in range(6):
-                            bonder_placements.add((bname, sweep_tip, brot))
-                bonder_placements = list(bonder_placements)
-            else:
-                bonder_placements = [(None, None, None)]
+                    # Bonder must have a slot at the tip (where atoms deposit)
+                    for bpos, brot in _find_glyph_placements(candidate_tip, bname):
+                        bset.add((bname, bpos, brot))
+                    # Also try bonder at tip with all rotations
+                    for brot in range(6):
+                        bset.add((bname, candidate_tip, brot))
+                bonder_by_armrot[arm_rot_c] = list(bset)
+        else:
+            for arm_rot_c in range(6):
+                bonder_by_armrot[arm_rot_c] = [(None, None, None)]
 
-            # Generate glyph combos
-            if len(glyph_names) == 1:
-                glyph_combos = [(g,) for g in glyph_placement_options[0]]
-            elif len(glyph_names) == 2:
-                glyph_combos = list(itertools.product(
-                    glyph_placement_options[0],
-                    glyph_placement_options[1]))
-            else:
-                glyph_combos = list(itertools.product(
-                    *[opts[:30] for opts in glyph_placement_options]))
+        # Build glyph combos (deduplicate when glyph names are identical)
+        if len(glyph_names) == 1:
+            gcombos = [(g,) for g in glyph_options[0]]
+        elif len(glyph_names) == 2 and glyph_names[0] == glyph_names[1]:
+            # Same glyph twice: use combinations_with_replacement
+            gcombos = list(itertools.combinations_with_replacement(
+                glyph_options[0], 2))
+        elif len(glyph_names) == 2:
+            gcombos = list(itertools.product(glyph_options[0], glyph_options[1]))
+        else:
+            gcombos = list(itertools.product(*[o[:30] for o in glyph_options]))
 
-            for glyph_combo in glyph_combos:
-                if time.time() - t0 > time_limit:
+        import random
+        random.Random(42).shuffle(gcombos)
+        for gcombo in gcombos:
+            if time.time() > config_deadline:
+                break
+            gparts = [Part(name=glyph_names[gi], position=gp, rotation=gr)
+                      for gi, (gp, gr) in enumerate(gcombo)]
+
+            for arm_rot in range(6):
+                if time.time() > config_deadline:
                     break
+                tip = sweep_tips[arm_rot]
+                bonder_list = bonder_by_armrot[arm_rot]
 
-                glyph_parts = [
-                    Part(name=glyph_names[gi], position=gpos, rotation=grot)
-                    for gi, (gpos, grot) in enumerate(glyph_combo)
-                ]
-
-                for bname, bpos, brot in bonder_placements:
-                    if time.time() - t0 > time_limit:
+                for bname, bpos, brot in bonder_list:
+                    if time.time() > config_deadline:
                         break
+                    bparts = [Part(name=bname, position=bpos, rotation=brot)] if bname else []
 
-                    bonder_parts = []
-                    if bname is not None:
-                        bonder_parts = [Part(name=bname, position=bpos,
-                                             rotation=brot)]
-
-                    # Try all arm rotations (input/output at each tip)
-                    for arm_rot in range(6):
-                        tip = HexCoord(DIRECTIONS[arm_rot].q * arm_len,
-                                       DIRECTIONS[arm_rot].r * arm_len)
-
-                        for out_rot in out_rots:
-                            if time.time() - t0 > time_limit:
-                                break
-                            # Build base solution and cache for fast tape splicing
-                            base_sol = Solution(
-                                puzzle_name=puzzle.name,
-                                solution_name="SR")
-                            for ii in range(len(puzzle.inputs)):
-                                base_sol.parts.append(
-                                    Part(name='input', position=tip,
-                                         io_index=ii))
-                            base_sol.parts.extend(glyph_parts)
-                            base_sol.parts.extend(bonder_parts)
-                            base_sol.parts.append(
-                                Part(name='out-std', position=tip,
-                                     rotation=out_rot, io_index=0))
-
-                            layout_info = {
-                                'arm_pos': arm_pos,
-                                'arm_len': arm_len,
-                                'arm_rot': arm_rot,
-                                'arm_type': f'arm{arm_len}',
-                            }
-                            from .solution import CachedSolutionBase
-                            cache = CachedSolutionBase(base_sol, layout_info)
-
-                            # Try each pass-through tape via fast splice
-                            for tape in pass_tapes:
-                                sol_bytes = cache.splice(tape)
-                                result = puzzle_ctx.verify(
-                                    sol_bytes, cycle_limit=1000)
-                                n_checked += 1
-
-                                if result.valid:
-                                    metrics = _make_metrics(result)
-                                    score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
-                                    if best is None or score < best.score:
-                                        # Reconstruct full solution
-                                        arm_part = Part(
-                                            name=f'arm{arm_len}',
-                                            position=arm_pos,
-                                            size=arm_len,
-                                            rotation=arm_rot)
-                                        arm_part.set_tape(tape)
-                                        final_sol = Solution(
-                                            puzzle_name=puzzle.name,
+                    for out_rot in out_rots:
+                        if time.time() > config_deadline:
+                            break
+                        base_sol = Solution(puzzle_name=puzzle.name,
                                             solution_name="SR")
-                                        final_sol.parts = list(base_sol.parts) + [arm_part]
-                                        best = SearchResult(
-                                            final_sol, metrics, score)
-                                        if verbose:
-                                            m = metrics
-                                            print(f'  ** Self-return hit: '
-                                                  f'{m["cost"]}g/{m["cycles"]}c/'
-                                                  f'{m["area"]}a/{m["instructions"]}i '
-                                                  f'= {m["sum4"]}s')
+                        for ii in range(len(puzzle.inputs)):
+                            base_sol.parts.append(
+                                Part(name='input', position=tip, io_index=ii))
+                        base_sol.parts.extend(gparts)
+                        base_sol.parts.extend(bparts)
+                        base_sol.parts.append(
+                            Part(name='out-std', position=tip,
+                                 rotation=out_rot, io_index=0))
+                        li = {'arm_pos': arm_pos, 'arm_len': arm_len,
+                              'arm_rot': arm_rot, 'arm_type': f'arm{arm_len}'}
+                        cache = CachedSolutionBase(base_sol, li)
+
+                        for tape in pass_tapes:
+                            sol_bytes = cache.splice(tape)
+                            result = puzzle_ctx.verify(sol_bytes, cycle_limit=1000)
+                            n_checked += 1
+                            if result.valid:
+                                metrics = _make_metrics(result)
+                                score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
+                                if best is None or score < best.score:
+                                    arm_part = Part(name=f'arm{arm_len}',
+                                                    position=arm_pos,
+                                                    size=arm_len,
+                                                    rotation=arm_rot)
+                                    arm_part.set_tape(tape)
+                                    final_sol = Solution(
+                                        puzzle_name=puzzle.name,
+                                        solution_name="SR")
+                                    final_sol.parts = list(base_sol.parts) + [arm_part]
+                                    best = SearchResult(final_sol, metrics, score)
+                                    if verbose:
+                                        m = metrics
+                                        print(f'  ** Self-return hit: '
+                                              f'{m["cost"]}g/{m["cycles"]}c/'
+                                              f'{m["area"]}a/{m["instructions"]}i '
+                                              f'= {m["sum4"]}s')
 
     puzzle_ctx.destroy()
-
     if verbose:
         print(f'  Self-return checked {n_checked} candidates')
-
     return best if best is not current_best else None
+
+
+def _generate_pass_through_tapes_compact() -> List[List[int]]:
+    """Compact set of pass-through tapes for self-return layout search.
+
+    Fewer tapes than the full set, focusing on the most common patterns:
+    simple sweeps (1-4 steps) and sweep-return combos (up to 3 steps each).
+    """
+    tapes: List[List[int]] = []
+
+    # Simple sweeps: GRAB, N rotations, RESET
+    for n in range(1, 5):
+        tapes.append([Inst.GRAB] + [Inst.ROTATE_CW] * n + [Inst.RESET])
+        tapes.append([Inst.GRAB] + [Inst.ROTATE_CCW] * n + [Inst.RESET])
+
+    # Sweep-and-return: GRAB, N out, M back, RESET (the P013 WR pattern)
+    for n_out in range(1, 4):
+        for n_back in range(1, 4):
+            if n_out == n_back:
+                continue
+            tapes.append(
+                [Inst.GRAB] + [Inst.ROTATE_CW] * n_out
+                + [Inst.ROTATE_CCW] * n_back + [Inst.RESET])
+            tapes.append(
+                [Inst.GRAB] + [Inst.ROTATE_CCW] * n_out
+                + [Inst.ROTATE_CW] * n_back + [Inst.RESET])
+
+    return tapes  # ~20 tapes total
 
 
 def _generate_pass_through_tapes(arm_start_dir: int) -> List[List[int]]:
@@ -976,6 +1032,22 @@ def _build_seed_tapes(layout: Layout, n_inputs: int,
         chain_tapes = compile_bonding_chain_tapes(layout, analysis, puzzle)
         seed_tapes.extend(chain_tapes)
 
+    # Source 1c: Beam search tapes (geometry-aware instruction-by-instruction)
+    if analysis is not None and puzzle is not None:
+        from .tape_compiler import beam_search_tape
+        beam_tapes = beam_search_tape(layout, analysis, puzzle)
+        seed_tapes.extend(beam_tapes)
+
+    # Source 1d: DL-generated tapes (transformer model)
+    try:
+        from .dl_inference import get_dl_model, generate_tapes_for_layout
+        dl_model = get_dl_model()
+        if dl_model is not None:
+            dl_tapes = generate_tapes_for_layout(dl_model, layout, beam_width=16, max_len=50)
+            seed_tapes.extend(dl_tapes[:20])  # top 20 from DL model
+    except (ImportError, Exception):
+        pass  # DL model not available or not trained
+
     # Source 2: Geometric templates
     geo_tapes = generate_geometric_tapes(n_stations, n_inputs, layout.directions)
     seed_tapes.extend(geo_tapes)
@@ -1007,6 +1079,340 @@ def _build_seed_tapes(layout: Layout, n_inputs: int,
             unique.append(tape)
 
     return unique
+
+
+# =============================================================================
+# ARCHIVE-GUIDED SEARCH
+# =============================================================================
+
+def _find_archive_dir(puzzle_name: str) -> Optional[str]:
+    """Find the archive directory for a puzzle by matching its name."""
+    import re
+    archive_base = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                                'tools', 'om-archive')
+    if not os.path.isdir(archive_base):
+        return None
+
+    # Normalize: strip non-alphanumeric, uppercase
+    def _norm(s):
+        return re.sub(r'[^A-Z0-9]', '', s.upper())
+
+    target = _norm(puzzle_name)
+
+    for journal_dir in sorted(os.listdir(archive_base)):
+        journal_path = os.path.join(archive_base, journal_dir)
+        if not os.path.isdir(journal_path):
+            continue
+        for puzzle_dir in os.listdir(journal_path):
+            if _norm(puzzle_dir) == target:
+                return os.path.join(journal_path, puzzle_dir)
+    return None
+
+
+def _try_archive_guided_search(
+    puzzle: Puzzle, puzzle_path: str, analysis: PuzzleAnalysis,
+    puzzle_bytes: bytes, simulator: Simulator,
+    target: str = 'sum4',
+    time_limit: float = 30.0,
+    verbose: bool = False,
+    current_best: Optional[SearchResult] = None,
+) -> Optional[SearchResult]:
+    """Try solving using archive solutions as layout templates.
+
+    Parses archive .solution files, extracts their layouts and tapes,
+    then runs multi-arm GA to optimize tapes on those layouts.
+    """
+    t0 = time.time()
+    best = current_best
+
+    archive_dir = _find_archive_dir(puzzle.name)
+    if archive_dir is None:
+        if verbose:
+            print(f'  Archive-guided: no archive found for "{puzzle.name}"')
+        return None
+
+    # Parse all archive solutions
+    sol_files = sorted(Path(archive_dir).glob('*.solution'))
+    if not sol_files:
+        return None
+
+    if verbose:
+        print(f'  Archive-guided: {len(sol_files)} archive solutions found')
+
+    # Sort by sum4 from filename (parse cost+cycles+area+instr from name)
+    def _sum4_from_name(f):
+        try:
+            parts = f.stem.split('-')
+            return (int(parts[0].rstrip('g')) + int(parts[1].rstrip('c'))
+                    + int(parts[2].rstrip('a')) + int(parts[3].rstrip('i')))
+        except (IndexError, ValueError):
+            return 999999
+    sol_files.sort(key=_sum4_from_name)
+
+    n_outputs = len(puzzle.outputs)
+    n_atoms = sum(len(o.molecule.atoms) for o in puzzle.outputs)
+    puzzle_ctx = simulator.create_puzzle_context(puzzle_bytes)
+
+    from .tape_compiler import compile_bonding_loop_tapes, compile_tapes_for_multi_arm
+
+    for fi, sol_file in enumerate(sol_files[:10]):  # top 10 by sum4
+        if time.time() - t0 > time_limit:
+            break
+
+        try:
+            sol = parse_solution_file(str(sol_file))
+        except Exception:
+            continue
+
+        result = extract_layout_from_solution(sol)
+        if result is None:
+            continue
+
+        layout, archive_tapes = result
+        n_arms = len(layout.arms)
+
+        if verbose and fi == 0:
+            print(f'  Archive layout: {n_arms} arms, {len(layout.stations)} stations, cost={layout.cost}')
+
+        if n_arms == 0:
+            continue
+
+        # Build seed tape sets: archive tapes + bonding templates + compiled tapes
+        seed_tape_sets: List[List[List[int]]] = [[] for _ in range(n_arms)]
+
+        # Source 1: Archive tapes (highest priority)
+        for ai in range(n_arms):
+            if ai < len(archive_tapes) and archive_tapes[ai]:
+                seed_tape_sets[ai].append(archive_tapes[ai])
+
+        # Source 2: Bonding loop templates
+        if n_arms >= 2 and analysis.needs_bonding:
+            bonding_seeds = compile_bonding_loop_tapes(layout, n_atoms)
+            if len(bonding_seeds) >= 2:
+                # Assign delivery tapes to arm with inputs, reposition to arm with outputs
+                for ai in range(n_arms):
+                    has_input = any(
+                        layout.stations[si][0] == 'input'
+                        for si in layout.arms[ai].station_indices
+                        if si < len(layout.stations)
+                    )
+                    if has_input and bonding_seeds[0]:
+                        seed_tape_sets[ai].extend(bonding_seeds[0][:50])
+                    elif bonding_seeds[1]:
+                        seed_tape_sets[ai].extend(bonding_seeds[1][:50])
+
+        # Source 3: Per-arm compiled tapes
+        try:
+            compiled = compile_tapes_for_multi_arm(layout, analysis, puzzle)
+            for ai in range(min(n_arms, len(compiled))):
+                seed_tape_sets[ai].extend(compiled[ai][:30])
+        except Exception:
+            pass
+
+        # Skip if no seeds for any arm
+        if any(not seeds for seeds in seed_tape_sets):
+            continue
+
+        # Build cached base
+        base_sol = layout.to_solution(puzzle, n_outputs)
+        cached = CachedMultiArmSolutionBase(base_sol, layout.arms)
+
+        # Screen: try archive tapes with various start_cycle offsets per arm
+        tapes = [seed_tape_sets[ai][0] if seed_tape_sets[ai] else []
+                 for ai in range(n_arms)]
+        if not any(not t for t in tapes) and not any(_is_obviously_invalid(t) for t in tapes):
+            # Try offsets on each arm independently
+            for offset_arm in range(n_arms):
+                for sc_offset in range(0, 12):
+                    if time.time() - t0 > time_limit:
+                        break
+                    start_cycles = [0] * n_arms
+                    start_cycles[offset_arm] = sc_offset
+                    try:
+                        sol_bytes = cached.splice(tapes, start_cycles)
+                        vr = puzzle_ctx.verify(sol_bytes, cycle_limit=2000)
+                        if vr.valid:
+                            metrics = _make_metrics(vr)
+                            score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
+                            if best is None or score < best.score:
+                                final_sol = layout.add_arms_with_tapes(base_sol, tapes, start_cycles)
+                                best = SearchResult(final_sol, metrics, score)
+                                if verbose:
+                                    m = metrics
+                                    print(f'  ** Archive-guided (layout {fi} screen arm{offset_arm} sc={sc_offset}): '
+                                          f'{m["cost"]}g/{m["cycles"]}c/'
+                                          f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+                    except Exception:
+                        pass
+
+        # Screen: cross-product of top seeds with start_cycle offsets
+        import itertools as _it
+        top_per_arm = [seeds[:8] for seeds in seed_tape_sets]
+        combos = list(_it.product(*[range(len(t)) for t in top_per_arm]))
+        if len(combos) > 200:
+            import random
+            random.Random(42).shuffle(combos)
+            combos = combos[:200]
+
+        for combo in combos:
+            if time.time() - t0 > time_limit:
+                break
+            tapes = [top_per_arm[ai][combo[ai]] for ai in range(n_arms)]
+            if any(_is_obviously_invalid(t) for t in tapes):
+                continue
+            for sc_offset in [0, 4, 8]:
+                start_cycles = [0] + [sc_offset] * (n_arms - 1)
+                try:
+                    sol_bytes = cached.splice(tapes, start_cycles)
+                    vr = puzzle_ctx.verify(sol_bytes, cycle_limit=2000)
+                    if vr.valid:
+                        metrics = _make_metrics(vr)
+                        score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
+                        if best is None or score < best.score:
+                            final_sol = layout.add_arms_with_tapes(base_sol, tapes, start_cycles)
+                            best = SearchResult(final_sol, metrics, score)
+                            if verbose:
+                                m = metrics
+                                print(f'  ** Archive-guided (layout {fi} combo): '
+                                      f'{m["cost"]}g/{m["cycles"]}c/'
+                                      f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+                except Exception:
+                    pass
+
+        # GA optimization on this layout
+        if time.time() - t0 < time_limit:
+            ga = MultiTapeGA(simulator, GAConfig(
+                pop_size=40, max_generations=80, stagnation_limit=25,
+                cycle_limit=2000))
+            ga_result = ga.optimize(
+                cached, seed_tape_sets, puzzle_bytes,
+                target=target,
+                current_best=best.score if best else None,
+                n_arms=n_arms,
+            )
+            if ga_result is not None and ga_result.valid:
+                score = ga_result.fitness
+                if best is None or score < best.score:
+                    final_sol = layout.add_arms_with_tapes(
+                        base_sol, ga_result.tapes, ga_result.start_cycles)
+                    best = SearchResult(final_sol, ga_result.metrics, score)
+                    if verbose:
+                        m = ga_result.metrics
+                        print(f'  ** Archive-guided (layout {fi} GA): '
+                              f'{m["cost"]}g/{m["cycles"]}c/'
+                              f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+
+    puzzle_ctx.destroy()
+    return best if best is not current_best else None
+
+
+# =============================================================================
+# MULTI-ARM ESCALATION
+# =============================================================================
+
+def _try_multi_arm_layouts(
+    puzzle: Puzzle, analysis: PuzzleAnalysis,
+    plans: list, graphs: list,
+    puzzle_bytes: bytes, simulator: Simulator,
+    target: str = 'sum4',
+    time_limit: float = 30.0,
+    verbose: bool = False,
+    current_best: Optional[SearchResult] = None,
+) -> Optional[SearchResult]:
+    """Try multi-arm solutions for puzzles that need >6 station directions.
+
+    Generates MultiArmLayout instances with 2+ arms, compiles per-arm tapes,
+    and optimizes them jointly via MultiTapeGA.
+    """
+    t0 = time.time()
+    best = current_best
+
+    # Generate multi-arm layouts
+    config = LayoutConfig(max_layouts=50, timeout_ms=5000)
+    multi_layouts = generate_multi_arm_layouts(puzzle, analysis, plans, graphs, config)
+
+    if not multi_layouts:
+        if verbose:
+            print(f'  Multi-arm: no multi-arm layouts generated')
+        return None
+
+    if verbose:
+        print(f'  Multi-arm: {len(multi_layouts)} layouts generated')
+
+    n_outputs = len(puzzle.outputs)
+    from .solution import CachedMultiArmSolutionBase
+    from .tape_compiler import compile_tapes_for_multi_arm
+
+    for li, layout in enumerate(multi_layouts):
+        if time.time() - t0 > time_limit:
+            break
+
+        # Build base solution (no arms)
+        base_sol = layout.to_solution(puzzle, n_outputs)
+
+        # Compile per-arm seed tapes
+        seed_tape_sets = compile_tapes_for_multi_arm(layout, analysis, puzzle)
+
+        # Quick screening: try all combinations of first few seeds per arm
+        cached = CachedMultiArmSolutionBase(base_sol, layout.arms)
+        puzzle_ctx = simulator.create_puzzle_context(puzzle_bytes)
+
+        # Screen: cross-product of first 5 seeds per arm
+        n_arms = len(layout.arms)
+        seed_limits = [min(5, len(seeds)) for seeds in seed_tape_sets]
+
+        if all(sl > 0 for sl in seed_limits):
+            import itertools as it
+            seed_indices = [range(sl) for sl in seed_limits]
+            for combo in it.product(*seed_indices):
+                if time.time() - t0 > time_limit:
+                    break
+                tapes = [seed_tape_sets[a][combo[a]] for a in range(n_arms)]
+                # Skip if any tape is obviously invalid
+                if any(_is_obviously_invalid(t) for t in tapes):
+                    continue
+                for sc_offset in [0, 1, 2, 3]:
+                    start_cycles = [0] + [sc_offset] * (n_arms - 1)
+                    sol_bytes = cached.splice(tapes, start_cycles)
+                    result = puzzle_ctx.verify(sol_bytes, cycle_limit=1000)
+                    if result.valid:
+                        metrics = _make_metrics(result)
+                        score = float(metrics[target]) if target in metrics else float(metrics['sum4'])
+                        if best is None or score < best.score:
+                            final_sol = layout.add_arms_with_tapes(
+                                base_sol, tapes, start_cycles)
+                            best = SearchResult(final_sol, metrics, score)
+                            if verbose:
+                                m = metrics
+                                print(f'  ** Multi-arm (layout {li} screen): '
+                                      f'{m["cost"]}g/{m["cycles"]}c/'
+                                      f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+
+        # GA optimization
+        if time.time() - t0 < time_limit:
+            ga = MultiTapeGA(simulator, GAConfig(
+                pop_size=20, max_generations=40, stagnation_limit=15))
+            ga_result = ga.optimize(
+                cached, seed_tape_sets, puzzle_bytes,
+                target=target,
+                current_best=best.score if best else None,
+                n_arms=n_arms,
+            )
+            if ga_result is not None and ga_result.valid:
+                score = ga_result.fitness
+                if best is None or score < best.score:
+                    final_sol = layout.add_arms_with_tapes(
+                        base_sol, ga_result.tapes, ga_result.start_cycles)
+                    best = SearchResult(final_sol, ga_result.metrics, score)
+                    if verbose:
+                        m = ga_result.metrics
+                        print(f'  ** Multi-arm (layout {li} GA): '
+                              f'{m["cost"]}g/{m["cycles"]}c/'
+                              f'{m["area"]}a/{m["instructions"]}i = {m["sum4"]}s')
+
+        puzzle_ctx.destroy()
+
+    return best if best is not current_best else None
 
 
 # =============================================================================
