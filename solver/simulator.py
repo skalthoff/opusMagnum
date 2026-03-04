@@ -30,8 +30,8 @@ class Simulator:
         if lib_path is None:
             # Default to the built library in tools/omsim
             base = Path(__file__).parent.parent / "tools" / "omsim"
-            # Try .so first (Linux), then .dylib (macOS)
-            for ext in ['libverify.so', 'libverify.dylib']:
+            # Try platform-specific library names
+            for ext in ['libverify.so', 'libverify.dylib', 'libverify.dll']:
                 candidate = base / ext
                 if candidate.exists():
                     lib_path = str(candidate)
